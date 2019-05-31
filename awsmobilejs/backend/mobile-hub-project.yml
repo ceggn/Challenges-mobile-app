@@ -1,0 +1,518 @@
+--- !com.amazonaws.mobilehub.v0.Project 
+apps:
+  react-native: !com.amazonaws.mobilehub.v0.AppDO {}
+features:
+  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic 
+    components:
+      FollowersCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: FollowersCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /Followers: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/Followers-20180819012346.zip
+            description: 'Handler for calls to resource path : /Followers/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: 5NrH5xKqL8wet4+UvfC+9CJA85fEo16TOfQMLcPlDUg=
+            memorySize: '128'
+            modified: '2018-08-18T22:25:10.944+0000'
+            name: Followers
+            runtime: nodejs6.10
+            timeout: '3'
+            version: FBtWUsMJ2J7V_O4KjAj8YsR3qQsWRQff
+          '/Followers/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/Followers-20180819012346.zip
+            description: 'Handler for calls to resource path : /Followers/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: 5NrH5xKqL8wet4+UvfC+9CJA85fEo16TOfQMLcPlDUg=
+            memorySize: '128'
+            modified: '2018-08-18T22:25:10.944+0000'
+            name: Followers
+            runtime: nodejs6.10
+            timeout: '3'
+            version: IHol7WXS1Er4.4BVqwUD4WFEMUVzGdn2
+      adsCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: adsCRUD
+          requires-signin: false
+          sdk-generation-stage-name: Development
+        paths:
+          /ads: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/ads-20180824051254.zip
+            description: 'Handler for calls to resource path : /ads/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: rLLLdCEIA2hUD35sN5aizdA85j+ZIH775lap6xYdk6k=
+            memorySize: '128'
+            modified: '2018-08-24T02:13:59.320+0000'
+            name: ads
+            runtime: nodejs6.10
+            timeout: '3'
+            version: EzLoFksBVIPegR1RV4ILouCe5qsi6iTM
+          '/ads/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/ads-20180824051254.zip
+            description: 'Handler for calls to resource path : /ads/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: rLLLdCEIA2hUD35sN5aizdA85j+ZIH775lap6xYdk6k=
+            memorySize: '128'
+            modified: '2018-08-24T02:13:59.320+0000'
+            name: ads
+            runtime: nodejs6.10
+            timeout: '3'
+            version: W_nl1xEW.ais0h8Nz2QRhFuZJmBDntqv
+      blockedUsersCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: blockedUsersCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /blockedUsers: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/blockedUsers-20190318223535.zip
+            description: 'Handler for calls to resource path : /blockedUsers/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: DcMVTcAy/iZa2KXZOuYLW6iS3Iex/oBz6+Qy2CAcgXg=
+            memorySize: '128'
+            modified: '2019-03-18T20:37:53.210+0000'
+            name: blockedUsers
+            runtime: nodejs6.10
+            timeout: '3'
+            version: QZNfcA6qMqHIjSmBQQDneQmz_2hkydFl
+          '/blockedUsers/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/blockedUsers-20190318223535.zip
+            description: 'Handler for calls to resource path : /blockedUsers/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: DcMVTcAy/iZa2KXZOuYLW6iS3Iex/oBz6+Qy2CAcgXg=
+            memorySize: '128'
+            modified: '2019-03-18T20:37:53.210+0000'
+            name: blockedUsers
+            runtime: nodejs6.10
+            timeout: '3'
+            version: N0zv9wK2Bcaa0ma.b3UtyOZSWRSXBQ7b
+      blockedVideosCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: blockedVideosCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /blockedVideos: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/blockedVideos-20180819023409.zip
+            description: 'Handler for calls to resource path : /blockedVideos/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: I+08SnIAM5ZYZTq2CEuvUxZg3TwDGauQLo/aL5ipMIo=
+            memorySize: '128'
+            modified: '2018-08-18T23:35:23.083+0000'
+            name: blockedVideos
+            runtime: nodejs6.10
+            timeout: '3'
+            version: gT3UwDmuQJbJ5LKdhC64oo2j1i1_h.zJ
+          '/blockedVideos/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/blockedVideos-20180819023409.zip
+            description: 'Handler for calls to resource path : /blockedVideos/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: I+08SnIAM5ZYZTq2CEuvUxZg3TwDGauQLo/aL5ipMIo=
+            memorySize: '128'
+            modified: '2018-08-18T23:35:23.083+0000'
+            name: blockedVideos
+            runtime: nodejs6.10
+            timeout: '3'
+            version: PUEzSFn6fDw10nsbYModUDxAGU07x1bM
+      commentsCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: commentsCRUD
+          requires-signin: false
+          sdk-generation-stage-name: Development
+        paths:
+          /comments: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/comments-20181022005546.zip
+            description: 'Handler for calls to resource path : /comments/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: oimTQwrFUxFtd70jD5AfzinSOVI3LOTVW++mZehQrL0=
+            memorySize: '128'
+            modified: '2018-10-21T21:56:50.364+0000'
+            name: comments
+            runtime: nodejs6.10
+            timeout: '3'
+            version: BWl4OXZdNTbYHdvjlytbosu81SJwLVU3
+          '/comments/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/comments-20181022005546.zip
+            description: 'Handler for calls to resource path : /comments/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: oimTQwrFUxFtd70jD5AfzinSOVI3LOTVW++mZehQrL0=
+            memorySize: '128'
+            modified: '2018-10-21T21:56:50.364+0000'
+            name: comments
+            runtime: nodejs6.10
+            timeout: '3'
+            version: DZpmUKwM0JKnoPZ_UHsIWUfQDgiT2WM0
+      likesCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: likesCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /likes: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/likes-20180819012346.zip
+            description: 'Handler for calls to resource path : /likes/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: C75IlEHnLPlC2TcmtgHRs8rMzwzoXCZBr7pM9w+X5cg=
+            memorySize: '128'
+            modified: '2018-08-18T22:25:19.701+0000'
+            name: likes
+            runtime: nodejs6.10
+            timeout: '3'
+            version: nbtK.loICmM05PRQomy4xNfKmBcC6hjo
+          '/likes/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/likes-20180819012346.zip
+            description: 'Handler for calls to resource path : /likes/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: C75IlEHnLPlC2TcmtgHRs8rMzwzoXCZBr7pM9w+X5cg=
+            memorySize: '128'
+            modified: '2018-08-18T22:25:19.701+0000'
+            name: likes
+            runtime: nodejs6.10
+            timeout: '3'
+            version: F88vQmbaeXwTvHBy2MFMDFDD7b22of4Q
+      payoutRequestsCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: payoutRequestsCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /payoutRequests: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/payoutRequests-20181122025543.zip
+            description: 'Handler for calls to resource path : /payoutRequests/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: sUpkV8PxgakjjckelkWH+0rXWxJJkWtLOMnsal3WYxQ=
+            memorySize: '128'
+            modified: '2018-11-21T23:56:40.862+0000'
+            name: payoutRequests
+            runtime: nodejs6.10
+            timeout: '3'
+            version: 6Fh.Euzaa1I1_qZhwMSw75BozDbl1hVb
+          '/payoutRequests/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/payoutRequests-20181122025543.zip
+            description: 'Handler for calls to resource path : /payoutRequests/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: sUpkV8PxgakjjckelkWH+0rXWxJJkWtLOMnsal3WYxQ=
+            memorySize: '128'
+            modified: '2018-11-21T23:56:40.862+0000'
+            name: payoutRequests
+            runtime: nodejs6.10
+            timeout: '3'
+            version: 9P8.ah7ptXUuNBWyfZvwwvxOCZUZozx2
+      reportsCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: reportsCRUD
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /reports: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/reports-20180819220801.zip
+            description: 'Handler for calls to resource path : /reports/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: /ZVwWlp7DsFyqmETv8hxqltXYyYcYQkudYMehOaIMj8=
+            memorySize: '128'
+            modified: '2018-08-19T19:19:16.089+0000'
+            name: reports
+            runtime: nodejs6.10
+            timeout: '3'
+            version: 1JAd20MTvpPhLNsYZ0.kZpBnq3z2dpEz
+          '/reports/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/reports-20180819220801.zip
+            description: 'Handler for calls to resource path : /reports/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: /ZVwWlp7DsFyqmETv8hxqltXYyYcYQkudYMehOaIMj8=
+            memorySize: '128'
+            modified: '2018-08-19T19:19:16.089+0000'
+            name: reports
+            runtime: nodejs6.10
+            timeout: '3'
+            version: m7vA.fVy_q5LasNWC3HtoFONNMBWJG2p
+      videosCRUD: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: videosCRUD
+          requires-signin: false
+          sdk-generation-stage-name: Development
+        paths:
+          /videos: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/videos-20190527094107.zip
+            description: 'Handler for calls to resource path : /videos/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: zm6Fd+XvZDaj13Kf2gyqnGSvs+nUvT9qYn2UTS1EF2k=
+            memorySize: '128'
+            modified: '2019-05-27T06:42:50.163+0000'
+            name: videos
+            runtime: nodejs6.10
+            timeout: '3'
+            version: ICESWEJfF6wtFvF7XSzqEc.Q0FvN9LgG
+          '/videos/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/videos-20190527094107.zip
+            description: 'Handler for calls to resource path : /videos/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: zm6Fd+XvZDaj13Kf2gyqnGSvs+nUvT9qYn2UTS1EF2k=
+            memorySize: '128'
+            modified: '2019-05-27T06:42:50.163+0000'
+            name: videos
+            runtime: nodejs6.10
+            timeout: '3'
+            version: HTRnDpVAaNyBZocEXer_vUS6A6Xn80ME
+  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
+    attributes:
+      enabled: true
+      visibility: public-global
+    components:
+      release: !com.amazonaws.mobilehub.v0.Bucket {}
+  database: !com.amazonaws.mobilehub.v0.Database 
+    components:
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase 
+        tables:
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              avatar: S
+              challengeId: S
+              creationDate: N
+              displayName: S
+              message: S
+              userId: S
+              username: S
+            hashKeyName: userId
+            hashKeyType: S
+            indexes:
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex 
+                hashKeyName: challengeId
+                hashKeyType: S
+                indexName: challengeId-creationDate
+                rangeKeyName: creationDate
+                rangeKeyType: N
+            rangeKeyName: creationDate
+            rangeKeyType: N
+            tableName: ___DYNAMIC_PREFIX___-comments
+            tablePrivacy: protected
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              itemId: S
+              itemType: S
+              reason: S
+              reportDate: S
+              userId: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-reports
+            tablePrivacy: private
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              challengeId: S
+              userId: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: challengeId
+            rangeKeyType: S
+            tableName: ___DYNAMIC_PREFIX___-likes
+            tablePrivacy: protected
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              approved: BOOL
+              author: S
+              authorSub: S
+              category: S
+              challengeId: S
+              comments: N
+              completed: BOOL
+              creationDate: N
+              deadlineDate: N
+              description: S
+              parent: S
+              payment: N
+              prizeDescription: S
+              prizeImage: S
+              prizeTitle: S
+              prizeUrl: S
+              rating: N
+              title: S
+              userId: S
+              videoFile: S
+              videoThumb: S
+              views: N
+            hashKeyName: userId
+            hashKeyType: S
+            indexes:
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex 
+                hashKeyName: authorSub
+                hashKeyType: S
+                indexName: User
+                rangeKeyName: rating
+                rangeKeyType: N
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex 
+                hashKeyName: category
+                hashKeyType: S
+                indexName: Categories
+                rangeKeyName: creationDate
+                rangeKeyType: N
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex 
+                hashKeyName: rating
+                hashKeyType: N
+                indexName: Hot
+                rangeKeyName: creationDate
+                rangeKeyType: N
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex 
+                hashKeyName: challengeId
+                hashKeyType: S
+                indexName: UUID
+                rangeKeyName: ''
+                rangeKeyType: ''
+            rangeKeyName: challengeId
+            rangeKeyType: S
+            tableName: ___DYNAMIC_PREFIX___-videos
+            tablePrivacy: protected
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              followers: SS
+              following: SS
+              userId: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-Followers
+            tablePrivacy: public
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              challengeId: S
+              userId: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-blockedVideos
+            tablePrivacy: private
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              id: S
+              resource: S
+              viewsnumber: N
+            hashKeyName: id
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-ads
+            tablePrivacy: public
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              blockedSub: S
+              userId: S
+              userSub: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-blockedUsers
+            tablePrivacy: private
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              address: S
+              address_add: S
+              approveDate: N
+              country: S
+              currentBalance: N
+              declineDate: N
+              declined: BOOL
+              email: S
+              firstName: S
+              isPrivate: BOOL
+              lastName: S
+              paypal: S
+              sent: BOOL
+              sub: S
+              submissionDate: N
+              userId: S
+              username: S
+            hashKeyName: userId
+            hashKeyType: S
+            rangeKeyName: submissionDate
+            rangeKeyType: N
+            tableName: ___DYNAMIC_PREFIX___-payoutRequests
+            tablePrivacy: private
+  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint 
+    components:
+      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}
+      messaging-push: !com.amazonaws.mobilehub.v0.PinpointMessaging 
+        attributes:
+          deliveryType: push
+  sign-in: !com.amazonaws.mobilehub.v0.SignIn 
+    attributes:
+      enabled: true
+      optional-sign-in: true
+    components:
+      sign-in-facebook: !com.amazonaws.mobilehub.v0.StandardIdentityProvider 
+        attributes:
+          provider-id: '708137699550743'
+          provider-name: facebook
+      sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider 
+        attributes:
+          alias-attributes:
+            - email
+          mfa-configuration: OFF
+          name: userpool
+          password-policy: !com.amazonaws.mobilehub.ConvertibleMap 
+            min-length: '8'
+            require-lower-case: true
+            require-numbers: true
+            require-symbols: false
+            require-upper-case: true
+          standard-attributes: '["email"]'
+  user-files: !com.amazonaws.mobilehub.v0.UserFiles 
+    attributes:
+      enabled: true
+      wildcard-cors-policy: true
+name: challenges-app
+region: us-west-1
+sharedComponents:
+  push-apns: !com.amazonaws.mobilehub.v0.PushPlatform 
+    attributes:
+      consumingFeatures: mobile-analytics
+      credential: 415941446547552b697a39353074334532356f30762b527a52565941655141434141706859324e76645735304c576c6b414177784f5455354e7a63324f544d354f546b41465746336379316a636e6c77644738746348566962476c6a4c57746c655142455154564e63476849646e64456433646f526d464e636b46765958644a5653396c5958424d52444648646d7776656d677655454e4c566c524b5556426f51336c6955537330515864525356643259307857614746526156565250543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d4852736d354d535a41596265525154624167455167447547757266584c56672b493962514c566d72696a73346e3033414f4f2b5a6e46514f6e326371374f675241674d427a566851494f35775551713231686a796c63792b797879325462534c7069765679774941414141414441414145414177706946414b7a4d3770716d506b4b4375364254306159783651504e64395a3173396353352f2f2f2f2f7741414141474f7473442b446e2b356b6d592f68543441414161503844424b5558344b7531584f31397553344272673052676748506f356556464e7a65686d6962707338596d695a456a4a735678464f4946414c467065664f58546c703756632f526d7553354d3865374532355431396e5164662f495a4f564e376b3555576b2b454d30387757357848783866564b2f567256685251644f2b61584c2f324544486d506f7435615966747379704233532b614a78715247776a68652b4754574f7567385539383668736375304c6b4f354155467446647238416d54445066564457433034703072784e612f39752f6154417746484f4d39412b7577386a32324433513731466639435536533958754c64517575726b39704e3034766637317361594f396a65756352336c7a5252504870745a486f4e36436257652f33384f374776676b55486b307636594f6d5772725634616662586f776d4a6c6a363173656c656d5a3539764c44702b44543131347a5a31394e6c4b7a6e6a76794d7149317432506c7839646e33355462434b737757583776683132374979794e2b38435153715641695230417572526f5a6d4e7572556755427a374539415a45637149706b72434639387472347553344a745162337a79774e50523965796e583637354537776571682b665a6c5a646a656232497a52733366556e6c396a36587a614e765466706356634845395856763059656558647567332f7270677762774d34715944366c46452b4274496539726d593678372b6d665279466f312b314d54424d4a62494f436c496766737479324b747171574e524e6568446f5535687a6e6a516244683931784f5957545366786e7269762b67534a4477303738596b424d434a32795170424c412f452f712f774c38487958467839486d746f427241516b565941426b3169413654714c4276654748584c704c3662374f67766b484250565462334941422b616d5730516854485367506f4738325547546b44446d766d385838476f544549622b70536d796e6341534c65766c54577879315164616a31337448426e524d5153367a4e784773566474426d6f712b484b34583436617934744b6e2f3555443442774b6a566c4c76794d69473142414853513137376c552b5972442f7770485a652f6e66593234316d6d7139705639503264705a72344244725a6f3569447a31365645683743723567397054594b7248524932786176756d6930504a71434a392f3655684e413079353159554d6d72792f42454a7930506c496f4f34304759493249496c6a394351706d63446d6559717458645a664a5a644937664b65753678684578414c75434441316f3550795732706c574a385442687037744c51596468707378546f627274795347743639595344464a63424d704f62754c306332425445395379427036375a5951712b306f6e774d73554d443177643247495a36465556684832666c764c43652f42543756445a4662642f483747777a4d545138424535595a5a45695045566835726d34616e66464548693178756d4e756f2f652b574a7462483374653345374e4a652b35784e45484465314a77365476336a6a506a4f48686a4f716b6a54776d70413942384f39425959304b52552b72464972563639686b316f32453879394b786b6d7362756a6c6a6d6547323246387256634f42676d69737052623759474a466b7043582b74756b42473033556a3437533236616b68684545706c4148312b724a6b5a514349616e34694335394a674947746236716a37704238444c615365783768686369665166536a4e6d584f2b366447363867432f4f745135376e386469554e586445484941476f634b58537975774666316347486d56736b753550774742776a63787271614156797851465244784e4832686678706c62584f354453724577666a674d7559373270303456754f732f4747464c5443624c494d55555057784d41647a706a654430776543554f71696159667279426d68366b366157542f71526772686c6f2b51316f7750557456486230575a6f37764333324130317a3274534e6b6d5150465a7842684836527a6753354c47596879303330566f4c585139725243706b72566b6c69564a5a343367764e5470704934427866434876714a2f73396679537978526645314f6e316e6152534e4e3972397063456f6a2f7646796e552f4239477142544f656d795673486a3137334b7245336f696c4a304d464a6258794a37393058442f6b7944436c6950325a5539776d6953315550336e33782b6762586d345166557662704e68336d776268396161706a494d342b5456394e675952736d487273364c51424238584e67626a4b6f4a79574d416f4b654671675658615965535a39726576447564417a564d304b57784669665454522f414b70756f2b2f6974493478493352505947527477556c48455a314137727235584f617643566b395265646f6d323548577872794d44787254486f666b4c733951656e584a522b774262776d524b6b64754466694750744e61336c6747714f624b434e5962465031314c743731444d6765576875354c597a355833356874324c51375a7042714a4873716d7566656668726f4d7130374a6d342f4a4e4a79364e50464669416846774a71646765764d54374e486e3161646f6b2b77684f626a693146433546484c59586b79485430653661686f6f61626d51617271363833674d39776f437775667a386e644b6b6c6d4c4d736d634856637368587676585277624a446478597157673076643630502b6b744530542b6d6b50782b666f5546702f36544b7167613865346d657131514d466c416776747a425a5648622b526372436d6677465241434848735953476c43776334336268366e7145337a565a4c6b53767439796f79415773426a424d67725750467175486e34396a673255395238555943573152326b52755476586e7a5871505350394a306c6878546e51326d466a676b7074436b5365724b67356855306c65386b7a3256584f62356a57342b68303331786632746b7263432b6d696150694b457470796471326c59576d67376f5359646e3373583865746274632f6152567075732f716a30455432713234434b77726b476f56575758456a4e2b76787370744a4749645031484e45782b576b59695041414763775a51497841502b6935306c794e65766c643135657a3136376e4b773746625a6146333955616849306a3857646c70364679434b677544524642356b735771364733742b6137414977574845376e48392b68474755514c70684f76496c6e737839423054646e336455632b66514b31717430424d70736b65364c63673063395453335047744d78305a
+      principal: 41594144654e5a3858684e3042313669752b73686a31665563614141655141434141706859324e76645735304c576c6b414177784f5455354e7a63324f544d354f546b41465746336379316a636e6c77644738746348566962476c6a4c57746c655142455158427161564677615578314d5646715a4863355531566a54485a424d6a4e4a5332593364304e534e486b33596b785a555531765657747662304e524d457844517a51765a56684362475a4c55465244637a45774f56423350543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d5261796c79304e6532676875436e3258416745516744765159506666375052717371366b536b5578645731744e43665a66352b2f387373635333577a7a5341756b5944362b4f5868456e316c746c4e50704b79335838394231742b6c2b2b626b6a716d522f774941414141414441414145414355376b78673845354632377a6659586c767064633637573764375946583666666b4249446f2f2f2f2f2f774141414147666b6b706e7032736d436764704f366741414168627a53734f6969767a7874687a692b4a306b4b657577442b6e427141332b3463386a73306e5866646841635849766e3943382f61346a33644941794f56655931694f74766a456e5a366a4d4b68714a2f646a574537696652676c71696e702f534179376d4f322f3934546564506437754274335742685735745951684d36566f634b48744e546965415661694932455542656c2b5831324c4772766f714a304d312f4a62664176684b323852302b4a732b554c6d716f563630356961664d6a4773514a486c325879767947746659556c4d32754752656d56324f6f694e77314d4b73317a36727a7a7371785150627a716347506a336c506d536a5a3969626c7947324b415159645275484f346d633971335778316f6649486b796531374c4768324b755272585162447379346e394e6b7a30584334423444476c4e474d416f6233556753736f544449645a44586238437751546d4155525437442f53595967615a6c5759786c6552333678585a2b53616f536b6b416430614e6a4373684d4a42684f7644577452712b2b7053516e527a306e516d723271765a6e622f65486e6447624361644f3577342b735a55564b44322b335036534a564467713948474167464b755a765a5641647361353277437969313067356b4f614c3654796a59555a426237364a64716f58544e74734d41666735386b7a6f6a566d5a4430694e667377684554575967474f56462f4869785942594f7a77446a5a7856726f707359776b65644c37442f774753322b664d333947673078664474716d46442f71516b6f4d4c3450536942562f3543327368324b31417744513537636a4d5171586568513030784e68523748476348366b75675a75582f53696a644e51346b534d67757173677a4d726f436c7058594a7551725379597236436f72523378465261556a347441692b596c6f4e6c5a4d46777670756a38502b56476759414264636d74744a49772f3338516a6b38324d69474654337966746b5053655844543948756c4c6d6b77636a73613575506b55496b4965532f476b3648425a574c4448476862757032614a66706e323059687442576273695a656d2f446f34366b727337656536734f6d3345536d49536a675573314e424d474d562f54706a4576576a633243324f6c42724f2f776d4a61664f7a546758776b76786d576b49366b5a4d2b65777837434862783077527a5a4a764563784c753741376d414e626768444f62704667555763766c33536c597a4348575662306b732f344b7a417554427232797a4e61696b704c476c6b564c5047514236797070437830367a455472507a6243667965334f394264613545475962373955713274532b336f6c446d39756d772b356d5164384e784961567a325275446c4e666a747570336937526e672b72774736643039366f695a65444d6770414d4963632b4f58704f68346f353557785546474845734456757457596d6359434868526e456c32702f78324a715634455064426b2b4e565565612f32454c5442785a6b734149417a53564c4c33566744777151516675786b6e5a4f414c4a593777796d6d352f626b447858565455464b426d4e346975664e4d5231794e3737642f41634f582f39416539496779446d5343515643734645427a786c74352b4169676b4b7a52616e542b442b564f744564773037686f5253745a363355624d4b652b366e4a79587a413575386e6a346a426d62696b64495532714e72374231484156694358743433644e655a5a6e414a6d3361564461504933736a5544557a63574c59364e37304e724d4f312f3137616c5a6a33396a334b78574769354544526438615969633351544f314a536464795470737458357a5130666c4251586869737a2b2f6f6b2f4f6b475a4c7a647363515746796a6953334c2f6a5a3453443678385831632f58434c6273367a45452f35734d6169527635304f59614a653039634939533773472f516444794a46713574597373565a322f4b32557a46353252364b48592f6e5a37774939637867532f7a6f4a4559704169364e6f482b56594934596e57685677556b6f6c464266516b6254336a63583155416e4e63766c3764646d706a626e6751657a4f76756c417672477532505137507466574a4b4b4f776a494c48346d32447271366b76586847344e664e5668342b465055666f614e57327147554d555933516b72516a5956483333367043564367756c695369437872747975305a335a363850463976316d6b2b2b65714251594550443565756a334266575965373666745a48356b69526973594767736a486375525271736369786c3051555a6f3070484e6c705849544a305358646456715478484946476963534b55574a6353755452622b4c4334614f3079666937646d78634c586848434c446246384b6b4d44524c734e54626f62623945713648427a73713442635a393679724f746d625532717765484b5558342f74472b68574431494c347264584d775a456e69675a7450325258616a6e62417147656d63794c316c45336270757063476a4b4477585a4568744d4c4c396f7971796a32477a5255546935776a59316b50346d7269374a4f55683653693557497956735168374c364e746d673946647566744d5956454b34463566332f426851697a36575852426e547a584674507246372f65467874324c7145594448342b4a624f3844336e7246546a54485a44326351484c62726d556653744c414d4a4a4a30477741337951696d5341325146586b64594242413335583849454367777562566d6f6e4a2b7a4b553432682b792b4b41497a424a4a554450363034674d68314a425558355a6f7055307052714e4e4b78705a39547444677535742b476e6f566b78784e714943442f644444735735534c356b516166474d41716646635733596f4f527a72385a594675327a3558682b6c4f572f2f773172705a4f7a4844712f4a466b6d583047537946517a6d2b37386f336f6b566e32306269702b435448434e506965706b49483971612f594c7659504130542b7359776a664964662b75594b62634f2b56694634632f7430444c4641794c765a494a444161504657456d58644b7843474b455151454c4b36364d59487248344d6a3437774d4d767969772f494961556d4e594946766e7376416c366b6f753633332f6f663448586135387a753770637767443646726f58307331395a2b4d735875306d6f6a484f722f7150344a316a2f68435873554f38326f2f4f655761413549756d6e49346949336979546b545371386562556b5a6847474b472b382b74725433766334357265633656394c76305359453541354730627a644b374f682b5545425a3579794d58356a4e76684271754441647a346b4b43544a4e645a6b566856575345744a4f302f786735514c5661352b2b52394576356e666f706a7a655a4c2b4b347662676e346c58717171335935723152436a5a525a386f75695a345a6c484970316772674a7a4b354c456b6d3877784e4e477a79356b6c432f704c5a4c6d75494b795955622f2b3065524b6b79587a6463636d626764466f55316f516d7042542b4b6d57763464375068425a306d6839597748775477516271366f3664626339396265415664442b675630313953374f66615972764a45336a512f4947764f534850706139347770426e69453638554454494174534e72357375454865744e58564e52414e2b6e792f78364969594a63396b712f47666d41497976686f464e6b304b357365386369565733697438334946627650663150416471636c333552797750456335324e4674317248585a686c6a63744a663972596731576849763639415a4a5668714263765a3449476e53437734773367344a2b684c2b38706a6973626b6f45524752305a45434966494c30353377384b556b7131327a337165544b6464303376364f3653306b4b4c75694d715139706550537a704172522f663033746a346a5a364d494e4a77426e4d4755434d463853504870634356537966714237674f35632b785a4f44756d534577725a3930365a6c78416a59334352644845413235335a794c3279676a43735a392f2b65514978414b576e662f39324445547a725a44385130594d693939354c75316d774458594f324c5649517a46674d3677737636385569745a6b6a694e647652516a38557646673d3d
+      type: 415941446543713676737532437237504c30716b7234795a39635941655141434141706859324e76645735304c576c6b414177784f5455354e7a63324f544d354f546b41465746336379316a636e6c77644738746348566962476c6a4c57746c655142455158566b4d45393651326c6a516d787155445a44556b647252337070646a5a315548705851314132565867724d6b553561545a50576c464462554e6b4e6b706f617a5531555868434e6d31445647315057545259547a4a6e50543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d3233586e42453073385a2b6d7a7a6c7441674551674476444c6e3461454d57555568746f526b523062595555357a4e30527a43667579725238744371455a78746b594a706e42615068475446753756503067376473734d63654e624d71713234314c73637841494141414141444141414541446e5a656a2b5a2f32467979645070327a58587446694367793349504d4b704166375550312b2f2f2f2f2f774141414148312f5a43796d67667377796270356a45414141414b55353943486a444e446d50332f6d33694e353933767378527a62616632486f5653534d415a7a426c416a45417536675861344570484d794e6a69654c46335a3838496877384357546e4d4b3568644e6a61596a775141456c394e41736c4d4b7a43773131762b537662477357416a4131797369425061466b6a776e4e504451424c646c5150314965676f58375541416244304567583167417775386e384c4c6355624a6532385151426565784573593d
+  push-gcm: !com.amazonaws.mobilehub.v0.PushPlatform 
+    attributes:
+      consumingFeatures: mobile-analytics
+      credential: 4159414465496b6d6550306c662b367062316f646169453371453841655141434141706859324e76645735304c576c6b414177784f5455354e7a63324f544d354f546b41465746336379316a636e6c77644738746348566962476c6a4c57746c6551424551544a684e484a4a4f45307756486c45646e68346547646862566435576d464d5a3274765432354f656c42464d57397755464530654756714e6e52595432705a61464a6c53574e7063336f784b7a52454e6b4a544e54563350543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d5962512f792b41324777344939346f37416745516744754f6a41456c716a77344144575955377265553551774563422f6669412b4e6955706d6e33762f734b4d792b7633324f6a734464725a427075773461574b53722b6a6e74563249772b5a615a49583251494141414141444141414541424b554944436778503031596132356736416f3452412b4b667645304533737452656a5138662f2f2f2f2f7741414141457069524c6672686446304b6453526e774141414359414d3656437849655572523442314f3537325a685a2b67416f664d472b6c5a743651756d2b5753666d6c784f312f715a4f2b4e486c4277383565554745514f74446c4b325033336c7345685232557a734e705769364b4e69356a30434a78526c3567365235544e313135694149516e305a2f31494a7247632f66357033304a7572424142363862766e7774645a30487054733767586557547a47664d4739626b6467652b69644f3367305775777830414d3833776f643250766e786e43392b7558423674624f666734467271626474456446476c36726373644f6a594a4c384c414763775a5149774a6634705a3749727a3779556c6a464b656b6a67662f534f35586136774c6e4b5558726551336d487647746449725762315053673245632b584a30436d794d63416a454178627a5462563765337352544d527970584937645169573061562b54715951334e4d6d555378353062576f41584d4f334e6a734464676a4647364d656f70544e
+      gcm-sender-id: 41594144654743733377594848597273516a6b634676435a69374541655141434141706859324e76645735304c576c6b414177784f5455354e7a63324f544d354f546b41465746336379316a636e6c77644738746348566962476c6a4c57746c6551424551546c575232683254334e455958525462564647526d68486555786b656e526b576d704f646c5257636b6c7a574768344d7a4646646e4e7954444a6e64314e79654570564d57733554575a56656c42555744513257554e5250543041415141485958647a4c5774746377424c59584a754f6d4633637a707262584d3664584d745a57467a644330784f6a517a4e7a41354d446b354d44597a4e5470725a586b764e7a68694d3255314e5467744f474e6b5a5330304d5751334c5467345a444d744d7a466a5954526c5a446b305a475134414b6342415145416548576a726a4f5974744532443062336d2f3661456f55617a61414777487a796535774350734f712f4b695a41414141666a423842676b71686b69473977304242776167627a4274416745414d4767474353714753496233445145484154416542676c67686b67425a514d45415334774551514d7667534d4965612f766957507970645541674551674473387173646c48664c796e6d4470707559754e5a396d4630796a34774441484b5366516641325a2f6b2b794957544d6b2f62554964326b567457324f4f396d32307763345472366368517468336b3851494141414141444141414541446e473375714b666d7343486a3145686e336143764d374c4b324a6b533536367369614474792f2f2f2f2f77414141414735486b7a2b45764256346f4a7a74486f414141414c554e36456675525030466d7a4775763248546e713555752b7249356c64776a7654617961414763775a514978414f4172424c4d5a71573779742b436f715445504c78307571486a6d753046684276723756695933555370522b592b336b5048584a7a66776c695a6f5348394e4e414977444d436434706e4735516139596b3144532f51566e2f534d344b4548726e796b4c4d6f476f7a44334b3535435671306c6878715233325248475a346f47716f41

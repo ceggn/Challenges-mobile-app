@@ -1,0 +1,66 @@
+# Use iOS 8 and above
+platform :ios, '9.0'
+
+# Specify Workspace
+workspace 'Challenges'
+
+target 'Challenges' do
+  # Install additional dependencies
+  pod 'Firebase'
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  # pod 'Firebase/Crash'
+  pod 'Firebase/Database'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Performance'
+  pod 'Firebase/Storage'
+
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge',
+    'DevSupport',
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket',
+    'RCTImage',
+  ]
+  # Explicitly include Yoga if you are using RN >= 0.42.0
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+  # Fix FB SDK
+  pod 'FBSDKCoreKit', '~> 4.40.0'
+  pod 'FBSDKLoginKit', '~> 4.40.0'
+  pod 'FBSDKShareKit', '~> 4.40.0'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  pod 'react-native-keep-awake', :path => '../node_modules/react-native-keep-awake'
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+  pod 'react-native-fast-image', :path => '../node_modules/react-native-fast-image'
+
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+
+    # The following is needed to ensure the "archive" step works in XCode.
+    # It removes React & Yoga from the Pods project, as it is already included in the main project.
+    # Without this, you'd see errors when you archive like:
+    # "Multiple commands produce ... libReact.a"
+    # "Multiple commands produce ... libyoga.a"
+
+    targets_to_ignore = %w(React yoga)
+    
+    if targets_to_ignore.include? target.name
+      target.remove_from_project
+    end
+
+  end
+end

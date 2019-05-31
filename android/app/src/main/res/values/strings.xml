@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Challenges</string>
+    <string name="facebook_app_id">708137699550743</string>
+    <string name="fb_login_protocol_scheme">fb708137699550743</string>
+</resources>
