@@ -528,7 +528,7 @@ class MySignUp extends SignUp {
         transparent={false}
         visible={this.state.modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          console.log('Modal has been closed.');
         }}>
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
           <View style={{ flex: 1, ...Platform.select({
