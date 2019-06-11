@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
 export default class AllFollowersScreen extends Component {
     state = {
         refreshing: true,
+        myUsername: "",
         result: [],
     };
     constructor(props) {
@@ -69,6 +70,13 @@ export default class AllFollowersScreen extends Component {
         this._loadFollowers = this._loadFollowers.bind(this);
     }
     componentDidMount(){
+        Auth.currentAuthenticatedUser().then(
+            myUser => {
+                this.setState({
+                    myUsername: myUser.username
+                });
+            }
+        );
         this._loadFollowers(this.props.navigation.getParam('sub', ''));
     }
     _loadFollowers(sub){
@@ -229,7 +237,7 @@ export default class AllFollowersScreen extends Component {
                             renderItem={({item}) =>
                                 <ListItem avatar>
                                     <Left>
-                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewProfile', {
+                                        <TouchableOpacity onPress={() => this.state.myUsername == item.Username ? this.props.navigation.navigate('Profile') : this.props.navigation.navigate('ViewProfile', {
                                             user: item.Username,
                                             needUpdate: true
                                         })}>
@@ -237,9 +245,9 @@ export default class AllFollowersScreen extends Component {
                                         </TouchableOpacity>
                                     </Left>
                                     <Body>
-                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewProfile', {
-                                                user: item.Username,
-                                                needUpdate: true
+                                        <TouchableOpacity onPress={() => this.state.myUsername == item.Username ? this.props.navigation.navigate('Profile') : this.props.navigation.navigate('ViewProfile', {
+                                            user: item.Username,
+                                            needUpdate: true
                                         })}>
                                             <Text style={{
                                                 fontSize: 14,

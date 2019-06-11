@@ -71,7 +71,7 @@ import PushNotification from '@aws-amplify/pushnotification';
 import * as mime from 'react-native-mime-types';
 import aws_exports from './aws-exports';
 Amplify.configure(aws_exports);
-//PushNotification.configure(aws_exports);
+PushNotification.configure(aws_exports);
 import { ErrorRow, Loading, SignIn, SignUp, ConfirmSignUp, ConfirmSignIn, VerifyContact, ForgotPassword, RequireNewPassword, AmplifyTheme } from 'aws-amplify-react-native';
 import { withAuthenticator } from './components/customAuth';
 import { LoginUsername, LoginPassword } from './custom-login-ui/FormElements';
@@ -4749,7 +4749,7 @@ class InitialScreen extends Component {
               if( notification._alert.title != "New Message" ){
                 Toast.show({
                   text: notification._alert.title+": "+notification._alert.body,
-                  position: "top"
+                  position: "bottom"
                 });
               }
               // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
@@ -4758,32 +4758,55 @@ class InitialScreen extends Component {
               if( notification.title != "New Message" ){
                 Toast.show({
                   text: notification.title+": "+notification.body,
-                  position: "top"
+                  position: "bottom"
                 });
               }
             }
           });
-    
-          // get the registration token
-          PushNotification.onRegister((token) => {
-            console.log('in app registration', token);
-            Auth.currentAuthenticatedUser().then(
-              user => {
-                Auth.updateUserAttributes(user, {
-                  'custom:pushToken': token,
-                  'custom:os': Platform.OS.toString(),
-                }).then(
-                  updatedUser => {
-                    console.log(updatedUser);
-                  }
-                ).catch(
-                  err => {
-                    console.log(err);
+          // if push token cached
+          const cacheKey = 'push_tokenb49d4d5e7b364ec6bd034bf6796c829b';
+          AsyncStorage.getItem(cacheKey).then((lastToken) => {
+              if (lastToken){
+                Auth.currentAuthenticatedUser().then(
+                  user => {
+                    Auth.updateUserAttributes(user, {
+                      'custom:pushToken': lastToken,
+                      'custom:os': Platform.OS.toString(),
+                    }).then(
+                      updatedUser => {
+                        console.log(updatedUser);
+                      }
+                    ).catch(
+                      err => {
+                        console.log(err);
+                      }
+                    );
                   }
                 );
+              }else{
+                // get the registration token
+                PushNotification.onRegister((token) => {
+                  console.warn('in app registration '+token);
+                  Auth.currentAuthenticatedUser().then(
+                    user => {
+                      Auth.updateUserAttributes(user, {
+                        'custom:pushToken': token,
+                        'custom:os': Platform.OS.toString(),
+                      }).then(
+                        updatedUser => {
+                          console.log(updatedUser);
+                        }
+                      ).catch(
+                        err => {
+                          console.log(err);
+                        }
+                      );
+                    }
+                  );
+                });
               }
-            );
           });
+
           // Update locale
           Auth.currentAuthenticatedUser().then(
             user => {

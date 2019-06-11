@@ -66,12 +66,20 @@ export default class FollowersScreen extends Component {
         this.state = {
             refreshing: true,
             loading: false,
+            myUsername: "",
             result: [],
         };
         this._loadFollowers = this._loadFollowers.bind(this);
         this.showReportActions = this.showReportActions.bind(this);
     }
     componentDidMount(){
+        Auth.currentAuthenticatedUser().then(
+            myUser => {
+                this.setState({
+                    myUsername: myUser.username
+                });
+            }
+        );
         this._loadFollowers(this.props.navigation.getParam('sub', ''));
     }
     _loadFollowers(sub){
@@ -273,15 +281,17 @@ export default class FollowersScreen extends Component {
                             renderItem={({item}) =>
                                 <ListItem avatar>
                                     <Left>
-                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewProfile', {
-                                            user: item.Username
+                                        <TouchableOpacity onPress={() => this.state.myUsername == item.Username ? this.props.navigation.navigate('Profile') : this.props.navigation.navigate('ViewProfile', {
+                                            user: item.Username,
+                                            needUpdate: true
                                         })}>
                                             <Thumbnail small style={{ width: 30, height: 30, borderRadius: 15}}  source={ this.getUserAvatar(item) ? { uri: this.getUserAvatar(item) } : require('../assets/images/avatar.png') } />
                                         </TouchableOpacity>
                                     </Left>
                                     <Body>
-                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewProfile', {
-                                                user: item.Username
+                                        <TouchableOpacity onPress={() => this.state.myUsername == item.Username ? this.props.navigation.navigate('Profile') : this.props.navigation.navigate('ViewProfile', {
+                                            user: item.Username,
+                                            needUpdate: true
                                         })}>
                                             <Text style={{
                                                 fontSize: 14,
