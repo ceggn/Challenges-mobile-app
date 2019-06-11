@@ -13,7 +13,7 @@ import {
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from './selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import { API, I18n } from 'aws-amplify';
+import { API, Auth, I18n } from 'aws-amplify';
 import getTheme from '../native-base-theme/components';
 import customStyle from '../native-base-theme/variables/platform';
 import {

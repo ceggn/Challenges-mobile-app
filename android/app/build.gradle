@@ -100,7 +100,7 @@ android {
         applicationId 'de.challenges.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 190
+        versionCode 191
         versionName "1.2.4"
         ndk {
             abiFilters "armeabi-v7a", "x86"

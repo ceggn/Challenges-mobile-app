@@ -30,13 +30,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>190</string>
+	<string>191</string>
 	<key>FacebookAppID</key>
 	<string>708137699550743</string>
 	<key>FacebookDisplayName</key>
 	<string>Challenges</string>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -60,7 +60,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need camera to record new video challeges</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need your microphone while recordin challege video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
