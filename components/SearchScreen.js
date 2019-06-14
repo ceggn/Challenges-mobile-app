@@ -390,6 +390,7 @@ export default class SearchScreen extends Component {
                                             videoAuthor: item.fields.author[0],
                                             videoDate: Number.parseInt(item.fields.creationdate[0]),
                                             videoDeadline: Number.parseInt(item.fields.deadlinedate[0]),
+                                            videoCompleted: item.fields.completed[0],
                                             prizeTitle: item.fields.prizetitle[0],
                                             prizeDescription: item.fields.prizedescription[0],
                                             prizeUrl: item.fields.prizeurl[0],

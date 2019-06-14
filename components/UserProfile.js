@@ -371,6 +371,7 @@ export default class UserProfileScreen extends Component {
                       videoAuthor: item.author,
                       videoDate: item.creationDate,
                       videoDeadline: item.deadlineDate,
+                      videoCompleted: item.completed,
                       prizeTitle: item.prizeTitle,
                       prizeDescription: item.prizeDescription,
                       prizeUrl: item.prizeUrl,

@@ -1586,6 +1586,7 @@ class VideoScreen extends React.Component {
         videoAuthor: item.author,
         videoDate: item.creationDate,
         videoDeadline: item.deadlineDate,
+        videoCompleted: item.completed,
         prizeTitle: item.prizeTitle,
         prizeDescription: item.prizeDescription,
         prizeUrl: item.prizeUrl,
@@ -1869,14 +1870,11 @@ class VideoScreen extends React.Component {
     const videoAuthor = navigation.getParam('videoAuthor', '');
     const videoDate = navigation.getParam('videoDate', '');
     const videoDeadline = navigation.getParam('videoDeadline', '');
+    const videoCompleted = navigation.getParam('videoCompleted', '');
     //const videoPayment = navigation.getParam('videoPayment', '');
     const videoPayment = 0;
     const challengeId = navigation.getParam('challengeId', '');
     const authorUsername = navigation.getParam('authorUsername', '');
-    const prizeTitle = navigation.getParam('prizeTitle', '');
-    const prizeDescription = navigation.getParam('prizeDescription', '');
-    const prizeUrl = navigation.getParam('prizeUrl', '');
-    const prizeImage = navigation.getParam('prizeImage', '');
     var currentDate = new Date().valueOf();
     return (
       <ImageBackground
@@ -2009,7 +2007,7 @@ class VideoScreen extends React.Component {
                 paddingVertical: 0,
                 marginBottom: 10
               }]} >
-              { videoDeadline > currentDate ?
+              { videoDeadline > currentDate || (videoDeadline < currentDate && !videoCompleted) ?
                 <Row>
                   { this.state.canParticipate && !this.state.hasParent ?
                   <Col style={{
@@ -2745,7 +2743,13 @@ class HomeScreen extends React.Component {
     var currTime = new Date().valueOf();
     var currVideos = this.state.apiResponse;
     if( !this.state.filterOnlyLive ){
-      var filtered = currVideos.filter( function(el) { return el.deadlineDate > currTime; } );
+      var filtered = currVideos.filter( function(el) {
+        if( el.deadlineDate > currTime || (el.deadlineDate < currTime && !el.completed) ){
+          return true;
+        }else{
+          return false;
+        }
+      } );
     }else{
       var needUpdate = true;
     }
@@ -3217,9 +3221,9 @@ class HomeScreen extends React.Component {
               <Col>
                   <Text style={styles.trendingTitleText}>{item.title}</Text>
                   <Text style={styles.trendingTitleDescriptionText}><TimeAgo time={item.creationDate} /></Text>
-                  { item.deadlineDate < new Date().valueOf() ?
-                    <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Ended')} { moment( parseInt( item.deadlineDate ) ).format('lll') }</Text>:
-                    <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Live')}</Text>
+                  { item.deadlineDate > new Date().valueOf() || ( item.deadlineDate < new Date().valueOf() && !item.completed ) ?
+                    <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Live')}</Text>:
+                    <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Ended')} { moment( parseInt( item.deadlineDate ) ).format('lll') }</Text>
                   }
               </Col>
               <Col style={{ width: 30 }}>
@@ -3244,6 +3248,7 @@ class HomeScreen extends React.Component {
               videoAuthor: item.author,
               videoDate: item.creationDate,
               videoDeadline: item.deadlineDate,
+              videoCompleted: item.completed,
               prizeTitle: item.prizeTitle,
               prizeDescription: item.prizeDescription,
               prizeUrl: item.prizeUrl,
@@ -3575,6 +3580,7 @@ class TrendingScreen extends React.Component {
           videoAuthor: item.author,
           videoDate: item.creationDate,
           videoDeadline: item.deadlineDate,
+          videoCompleted: item.completed,
           prizeTitle: item.prizeTitle,
           prizeDescription: item.prizeDescription,
           prizeUrl: item.prizeUrl,
@@ -3971,6 +3977,7 @@ class ProfileScreen extends React.Component {
                   videoAuthor: item.author,
                   videoDate: item.creationDate,
                   videoDeadline: item.deadlineDate,
+                  videoCompleted: item.completed,
                   prizeTitle: item.prizeTitle,
                   prizeDescription: item.prizeDescription,
                   prizeUrl: item.prizeUrl,
