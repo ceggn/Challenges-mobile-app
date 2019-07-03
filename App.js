@@ -2284,7 +2284,7 @@ class AddChallengeScreen extends React.Component {
         "authorSub": this.state.sub,
         "authorUsername": this.state.username,
         "completed": false,
-        "approved": false,
+        "approved": true,
       }
     }
     const path = "/videos";
