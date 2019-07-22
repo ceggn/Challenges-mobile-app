@@ -81,7 +81,7 @@ app.get('/videos', function(req, res) {
     }else{
       queryParams = {
         TableName : tableName,
-        Limit : 40,
+        Limit : 6,
         IndexName: 'parent-creationDate-index',
         KeyConditionExpression: 'parent = :null',
         ExpressionAttributeValues: {
@@ -439,6 +439,32 @@ app.put(path, function(req, res) {
             res.json(err);
           } else{
             res.json({success: 'view increment succeed!', data: data})
+          }
+        });
+      }
+    });
+  }else if( req.apiGateway.event.queryStringParameters && req.apiGateway.event.queryStringParameters.participant && req.apiGateway.event.queryStringParameters.uuid ){
+    let queryParams = {
+      TableName: tableName,
+      IndexName: 'UUID',
+      KeyConditionExpression: 'challengeId = :challengeId',
+      ExpressionAttributeValues: { ':challengeId': req.apiGateway.event.queryStringParameters.uuid }
+    }
+    dynamodb.query(queryParams, (err, data) => {
+      if (err) {
+        res.json({error: 'Could not load items: ' + err});
+      } else {
+        var videoObj = data.Items[0];
+        videoObj.participants = videoObj.participants ? videoObj.participants + 1 : 1;
+        let putItemParams = {
+          TableName: tableName,
+          Item: videoObj
+        }
+        dynamodb.put(putItemParams, (err, data) => {
+          if(err) {
+            res.json(err);
+          } else{
+            res.json({success: 'participant increment succeed!', data: data})
           }
         });
       }

@@ -376,7 +376,7 @@ export default class UserProfileScreen extends Component {
                       prizeDescription: item.prizeDescription,
                       prizeUrl: item.prizeUrl,
                       prizeImage:item.prizeImage,
-                      hasParent: item.parent,
+                      hasParent: item.parent == 'null' ? false : item.parent,
                       videoCategory: I18n.get('Profile'),
                       videoPayment: item.payment,
                       challengeId: item.challengeId,

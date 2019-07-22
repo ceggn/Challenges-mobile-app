@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
       fontStyle: "normal",
       lineHeight: 22,
       letterSpacing: -0.05,
-      textAlign: "center",
+      textAlign: "left",
       color: "#9b9b9b"
     }
 });
@@ -85,11 +85,13 @@ export default class LikedVideosScreen extends Component {
         API.get("videosCRUD", path)
             .then(
             challenge => {
-                this.setState(
-                    {
-                        result: [...this.state.result, challenge]
-                    }
-                );
+                if(challenge){
+                    this.setState(
+                        {
+                            result: [...this.state.result, challenge]
+                        }
+                    );
+                }
             }
             ).catch(err => console.log(err));
     }
@@ -137,7 +139,7 @@ export default class LikedVideosScreen extends Component {
                       prizeDescription: item.prizeDescription,
                       prizeUrl: item.prizeUrl,
                       prizeImage:item.prizeImage,
-                      hasParent: item.parent,
+                      hasParent: item.parent == 'null' ? false : item.parent,
                       videoCategory: 'Profile',
                       videoPayment: item.payment,
                       challengeId: item.challengeId,

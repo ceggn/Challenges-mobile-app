@@ -32,28 +32,16 @@ const logger = new Logger('auth components');
 
 export { Authenticator, AuthPiece, SignIn, ConfirmSignIn, SignUp, ConfirmSignUp, ForgotPassword, Loading, RequireNewPassword, VerifyContact, Greetings };
 
-export function withAuthenticator(Comp, includeGreetings = false, authenticatorComponents = []) {
+export function withAuthenticator(Comp, includeGreetings = false, authenticatorComponents = [], federated = null, theme = null, signUpConfig = {}) {
     class Wrapper extends React.Component {
         constructor(props) {
             super(props);
 
             this.handleAuthStateChange = this.handleAuthStateChange.bind(this);
-            this.guestSignIn = this.guestSignIn.bind(this);
 
             this.state = {
-              authState: props.authState,
-              manual: false,
-              loading: true
+              authState: props.authState
             };
-        }
-        guestSignIn(){
-          Auth.signIn('Guest', '4A^J2mewTjc68lZiVI19yW%ek&').then( () => {
-            this.setState({
-              loading: false
-            });
-          }).catch( (err) => {
-            
-          });
         }
 
         handleAuthStateChange(state, data) {
@@ -61,7 +49,6 @@ export function withAuthenticator(Comp, includeGreetings = false, authenticatorC
             this.setState({
               authState: state,
               authData: data,
-              manual: true
             });
           }else{
             this.setState({
@@ -78,56 +65,11 @@ export function withAuthenticator(Comp, includeGreetings = false, authenticatorC
             const { authState, authData } = this.state;
             const signedIn = authState === 'signedIn';
             if (signedIn) {
-              if (!includeGreetings) {
-                    return React.createElement(Comp, _extends({}, this.props, {
-                        authState: authState,
-                        authData: authData,
-                        onStateChange: this.handleAuthStateChange
-                    }));
-                }
-
-                return React.createElement(
-                    View,
-                    { style: { flex: 1 } },
-                    React.createElement(Greetings, {
-                        authState: authState,
-                        authData: authData,
-                        onStateChange: this.handleAuthStateChange
-                    }),
-                    React.createElement(Comp, _extends({}, this.props, {
-                        authState: authState,
-                        authData: authData,
-                        onStateChange: this.handleAuthStateChange
-                    }))
-                );
-            }else if( this.state.manual ){
-              return React.createElement(Authenticator, _extends({}, this.props, {
-                hideDefault: authenticatorComponents.length > 0,
-                onStateChange: this.handleAuthStateChange,
-                children: authenticatorComponents
+              return React.createElement(Comp, _extends({}, this.props, {
+                authState: authState,
+                authData: authData,
+                onStateChange: this.handleAuthStateChange
               }));
-            }
-            if( authState && !this.state.manual && authState === 'signIn' ){
-              if( this.state.loading ){
-                this.guestSignIn();
-                return (
-                  <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    padding: 10
-                  }}>
-                      <ActivityIndicator/>
-                  </View>
-                );
-              }else{
-                return React.createElement(Comp, _extends({}, this.props, {
-                  authState: authState,
-                  authData: authData,
-                  onStateChange: this.handleAuthStateChange
-                }));
-              }
           }
           return React.createElement(Authenticator, _extends({}, this.props, {
             hideDefault: authenticatorComponents.length > 0,

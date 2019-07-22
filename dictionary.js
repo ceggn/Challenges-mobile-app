@@ -54,6 +54,8 @@ const cahallengesDict = {
         'Create a new account': "Create a new account",
         'Enter your username': "Enter your username",
         'Enter your password': "Enter your password",
+        'Enter your password again': "Enter your password again",
+        'Repeat password': "Repeat password",
         'Email': "Email",
         'Enter your email': "Enter your email",
         'Phone Number': "Phone Number",
@@ -152,6 +154,7 @@ const cahallengesDict = {
         'Close': "Close",
         'Retry': "Retry",
         'There was an error playing this video, please try again later.': "There was an error playing this video, please try again later.",
+        'The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.': "The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.",
     },
     'de': {
         'Challenge': "Challenge",
@@ -207,7 +210,9 @@ const cahallengesDict = {
         'Confirm a Code': "Code bestätigen",
         'Create a new account': "Erstelle einen neuen Account",
         'Enter your username': "Gib deinen Nutzernamen ein",
-        'Enter your password': " Gib dein Passwort ein",
+        'Enter your password': "Gib dein Passwort ein",
+        'Enter your password again': "Gib dein Passwort erneut ein",
+        'Repeat password': "Wiederhole das Passwort",
         'Email': "E-Mail",
         'Enter your email': "Gib deine E-Mail ein",
         'Phone Number': "Telefonnummer",
@@ -288,7 +293,7 @@ const cahallengesDict = {
         'EULA': "Nutzungsbestimmung",
         'I Accept': "Ich akzeptiere",
         'Report a comment': "Einen Kommentar melden",
-        'Hide': "Vergbergen",
+        'Hide': "Verbergen",
         'Hashtags': "Hashtags",
         'Sign Out': "Ausloggen",
         'Confirm Sign In': "Registrierung bestätigen",
@@ -306,6 +311,7 @@ const cahallengesDict = {
         'Close': "Schließen",
         'Retry': "Wiederholen",
         'There was an error playing this video, please try again later.': "Ein Fehler ist aufgetreten, bitte versuche es später erneuet.",
+        'The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.': "Dass Passwort muss mindestens 8 Zeichen lang sein, eine Zahl und jeweils einen Groß- und einen Kleinbuchstaben haben.",
     }
 }
 

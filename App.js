@@ -280,15 +280,6 @@ class MyLoading extends Loading {
 class MySignIn extends SignIn {
   constructor(props) {
     super(props);
-    this.logBack = this.logBack.bind(this);
-  }
-  logBack(){
-    this.props.onStateChange('loading');
-    Auth.signIn('Guest', '4A^J2mewTjc68lZiVI19yW%ek&').then( () => {
-      
-    }).catch( (err) => {
-      
-    });
   }
   showComponent(theme) {
     const Footer = props => {
@@ -360,23 +351,7 @@ class MySignIn extends SignIn {
                 },
                 React.createElement(
                   Left,
-                  {},
-                  React.createElement(
-                    Button,
-                    {
-                      transparent:true,
-                      onPress: () => {this.logBack()}
-                    },
-                    React.createElement(
-                      Icon,
-                      {
-                        name:'back',
-                        size: 15,
-                        color:'#373744',
-                        style:{ left: 15 }
-                      },
-                    )
-                  )
+                  {}
                 ),
                 React.createElement(
                   Body
@@ -560,7 +535,7 @@ class MySignUp extends SignUp {
                 }}
                 startInLoadingState
                 renderLoading={this.indicator}
-                source={{ uri: "https://challenges.de/+agb.html" }}
+                source={{ uri: "https://challenges.de/%20agb.html" }}
               />
             </View>
             <View>
@@ -616,6 +591,26 @@ class MySignUp extends SignUp {
                 secureTextEntry: true,
                 required: true
               }),
+              React.createElement(
+                Text,
+                {
+                    style: {
+                      fontSize: 11,
+                      color: '#303030',
+                      paddingHorizontal: 32,
+                      paddingVertical: 10
+                    }
+                },
+                I18n.get('The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.')
+            ),
+              React.createElement(FormField, {
+                theme: theme,
+                onChangeText: text => this.setState({ password2: text }),
+                label: I18n.get('Repeat password'),
+                placeholder: I18n.get('Enter your password again'),
+                secureTextEntry: true,
+                required: true
+              }),
               React.createElement(FormField, {
                 theme: theme,
                 onChangeText: text => this.setState({ email: text }),
@@ -634,9 +629,9 @@ class MySignUp extends SignUp {
                   },
                   React.createElement(
                       Button, {
-                          style: theme.button,
+                          style: !this.state.email || !this.state.username || !this.state.password || this.state.password != this.state.password2 ? theme.button : [theme.button, {backgroundColor:'#ED923D'}],
                           onPress: () => this.setModalVisible(true),
-                          disabled: !this.state.username || !this.state.password
+                          disabled: !this.state.email || !this.state.username || !this.state.password || this.state.password != this.state.password2
                       },
                       React.createElement(
                           Text,
@@ -685,7 +680,7 @@ class MyConfirmSignUp extends ConfirmSignUp {
       return (
         <Header noShadow transparent>
           <Left>
-            <Button transparent onPress={() => onStateChange('signIn')}>
+            <Button transparent onPress={() => onStateChange('signIn')} style={{ left: 15 }}>
               <Icon name="close" style={{color: '#ffffff'}} />
             </Button>
           </Left>
@@ -778,12 +773,12 @@ class MyForgotPassword extends ForgotPassword {
       return (
           <Header noShadow transparent>
             <Left>
-              <Button transparent onPress={() => onStateChange('signIn')}>
+              <Button transparent onPress={() => onStateChange('signIn')} style={{ left: 15 }}>
                 <Icon name="close" style={{color: '#ffffff'}} />
               </Button>
             </Left>
-            <Body style={{width: 320}}>
-              <Title style={{width: 320, color: '#ffffff',fontWeight: '500'}}>{I18n.get('Forgot Password')}</Title>
+            <Body style={{width: 280}}>
+              <Title style={{width: 280, color: '#ffffff',fontWeight: '500'}}>{I18n.get('Forgot Password')}</Title>
             </Body>
             <Right></Right>
           </Header>
@@ -901,13 +896,16 @@ class MyForgotPassword extends ForgotPassword {
   }
 }
 class MyVerifyContact extends VerifyContact {
+  componentDidMount(){
+    this.changeState('signedIn');
+  }
   showComponent(theme) {
     const HeaderCustom = props => {
       const { onStateChange } = props;
       return (
           <Header noShadow transparent>
             <Left>
-              <Button transparent onPress={() => onStateChange('signIn')}>
+              <Button transparent onPress={() => onStateChange('signIn')} style={{ left: 15 }}>
                 <Icon name="close" style={{color: '#ffffff'}} />
               </Button>
             </Left>
@@ -2273,6 +2271,7 @@ class AddChallengeScreen extends React.Component {
         //"payment": this.state.isParent ? this.state.parentVideo.payment : this.state.payment,
         "payment": 0,
         "rating": 0,
+        "participants": 0,
         "title": this.state.title,
         "prizeTitle": this.state.prizeTitle ? this.state.prizeTitle : '-',
         "prizeDescription": this.state.prizeDescription ? this.state.prizeDescription : '-',
@@ -2286,6 +2285,12 @@ class AddChallengeScreen extends React.Component {
         "completed": false,
         "approved": true,
       }
+    }
+    // Adding a new participant value
+    if( this.props.navigation.getParam('parentChallengeId', '') ){
+      let uuid = this.props.navigation.getParam('parentChallengeId', '');
+      const path = "/videos?uuid="+uuid+"&participant=1";
+      API.put("videosCRUD", path, {});
     }
     const path = "/videos";
 
@@ -2367,7 +2372,13 @@ class AddChallengeScreen extends React.Component {
   }
   render() {
     return (
-      <SafeAreaView style={{flex:1, backgroundColor: '#eef0f3'}}>
+      <ImageBackground
+        source={require('./assets/images/screen-bg.png')}
+        style={{
+          flex: 1,
+          width: null,
+          height: null,
+      }}>
         <StyleProvider style={getTheme(customStyle)}>
           <Container style={{...Platform.select({
                 android: {
@@ -2653,7 +2664,7 @@ class AddChallengeScreen extends React.Component {
             }
           </Container>
         </StyleProvider>
-      </SafeAreaView>
+      </ImageBackground>
     );
   }
 }
@@ -2713,7 +2724,7 @@ class HomeScreen extends React.Component {
     AsyncStorage.getItem('hiddenVideos')
     .then(
       hidden => {
-        console.log('Hidden Videos: ', JSON.parse(hidden));
+        //console.log('Hidden Videos: ', JSON.parse(hidden));
         this.setState({
           hiddenVideos: hidden ? JSON.parse(hidden) : []
         }, function() {
@@ -3265,7 +3276,7 @@ class HomeScreen extends React.Component {
             <FastImage
               style={{ width: null, height: null, aspectRatio: 1000 / 564 }}
               source={{
-                uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text=video+processing':item.videoThumb,
+                uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text='+I18n.get('Loading...'):item.videoThumb,
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -3274,6 +3285,8 @@ class HomeScreen extends React.Component {
           <Grid style={styles.trendingCardFooter} >
             <Col>
               <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
+                <Text style={styles.trendingCardFooterText}>
+                  <Icon name={'award1'} size={15} color={'#000000'} /> { item.participants ? item.participants : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
                   <Icon name={'visibility'} size={15} color={'#000000'} /> { item.views ? item.views : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
