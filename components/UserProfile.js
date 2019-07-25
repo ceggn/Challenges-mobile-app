@@ -389,10 +389,14 @@ export default class UserProfileScreen extends Component {
                   >
                     <FastImage
                       style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
-                      source={{
-                        uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
-                        priority: FastImage.priority.normal,
-                      }}
+                      source={
+                        (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
+                        require('../assets/images/placeholder-alt-1.jpg') :
+                        {
+                          uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
+                          priority: FastImage.priority.normal,
+                        }
+                      }
                       resizeMode={FastImage.resizeMode.cover}
                     />
                   </TouchableHighlight>
