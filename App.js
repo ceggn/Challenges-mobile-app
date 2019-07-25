@@ -22,9 +22,7 @@ import {
   Platform,
   Modal,
   StatusBar,
-  PermissionsAndroid,
-  TouchableWithoutFeedback,
-  Keyboard
+  PermissionsAndroid
 } from 'react-native';
 
 import { WebView } from "react-native-webview";

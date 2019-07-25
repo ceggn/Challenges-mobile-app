@@ -383,26 +383,22 @@ export default class SearchScreen extends Component {
                                     </Left>
                                     <Body>
                                         <TouchableOpacity onPress={() => item.fields.videofile[0] == '-' ? '':this.props.navigation.navigate('Video', {
-                                            videoThumb: item.fields.videothumb[0],
+                                            videoThumb: item.fields.videothumb[0] ? item.fields.videothumb[0] : '-',
                                             videoURL: item.fields.videofile[0],
-                                            videoTitle: item.fields.title[0],
-                                            videoDescription: item.fields.description[0],
+                                            videoTitle: item.fields.title[0] ? item.fields.title[0] : '-',
+                                            videoDescription: item.fields.description[0] ? item.fields.description[0] : '-',
                                             videoAuthor: item.fields.author[0],
                                             videoDate: Number.parseInt(item.fields.creationdate[0]),
                                             videoDeadline: Number.parseInt(item.fields.deadlinedate[0]),
-                                            videoCompleted: item.fields.completed[0],
-                                            prizeTitle: item.fields.prizetitle[0],
-                                            prizeDescription: item.fields.prizedescription[0],
-                                            prizeUrl: item.fields.prizeurl[0],
-                                            prizeImage: item.fields.prizeimage[0],
                                             hasParent: item.fields.parent[0] == 'null' ? false : item.fields.parent[0],
                                             videoCategory: I18n.get('Search'),
-                                            videoPayment: item.fields.payment[0],
+                                            videoPayment: 0,
                                             challengeId: item.fields.challengeid[0],
                                             views: Number.parseInt(item.fields.views[0]),
                                             rating: Number.parseInt(item.fields.rating[0]),
                                             needUpdate: true,
-                                            authorSub: item.fields.authorsub[0], authorusername: item.fields.authorusername[0]
+                                            authorSub: item.fields.authorsub[0],
+                                            authorusername: item.fields.authorusername[0]
                                         })}>
                                             <Text style={{
                                                 fontSize: 14,
