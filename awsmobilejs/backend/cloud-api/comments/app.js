@@ -177,6 +177,7 @@ app.put(path, function(req, res) {
       dynamodb.query(queryParams, (error, singleChallengeData) => {
         if (error) {
           console.log("Error", error);
+          res.json({error: 'get challenge error', url: req.url, data: error});
         } else {
           var videoObj = singleChallengeData.Items[0];
           videoObj.comments = videoObj.comments ? videoObj.comments + 1 : 1;
@@ -187,13 +188,14 @@ app.put(path, function(req, res) {
           dynamodb.put(putItemParams, (putErr, challengePutData) => {
             if(putErr) {
               console.log(putErr);
+              res.json({error: 'put comments number error', url: req.url, data: putErr});
             } else{
               console.log({success: 'comment increment succeed!', data: challengePutData})
+              res.json({success: 'put comments number success', url: req.url, data: challengePutData});
             }
           });
         }
       });
-      res.json({success: 'put call succeed!', url: req.url, data: data})
     }
   });
 });

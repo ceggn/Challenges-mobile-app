@@ -66,12 +66,29 @@ import ProgressCircle from 'react-native-progress/Circle';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Stopwatch } from 'react-native-stopwatch-timer'
 
-import Amplify, { I18n, Auth, API, Storage } from 'aws-amplify';
+import Amplify, { I18n, Auth, API, Storage, Hub } from 'aws-amplify';
 import PushNotification from '@aws-amplify/pushnotification';
 import * as mime from 'react-native-mime-types';
 import aws_exports from './aws-exports';
 Amplify.configure(aws_exports);
 PushNotification.configure(aws_exports);
+Amplify.configure({
+  Auth: {
+      oauth: {
+        // Domain name
+        domain : 'challenges.auth.us-west-2.amazoncognito.com', 
+        // Authorized scopes
+        scope : ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'], 
+        // Callback URL
+        redirectSignIn : 'challenges://', // or 'exp://127.0.0.1:19000/--/', 'myapp://main/'
+        // Sign out URL
+        redirectSignOut : 'challenges://', // or 'exp://127.0.0.1:19000/--/', 'myapp://main/'
+        // 'code' for Authorization code grant, 
+        // 'token' for Implicit grant
+        responseType: 'code',
+      }
+  },
+});
 import { ErrorRow, Loading, SignIn, SignUp, ConfirmSignUp, ConfirmSignIn, VerifyContact, ForgotPassword, RequireNewPassword, AmplifyTheme } from 'aws-amplify-react-native';
 import { withAuthenticator } from './components/customAuth';
 import { LoginUsername, LoginPassword } from './custom-login-ui/FormElements';
@@ -191,6 +208,21 @@ const AuthTheme = Object.assign({}, AmplifyTheme, {
       marginTop: 15,
       marginBottom: 15,
   },
+  halfbutton: {
+      flex: 1,
+      minWidth: 140,
+      height: 32,
+      borderRadius: 16,
+      marginTop: 15,
+      marginBottom: 15,
+      marginHorizontal: 4
+  },
+  googlebtn: {
+    backgroundColor: "#ffffff",
+  },
+  fbbtn: {
+      backgroundColor: "#3b5998",
+  },
   activeButton: {
       width: 190,
       height: 43,
@@ -281,6 +313,24 @@ class MySignIn extends SignIn {
   constructor(props) {
     super(props);
   }
+  static navigationOptions = ({ navigate, navigation }) => ({
+    header: null,
+    tabBarVisible: false,
+  });
+  componentDidMount() {
+    Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          Auth.currentAuthenticatedUser().then(user => {
+            this.setState({ user, error: null, loading: false });
+          });
+          break;
+        case "signOut":
+          this.setState({ user: null, error: null, loading: false });
+          break;
+      }
+    });
+  }
   showComponent(theme) {
     const Footer = props => {
       const { theme, onStateChange } = props;
@@ -324,8 +374,7 @@ class MySignIn extends SignIn {
           style: {
               flex: 1,
               width: '100%',
-              height: null,
-              marginBottom: -14
+              height: null
           }
       },
       React.createElement(
@@ -415,7 +464,42 @@ class MySignIn extends SignIn {
                             },
                             I18n.get('Sign In'),
                         )
-                    )
+                    ),
+                    React.createElement(
+                      View,
+                      {
+                          style: {
+                              flexDirection: 'row',
+                              justifyContent: 'center'
+                          }
+                      },
+                      React.createElement(
+                        Button, {
+                            style: [theme.halfbutton, theme.bbtn],
+                            onPress: () => Auth.federatedSignIn({provider: 'Facebook'}),
+                        },
+                        React.createElement(
+                            Text,
+                            {
+                              style: [theme.buttonText, {color: '#ffffff',}]
+                            },
+                            I18n.get('Facebook'),
+                        )
+                      ),
+                      React.createElement(
+                          Button, {
+                              style: [theme.halfbutton, theme.googlebtn],
+                              onPress: () => Auth.federatedSignIn({provider: 'Google'}),
+                          },
+                          React.createElement(
+                              Text,
+                              {
+                                  style: [theme.buttonText, {color: '#4285F4',}]
+                              },
+                              I18n.get('Google'),
+                          )
+                      )
+                    ),
                 ),
                 React.createElement(
                     ErrorRow,
@@ -553,8 +637,7 @@ class MySignUp extends SignUp {
           style: {
               flex: 1,
               width: '100%',
-              height: null,
-              marginBottom: -14
+              height: null
           }
       },
       React.createElement(
@@ -650,7 +733,7 @@ class MySignUp extends SignUp {
               React.createElement(Footer, { theme: theme, onStateChange: this.changeState }),
           ),
       )
-    )
+    );
   }
 }
 class MyConfirmSignUp extends ConfirmSignUp {
@@ -791,8 +874,7 @@ class MyForgotPassword extends ForgotPassword {
             style: {
                 flex: 1,
                 width: '100%',
-                height: null,
-                marginBottom: -14
+                height: null
             }
         },
         React.createElement(
@@ -896,8 +978,67 @@ class MyForgotPassword extends ForgotPassword {
   }
 }
 class MyVerifyContact extends VerifyContact {
-  componentDidMount(){
-    this.changeState('signedIn');
+  verifyBody(theme) {
+    const { unverified } = this.props.authData;
+    if (!unverified) {
+        logger.debug('no unverified contact');
+        return null;
+    }
+
+    const { email, phone_number } = unverified;
+    return React.createElement(
+        View,
+        { style: {
+            flexDirection: 'column',
+            justifyContent: 'center'
+        } },
+        this.createPicker(unverified),
+        React.createElement(
+          Button, {
+              style: theme.button,
+              onPress: this.verify,
+              disabled: !this.state.pickAttr
+          },
+          React.createElement(
+              Text,
+              {
+                  style: theme.buttonText
+              },
+              I18n.get('Verify')
+          )
+        ),
+    );
+  }
+
+  submitBody(theme) {
+      return React.createElement(
+          View,
+          { style: {
+              flexDirection: 'column',
+              justifyContent: 'center'
+          } },
+          React.createElement(FormField, {
+              theme: theme,
+              onChangeText: text => this.setState({ code: text }),
+              label: I18n.get('Confirmation Code'),
+              placeholder: I18n.get('Enter your confirmation code'),
+              required: true
+          }),
+          React.createElement(
+            Button, {
+                style: [theme.button, {alignSelf: 'center'}],
+                onPress: this.submit,
+                disabled: !this.state.code
+            },
+            React.createElement(
+                Text,
+                {
+                    style: theme.buttonText
+                },
+                I18n.get('Submit')
+            )
+          ),
+      );
   }
   showComponent(theme) {
     const HeaderCustom = props => {
@@ -923,34 +1064,37 @@ class MyVerifyContact extends VerifyContact {
           style: {
               flex: 1,
               width: '100%',
-              height: null,
-              marginBottom: -14
+              height: null
           }
       },
       React.createElement(
-          View,
+          Container,
           { style: theme.section },
           React.createElement(
-              HeaderCustom,
-              {
-                  onStateChange: this.changeState
-              },
+            HeaderCustom,
+            {
+                onStateChange: this.changeState
+            },
           ),
           React.createElement(
-            TouchableWithoutFeedback,
-            { onPress: Keyboard.dismiss, accessible: false },
-            React.createElement(
-                View,
-                { style: theme.section },
-                !this.state.verifyAttr && this.verifyBody(theme),
-                this.state.verifyAttr && this.submitBody(theme),
-                React.createElement(
-                    View,
-                    { style: theme.sectionFooter },
-                    React.createElement(
+              KeyboardAvoidingView,
+              {
+                  style: theme.sectionBody,
+                  behavior: Platform.OS === 'ios' ? "padding":""
+              },
+              !this.state.verifyAttr && this.verifyBody(theme),
+              this.state.verifyAttr && this.submitBody(theme),
+              React.createElement(
+                  View,
+                  {
+                      style: {
+                          flexDirection: 'column',
+                          justifyContent: 'center'
+                      }
+                  },
+                  React.createElement(
                       Button, {
                           style: theme.button,
-                          light: true,
                           onPress: () => this.changeState('signedIn'),
                       },
                       React.createElement(
@@ -960,15 +1104,14 @@ class MyVerifyContact extends VerifyContact {
                           },
                           I18n.get('Skip')
                       )
-                    )
-                ),
-                React.createElement(
-                    ErrorRow,
-                    { theme: theme },
-                    this.state.error
-                )
-            )
-          )
+                  ),
+              ),
+              React.createElement(
+                  ErrorRow,
+                  { theme: theme },
+                  this.state.error
+              ),
+          ),
       )
     );
   }
@@ -1365,6 +1508,7 @@ class VideoScreen extends React.Component {
         // Use the API module to save the comment to the database
         API.put("commentsCRUD", path, newComment).then(
           apiResponse => {
+            console.log('Post comment response', apiResponse);
             let commentsArr = [];
             commentsArr = this.state.allcomments;
             commentsArr.unshift({
@@ -1578,6 +1722,7 @@ class VideoScreen extends React.Component {
       this.player.pause();
       this.props.navigation.push('Video', {
         videoThumb: item.videoThumb,
+        userThumb: item.userThumb,
         videoURL: item.videoFile,
         videoTitle: item.title,
         videoDescription: item.description,
@@ -1650,7 +1795,7 @@ class VideoScreen extends React.Component {
                         borderRadius: 3.7
                       }}
                       source={{
-                        uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text=video+processing':item.videoThumb,
+                        uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                         priority: FastImage.priority.normal,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
@@ -1992,6 +2137,10 @@ class VideoScreen extends React.Component {
               <Grid style={styles.trendingCardFooter} >
                 <Col>
                   <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end', paddingTop: 4}}>
+                    { !this.state.hasParent &&
+                    <Text style={styles.trendingCardFooterText}>
+                      <Icon name={'award1'} size={15} color={'#000000'} /> { this.state.allchallengers ? this.state.allchallengers.length : 0 }</Text>
+                    }
                     <Text style={styles.trendingCardFooterText}>
                       <Icon name={'visibility'} size={15} color={'#000000'} /> {this.state.views}</Text>
                     <Text style={styles.trendingCardFooterText}>
@@ -2159,8 +2308,7 @@ class AddChallengeScreen extends React.Component {
       sub: '',
       isParent: false,
       parentVideo: [],
-      prizeResponse: [],
-      prizeSwitchIsOn: false
+      thumbResponse: {}
     };
     this.share = this.share.bind(this);
     this.addChallenge = this.addChallenge.bind(this);
@@ -2226,10 +2374,11 @@ class AddChallengeScreen extends React.Component {
   }
   async uploadFile(uuid, uri) {
     const fileName = uuid;
+    const type = mime.lookup(uri);
     const file = {
       uri: uri,
-      name: Platform.OS === 'ios' ? fileName+'.mov' : fileName+'.mp4',
-      type: Platform.OS === 'ios' ? "video/quicktime" : "video/mp4"
+      name: fileName+'.'+mime.extension(type),
+      type: type
     }
     
     const options = {
@@ -2258,7 +2407,7 @@ class AddChallengeScreen extends React.Component {
       }
     )
   }
-  addChallenge( uuid, isPrizeImage ) {
+  addChallenge( uuid, isThumbImage ) {
     let self = this;
     let newChallenge = {
       body: {
@@ -2276,9 +2425,10 @@ class AddChallengeScreen extends React.Component {
         "prizeTitle": this.state.prizeTitle ? this.state.prizeTitle : '-',
         "prizeDescription": this.state.prizeDescription ? this.state.prizeDescription : '-',
         "prizeUrl": this.state.website ? this.state.website : '-',
-        "prizeImage": isPrizeImage ? isPrizeImage : '-',
+        "prizeImage": '-',
         "videoFile": '-',
         "videoThumb": '-',
+        "userThumb": isThumbImage ? isThumbImage : '-',
         "parent": this.props.navigation.getParam('parentChallengeId', '') ? this.props.navigation.getParam('parentChallengeId', '') : 'null',
         "authorSub": this.state.sub,
         "authorUsername": this.state.username,
@@ -2286,29 +2436,46 @@ class AddChallengeScreen extends React.Component {
         "approved": true,
       }
     }
-    // Adding a new participant value
-    if( this.props.navigation.getParam('parentChallengeId', '') ){
-      let uuid = this.props.navigation.getParam('parentChallengeId', '');
-      const path = "/videos?uuid="+uuid+"&participant=1";
-      API.put("videosCRUD", path, {});
-    }
     const path = "/videos";
 
-    // Use the API module to save the challenge to the database
-    API.put("videosCRUD", path, newChallenge).then(
-      challenge => {
-        // Challenge Added to the DB
-        console.log('Challenge Added.');
-        self.uploadFile( uuid, self.props.navigation.getParam('videoURL', '') ).then((result) => {
-          // Video Uploaded
-          console.log('Video Uploaded.');
+    // Upload Video
+    self.uploadFile( uuid, self.props.navigation.getParam('videoURL', '') ).then((result) => {
+      // Video Uploaded
+      console.log('Video Uploaded.');
+      // Use the API module to save the challenge to the database
+      API.put("videosCRUD", path, newChallenge).then(
+        challenge => {
+          // Challenge Added to the DB
+          console.log('Challenge Added.');
+          // Adding a new participant value
+          if( self.props.navigation.getParam('parentChallengeId', '') ){
+            let uuid = self.props.navigation.getParam('parentChallengeId', '');
+            const valuepath = "/videos?uuid="+uuid+"&participant=1";
+            API.put("videosCRUD", valuepath, {});
+          }
           self.setState({
             loading: false
           });
           self.props.navigation.navigate('Home');
-        });
+        }
+      ).catch(
+        err => {
+          console.log(err);
+          Alert.alert(
+            I18n.get('Error'),
+            err,
+          );
+        }
+      );
+    }).catch(
+      err => {
+        console.log(err);
+        Alert.alert(
+          I18n.get('Error'),
+          err,
+        );
       }
-    ).catch(err => console.log(err));
+    );
   }
   share(){
     let self = this;
@@ -2316,22 +2483,22 @@ class AddChallengeScreen extends React.Component {
       loading: true
     });
     UUIDGenerator.getRandomUUID((uuid) => {
-      if( self.state.prizeResponse && self.state.prizeResponse.data ){
-        console.log('Prize Image Present');
-        Storage.put( uuid+'_'+self.state.prizeResponse.fileSize.toString()+'.jpg', new Buffer(self.state.prizeResponse.data, 'base64'), {
+      if( self.state.thumbResponse && self.state.thumbResponse.data ){
+        console.log('Thumb Image Present');
+        Storage.put( uuid+'_'+self.state.thumbResponse.fileSize.toString()+'.jpg', new Buffer(self.state.thumbResponse.data, 'base64'), {
           level: "public",
-          contentType: mime.lookup(self.state.prizeResponse.uri),
+          contentType: mime.lookup(self.state.thumbResponse.uri),
         })
         .then(
           storageData => {
-            console.log('Prize Image Upload Data', storageData);
-            console.log('Prize Image Uploaded. Starting Adding Challenge...');
+            console.log('Thumb Image Upload Data', storageData);
+            console.log('Thumb Image Uploaded. Starting Adding Challenge...');
             self.addChallenge( uuid, 'https://s3-us-west-1.amazonaws.com/challengesapp-userfiles-mobilehub-1228559550/public/'+storageData.key );
           }
         )
         .catch(err => console.log(err));
       }else{
-        console.log('No Prize Image');
+        console.log('No Thumb Image');
         self.addChallenge( uuid, false );
       }
     });
@@ -2339,7 +2506,7 @@ class AddChallengeScreen extends React.Component {
   getPhotos = () => {
     let self = this;
     var options = {
-      title: I18n.get('Select Picture'),
+      title: I18n.get('Upload a thumbnail'),
       cancelButtonTitle: I18n.get('Cancel'),
       takePhotoButtonTitle: I18n.get('Take Photo'),
       chooseFromLibraryButtonTitle: I18n.get('Choose from Library'),
@@ -2365,7 +2532,7 @@ class AddChallengeScreen extends React.Component {
       else {
         console.log('Gallery picture', response);
         self.setState({
-          prizeResponse: response
+          thumbResponse: response
         });
       }
     });
@@ -2593,6 +2760,22 @@ class AddChallengeScreen extends React.Component {
                           </Picker>
                         </View>
                       }
+                      </Item>
+                      <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, height: 200}}>
+                        <Label style={{fontSize: 12}}>{I18n.get('Upload a thumbnail')}</Label>
+                        <TouchableOpacity onPress={() => this.getPhotos()}>
+                          <FastImage
+                                style={{ marginTop: 12, width: '100%', borderRadius: 9.1, height: null, aspectRatio: 1280/720 }}
+                                source={
+                                  this.state.thumbResponse.uri ? {
+                                    uri: this.state.thumbResponse.uri,
+                                    priority: FastImage.priority.normal,
+                                  } :
+                                  require('./assets/images/upload.jpg')
+                                }
+                                resizeMode={FastImage.resizeMode.cover}
+                            />
+                        </TouchableOpacity>
                       </Item>
                     </Form>
                   </Col>
@@ -3253,6 +3436,7 @@ class HomeScreen extends React.Component {
           </Grid>
           <TouchableHighlight style={{backgroundColor: "#F7F8F8"}} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
               videoThumb: item.videoThumb,
+              userThumb: item.userThumb,
               videoURL: item.videoFile,
               videoTitle: item.title,
               videoDescription: item.description,
@@ -3276,7 +3460,7 @@ class HomeScreen extends React.Component {
             <FastImage
               style={{ width: null, height: null, aspectRatio: 1000 / 564 }}
               source={{
-                uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text='+I18n.get('Loading...'):item.videoThumb,
+                uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb:item.userThumb,
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -3587,6 +3771,7 @@ class TrendingScreen extends React.Component {
             alignSelf: "stretch",
           }]} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
           videoThumb: item.videoThumb,
+          userThumb: item.userThumb,
           videoURL: item.videoFile,
           videoTitle: item.title,
           videoDescription: item.description,
@@ -3623,7 +3808,7 @@ class TrendingScreen extends React.Component {
                 aspectRatio: 1
               }}
               source={{
-                uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text=video+processing':item.videoThumb,
+                uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -3852,11 +4037,11 @@ class VideoCapture extends React.Component {
                       <Icon name='Trending_Nonselected' size={30} color={ '#ffffff' } />
                     </TouchableOpacity>
                   </Col>
-                  <Col style={{alignItems: 'center'}}>
+                  <Col style={{alignItems: 'center' , alignSelf: 'center'}}>
                     <TouchableOpacity onPress={this.takeVideo.bind(this)}>
                       <Icon name='btn_shoot' size={60} color={ this.state.isRecording ? '#ED3D3D':'#ED923D' } />
                     </TouchableOpacity>
-                    <Stopwatch
+                    {/* <Stopwatch
                       start={this.state.isRecording}
                       getTime={this.getFormattedTime}
                       options={{
@@ -3873,7 +4058,7 @@ class VideoCapture extends React.Component {
                           marginLeft: 0,
                         }
                       }}
-                    />
+                    /> */}
                   </Col>
                   <Col style={{alignItems: 'flex-end', alignSelf: 'center'}}>
                     <TouchableOpacity onPress={this.turnFront.bind(this)}>
@@ -3956,7 +4141,7 @@ class ProfileScreen extends React.Component {
     this._loadUser = this._loadUser.bind(this);
     this._loadFollowers = this._loadFollowers.bind(this);
   }
-  deleteVideo( challengeId ){
+  deleteVideo( challengeId, parentId = false ){
     Alert.alert(
       I18n.get('Remove Video?'),
       '',
@@ -3971,6 +4156,12 @@ class ProfileScreen extends React.Component {
               this._loadUser();
             }
           ).catch(err => console.log(err));
+          if(parentId && parentId != 'null'){
+            // Removing a participant value
+            let uuid = parentId;
+            const path = "/videos?uuid="+uuid+"&participant=1&remove=1";
+            API.put("videosCRUD", path, {});
+          }
         }},
       ],
       { cancelable: true }
@@ -3984,6 +4175,7 @@ class ProfileScreen extends React.Component {
             <Col style={{ width: 66 }}>
                 <TouchableHighlight style={{backgroundColor: "#F7F8F8"}} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
                   videoThumb: item.videoThumb,
+                  userThumb: item.userThumb,
                   videoURL: item.videoFile,
                   videoTitle: item.title,
                   videoDescription: item.description,
@@ -4007,7 +4199,7 @@ class ProfileScreen extends React.Component {
                 <FastImage
                   style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                   source={{
-                    uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text=video+processing':item.videoThumb,
+                    uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                     priority: FastImage.priority.normal,
                   }}
                   resizeMode={FastImage.resizeMode.cover}
@@ -4039,7 +4231,7 @@ class ProfileScreen extends React.Component {
               width: 26,
               paddingLeft: 6
             }}>
-              <Button onPress={() => this.deleteVideo(item.challengeId)} block bordered danger style={{
+              <Button onPress={() => this.deleteVideo(item.challengeId, item.parent)} block bordered danger style={{
                 height: 26,
                 width: 26
               }}>
@@ -4631,7 +4823,7 @@ class EditProfileScreen extends React.Component {
                   paddingHorizontal: 0
                   }}>
                   <Form>
-                    <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 10, backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 20}}>
+                    <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 10, backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 20, height: 86}}>
                       <Label style={{color: '#2D3741', fontSize: 12, fontWeight: '300'}}>{I18n.get('Preferred Name')}</Label>
                       <Input
                         onChangeText={(preferred_username) => { this.setState({preferred_username}) }  }
@@ -4645,7 +4837,7 @@ class EditProfileScreen extends React.Component {
                           height: 26
                         }} />
                     </Item>
-                    <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 10, backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 20}}>
+                    <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 10, backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 20, height: 86}}>
                       <Label style={{color: '#2D3741', fontSize: 12, fontWeight: '300'}}>{I18n.get('Country')}</Label>
                       <Input
                         onChangeText={(country) => { this.setState({country}) } }

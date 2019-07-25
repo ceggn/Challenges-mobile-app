@@ -365,6 +365,7 @@ export default class UserProfileScreen extends Component {
                 <Col style={{ width: 66 }}>
                     <TouchableHighlight onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
                       videoThumb: item.videoThumb,
+                      userThumb: item.userThumb,
                       videoURL: item.videoFile,
                       videoTitle: item.title,
                       videoDescription: item.description,
@@ -389,7 +390,7 @@ export default class UserProfileScreen extends Component {
                     <FastImage
                       style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                       source={{
-                        uri: item.videoThumb == '-' ? 'https://via.placeholder.com/1000x564?text=video+processing':item.videoThumb,
+                        uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                         priority: FastImage.priority.normal,
                       }}
                       resizeMode={FastImage.resizeMode.cover}

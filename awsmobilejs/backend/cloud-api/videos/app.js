@@ -455,7 +455,11 @@ app.put(path, function(req, res) {
         res.json({error: 'Could not load items: ' + err});
       } else {
         var videoObj = data.Items[0];
-        videoObj.participants = videoObj.participants ? videoObj.participants + 1 : 1;
+        if(req.apiGateway.event.queryStringParameters.remove){
+          videoObj.participants = videoObj.participants && videoObj.participants > 0 ? videoObj.participants - 1 : 0;
+        }else{
+          videoObj.participants = videoObj.participants ? videoObj.participants + 1 : 1;
+        }
         let putItemParams = {
           TableName: tableName,
           Item: videoObj
