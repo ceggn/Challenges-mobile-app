@@ -5127,6 +5127,7 @@ class InitialScreen extends Component {
         backBehavior: 'none',
       });
       const client = new AWSAppSyncClient({
+        disableOffline: true,
         url: AppSync.graphqlEndpoint,
         region: AppSync.region,
         auth: {
