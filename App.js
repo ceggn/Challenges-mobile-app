@@ -1454,18 +1454,8 @@ class VideoScreen extends React.Component {
             sortedVideos.sort(function(a, b) {
               return b.rating - a.rating;
             });
-            var prevPlace = null;
             for( $i = 0; $i < sortedVideos.length; $i++ ){
-              if( $i == 0 ){
-                prevPlace = 1;
-                sortedVideos[$i].place = prevPlace;
-              }else{
-                if( sortedVideos[$i].rating == sortedVideos[$i-1].rating ){
-                  sortedVideos[$i].place = prevPlace;
-                }else{
-                  sortedVideos[$i].place = $i+1;
-                }
-              }
+              sortedVideos[$i].place = $i+1;
             }
             this.setState({
               allchallengers: sortedVideos,
@@ -4086,11 +4076,11 @@ class VideoCapture extends React.Component {
                       <Icon name='Trending_Nonselected' size={30} color={ '#ffffff' } />
                     </TouchableOpacity>
                   </Col>
-                  <Col style={{alignItems: 'center'}}>
+                  <Col style={{alignItems: 'center' , alignSelf: 'center'}}>
                     <TouchableOpacity onPress={this.takeVideo.bind(this)}>
                       <Icon name='btn_shoot' size={60} color={ this.state.isRecording ? '#ED3D3D':'#ED923D' } />
                     </TouchableOpacity>
-                    <Stopwatch
+                    {/* <Stopwatch
                       start={this.state.isRecording}
                       getTime={this.getFormattedTime}
                       options={{
@@ -4107,7 +4097,7 @@ class VideoCapture extends React.Component {
                           marginLeft: 0,
                         }
                       }}
-                    />
+                    /> */}
                   </Col>
                   <Col style={{alignItems: 'flex-end', alignSelf: 'center'}}>
                     <TouchableOpacity onPress={this.turnFront.bind(this)}>
