@@ -2046,7 +2046,8 @@ class VideoScreen extends React.Component {
               <Right></Right>
             </Header>
             }
-            <KeyboardAwareScrollView {...( Platform.OS === 'ios' ? { stickyHeaderIndices: [1]} : {})}>
+            {/* <KeyboardAwareScrollView {...( Platform.OS === 'ios' ? { stickyHeaderIndices: [1]} : {})}> */}
+            <KeyboardAwareScrollView>
               { this.state.videoExpanded ? <Grid></Grid>:
               <Grid style={styles.trendingCardHeader} >
                 <Row>
@@ -2123,7 +2124,8 @@ class VideoScreen extends React.Component {
                     progress: '#E75B3A',
                     loading: '#ED923D'
                   }}
-                  lockRatio={16/9}
+                  //lockRatio={16/9}
+                  lockRatio={9/16}
                 />
               </View>
               <Grid style={styles.trendingCardFooter} >
@@ -3450,7 +3452,12 @@ class HomeScreen extends React.Component {
             })}
           >
             <FastImage
-              style={{ width: null, height: null, aspectRatio: 1000 / 564 }}
+              style={{
+                width: null,
+                height: null,
+                //aspectRatio: 1000 / 564
+                aspectRatio: 720 / 1280
+              }}
               source={
                 (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
                 require('./assets/images/placeholder-alt-1.jpg') :
