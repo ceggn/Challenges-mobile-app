@@ -62,7 +62,6 @@ import TimeAgo from './components/TimeAgo';
 import { RNS3 } from 'react-native-aws3';
 import ProgressCircle from 'react-native-progress/Circle';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Stopwatch } from 'react-native-stopwatch-timer'
 
 import Amplify, { I18n, Auth, API, Storage, Hub } from 'aws-amplify';
 import PushNotification from '@aws-amplify/pushnotification';
@@ -1335,7 +1334,8 @@ class VideoScreen extends React.Component {
       authorName: '',
       allowed: false,
       canParticipate: false,
-      videoExpanded: false
+      videoExpanded: false,
+      liking: false
     };
     this.renderHeader = this.renderHeader.bind(this);
     this.postComment = this.postComment.bind(this);
@@ -1415,7 +1415,6 @@ class VideoScreen extends React.Component {
     API.get("commentsCRUD", path)
       .then(
         data => {
-          console.log('Comments', data);
           this.setState({
             allcomments: data,
             loadingComments: false,
@@ -1652,42 +1651,38 @@ class VideoScreen extends React.Component {
     );
   };
   _like(challengeId){
-    if( isGuest ){
-      Auth.signOut()
-      .then(() => {
-        this.props.screenProps.logOut('signedOut');
-      })
-      .catch(err => console.log(err));
+    let self = this;
+    self.setState({
+      liking: true
+    });
+    if( self.state.liked ){
+      const path = "/likes/object/"+challengeId;
+      API.del("likesCRUD", path)
+      .then(
+        like => {
+          self.setState({
+            liked: false,
+            liking: false,
+            rating: self.state.rating == 0 ? 0 : (self.state.rating - 1)
+          });
+        }
+      ).catch(err => console.log(err));
     }else{
-      if( this.state.liked ){
-        this.setState({
-          liked: false,
-          rating: this.state.rating == 0 ? 0 : (this.state.rating - 1)
-        });
-        const path = "/likes/object/"+challengeId;
-        API.del("likesCRUD", path)
+      const path = "/likes";
+      API.put("likesCRUD", path, {
+        body: {
+          "challengeId": challengeId
+        }
+      })
         .then(
           like => {
-            console.log(like);
+            self.setState({
+              liked: true,
+              liking: false,
+              rating: self.state.rating + 1
+            });
           }
         ).catch(err => console.log(err));
-      }else{
-        this.setState({
-          liked: true,
-          rating: this.state.rating + 1
-        });
-        const path = "/likes";
-        API.put("likesCRUD", path, {
-          body: {
-            "challengeId": challengeId
-          }
-        })
-          .then(
-            like => {
-              console.log(like);
-            }
-          ).catch(err => console.log(err));
-      }
     }
   }
   _share(challengeId, title){
@@ -1974,9 +1969,6 @@ class VideoScreen extends React.Component {
       .then(
         challenge => {
           console.log(challenge);
-          this.setState({
-            views: this.state.views + 1
-          });
         }
       ).catch(err => console.log(err));
   }
@@ -2046,8 +2038,7 @@ class VideoScreen extends React.Component {
               <Right></Right>
             </Header>
             }
-            {/* <KeyboardAwareScrollView {...( Platform.OS === 'ios' ? { stickyHeaderIndices: [1]} : {})}> */}
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView {...( Platform.OS === 'ios' ? { stickyHeaderIndices: [1]} : {})}>
               { this.state.videoExpanded ? <Grid></Grid>:
               <Grid style={styles.trendingCardHeader} >
                 <Row>
@@ -2124,8 +2115,7 @@ class VideoScreen extends React.Component {
                     progress: '#E75B3A',
                     loading: '#ED923D'
                   }}
-                  //lockRatio={16/9}
-                  lockRatio={9/16}
+                  lockRatio={16/9}
                 />
               </View>
               <Grid style={styles.trendingCardFooter} >
@@ -2135,8 +2125,6 @@ class VideoScreen extends React.Component {
                     <Text style={styles.trendingCardFooterText}>
                       <Icon name={'award1'} size={15} color={'#000000'} /> { this.state.allchallengers ? this.state.allchallengers.length : 0 }</Text>
                     }
-                    <Text style={styles.trendingCardFooterText}>
-                      <Icon name={'visibility'} size={15} color={'#000000'} /> {this.state.views}</Text>
                     <Text style={styles.trendingCardFooterText}>
                       <Icon name={'chat'} size={15} color={'#000000'} /> {this.state.allcomments.length}</Text>
                     <Text style={styles.trendingCardFooterText}>
@@ -2148,7 +2136,7 @@ class VideoScreen extends React.Component {
                 paddingVertical: 0,
                 marginBottom: 10
               }]} >
-              { videoDeadline > currentDate || (videoDeadline < currentDate && !videoCompleted) ?
+              { videoDeadline > currentDate || (videoDeadline < currentDate && !videoCompleted && !this.state.hasParent) ?
                 <Row>
                   { this.state.canParticipate && !this.state.hasParent ?
                   <Col style={{
@@ -2159,7 +2147,6 @@ class VideoScreen extends React.Component {
                     paddingVertical: 5,
                     alignSelf: 'center',
                   }}>
-                    { !isGuest ?
                     <TouchableOpacity onPress={() => this.purchase(videoPayment)}>
                       <Text style={{
                         height: 24,
@@ -2169,30 +2156,14 @@ class VideoScreen extends React.Component {
                         {I18n.get('Participate')}
                         {/* { videoPayment == 0 ? I18n.get('Free') : '$'+videoPayment } */}
                       </Text>
-                    </TouchableOpacity>:
-                    <TouchableOpacity onPress={() => {
-                      Auth.signOut()
-                      .then(() => {
-                        this.props.screenProps.logOut('signedOut');
-                      })
-                      .catch(err => console.log(err));
-                    }}>
-                      <Text style={{
-                        height: 24,
-                        textAlign: 'center',
-                        color: "#ffffff",
-                      }}>
-                        {I18n.get('Login to Participate')}
-                      </Text>
                     </TouchableOpacity>
-                    }
                   </Col>:
                   <Col style={{
-                    height: 30,
-                    marginHorizontal: 2,
-                    paddingVertical: 5,
-                    alignSelf: 'center',
-                  }}>
+                      height: 30,
+                      marginHorizontal: 2,
+                      paddingVertical: 5,
+                      alignSelf: 'center',
+                    }}>
                   </Col>
                   }
                   <Col style={{
@@ -2207,7 +2178,7 @@ class VideoScreen extends React.Component {
                     paddingVertical: 5,
                     alignSelf: 'center',
                   }}>
-                    <TouchableOpacity onPress={() => this._like(challengeId) }>
+                    <TouchableOpacity disabled={this.state.liking} onPress={() => this._like(challengeId) }>
                       <Text style={{
                           textAlign: 'center',
                           height: 24,
@@ -2294,8 +2265,8 @@ class AddChallengeScreen extends React.Component {
       description: '',
       prizeDescription: '',
       prizeImageAws: '',
-      deadline: new Date(),
-      category: undefined,
+      deadline: new Date(Date.now() + 14*24*60*60*1000),
+      category: 'SPORT',
       payment: 0,
       progress: 0,
       pp: undefined,
@@ -2367,6 +2338,9 @@ class AddChallengeScreen extends React.Component {
     });
   }
   async uploadFile(uuid, uri) {
+    let self = this;
+    const videorResponse = await fetch( uri );
+    const blob = await videorResponse.blob();
     const fileName = uuid;
     const type = mime.lookup(uri);
     const file = {
@@ -2374,32 +2348,20 @@ class AddChallengeScreen extends React.Component {
       name: fileName+'.'+mime.extension(type),
       type: type
     }
-    
-    const options = {
-      acl: "private",
-      keyPrefix: "private/",
-      bucket: "challengesapp-userfiles-mobilehub-1228559550",
-      region: "us-west-1",
-      accessKey: "AKIAIZ632NDHGSWUPH6A",
-      secretKey: "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",
-      awsUrl: "s3.us-west-1.amazonaws.com"
-    }
-    
-    await RNS3.put(file, options)
-    .then(
+    Storage.put(file.name, blob, {
+      level: "private",
+      contentType: file.type,
+      progressCallback(progress) {
+        self.setState({
+          progress: progress.loaded / progress.total,
+        });
+      },
+    }).then(
       response => {
-        if (response.status !== 201)
-          throw new Error("Failed to upload image to S3");
-          console.log(response.body);
+        console.log(response);
       }
     )
-    .progress(
-      (e) => {
-        this.setState({
-          progress: e.loaded / e.total,
-        })
-      }
-    )
+    .catch(err => console.log(err));
   }
   addChallenge( uuid, isThumbImage ) {
     let self = this;
@@ -2694,7 +2656,7 @@ class AddChallengeScreen extends React.Component {
                                 color: 'rgb(237, 146, 61)',
                               },
                             }}
-                            date={this.state.deadline ? this.state.deadline : new Date()}
+                            date={this.state.deadline ? this.state.deadline : new Date(Date.now() + 14*24*60*60*1000)}
                             mode="datetime"
                             placeholder={I18n.get('Select Date')}
                             showIcon={false}
@@ -2756,7 +2718,7 @@ class AddChallengeScreen extends React.Component {
                       }
                       </Item>
                       <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, height: 200}}>
-                        <Label style={{fontSize: 12}}>{I18n.get('Upload a thumbnail')}</Label>
+                        <Label style={{fontSize: 12, marginTop: 20}}>{I18n.get('Upload a thumbnail')}</Label>
                         <TouchableOpacity onPress={() => this.getPhotos()}>
                           <FastImage
                                 style={{ marginTop: 12, width: '100%', borderRadius: 9.1, height: null, aspectRatio: 1280/720 }}
@@ -3332,14 +3294,6 @@ class HomeScreen extends React.Component {
               loading: '#ED923D'
             }}
           />
-          <Grid style={styles.trendingCardFooter} >
-            <Col>
-              <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <Text style={styles.trendingCardFooterText}>
-                  <Icon name={'visibility'} size={15} color={'#000000'} /> {this.state.adsResponse[index/2-1].viewsnumber}</Text>
-              </View>
-            </Col>
-          </Grid>
         </InViewPort>
         }
         { ( Platform.OS === 'android' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
@@ -3376,14 +3330,6 @@ class HomeScreen extends React.Component {
               loading: '#ED923D'
             }}
           />
-          <Grid style={styles.trendingCardFooter} >
-            <Col>
-              <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <Text style={styles.trendingCardFooterText}>
-                  <Icon name={'visibility'} size={15} color={'#000000'} /> {this.state.adsResponse[index/2-1].viewsnumber}</Text>
-              </View>
-            </Col>
-          </Grid>
         </View>
         }
         <View style={{ marginTop: 20 }}>
@@ -3455,8 +3401,7 @@ class HomeScreen extends React.Component {
               style={{
                 width: null,
                 height: null,
-                //aspectRatio: 1000 / 564
-                aspectRatio: 720 / 1280
+                aspectRatio: 1000 / 564
               }}
               source={
                 (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
@@ -3474,8 +3419,6 @@ class HomeScreen extends React.Component {
               <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
                 <Text style={styles.trendingCardFooterText}>
                   <Icon name={'award1'} size={15} color={'#000000'} /> { item.participants ? item.participants : 0 }</Text>
-                <Text style={styles.trendingCardFooterText}>
-                  <Icon name={'visibility'} size={15} color={'#000000'} /> { item.views ? item.views : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
                   <Icon name={'chat'} size={15} color={'#000000'} /> { item.comments ? item.comments : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
@@ -4029,8 +3972,18 @@ class VideoCapture extends React.Component {
                     style = {styles.preview}
                     type={this.state.isFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back}
                     flashMode={this.state.isTorch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
-                    permissionDialogTitle={I18n.get('Permission to use camera')}
-                    permissionDialogMessage={I18n.get('We need your permission to use your camera')}
+                    androidCameraPermissionOptions={{
+                      title: I18n.get('Permission to use camera'),
+                      message: I18n.get('We need your permission to use your camera'),
+                      buttonPositive: I18n.get('Ok'),
+                      buttonNegative: I18n.get('Cancel'),
+                    }}
+                    androidRecordAudioPermissionOptions={{
+                      title: I18n.get('Permission to use audio recording'),
+                      message: I18n.get('We need your permission to use your audio'),
+                      buttonPositive: I18n.get('Ok'),
+                      buttonNegative: I18n.get('Cancel'),
+                    }}
                 />
               </Row>
               { Platform.OS === 'ios' ?
@@ -4629,8 +4582,6 @@ class EditProfileScreen extends React.Component {
     });
     if( this.state.avatarResponse && this.state.pictureChanged ){
       UUIDGenerator.getRandomUUID( async (uuid) => {
-        //const response = await fetch( this.state.avatarResponse.uri);
-        //const blob = await response.blob();
         Storage.put( uuid+'_'+this.state.avatarResponse.fileSize.toString()+'.jpg', new Buffer(this.state.avatarResponse.data, 'base64'), {
           level: "public",
           contentType: mime.lookup(this.state.avatarResponse.uri),
@@ -4662,38 +4613,6 @@ class EditProfileScreen extends React.Component {
           }
         )
         .catch(err => console.log(err))
-        
-        // await Storage.put( uuid+'_'+this.state.avatarResponse.fileName, blob, {
-        //   level: "public",
-        //   contentType: mime.lookup(this.state.avatarResponse.uri),
-        // })
-        // .then(
-        //   storageData => {
-        //     let avatarPath = 'https://s3-us-west-1.amazonaws.com/challengesapp-userfiles-mobilehub-1228559550/public/'+storageData.key;
-        //     Auth.updateUserAttributes(this.state.user, {
-        //       'preferred_username': this.state.preferred_username ? this.state.preferred_username : '-',
-        //       'custom:country': this.state.country ? this.state.country : '-',
-        //       'profile': this.state.description ? this.state.description : '-',
-        //       'picture': avatarPath
-        //     }).then(
-        //       data => {
-        //         this.setState({
-        //           savingActive: false
-        //         }, () => {
-        //           this.props.navigation.navigate('Profile', {needUpdate:true});
-        //         });
-        //       }
-        //     ).catch(
-        //       err => {
-        //         console.log(err);
-        //         this.setState({
-        //           savingActive: false
-        //         });
-        //       }
-        //     );
-        //   }
-        // )
-        // .catch(err => console.log(err))
       });
     }else{
       console.log('User description to update ', this.state.description);

@@ -100,8 +100,8 @@ android {
         applicationId 'de.challenges.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 228
-        versionName "1.4.4"
+        versionCode 243
+        versionName "1.4.7"
         multiDexEnabled true
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true
