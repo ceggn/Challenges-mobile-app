@@ -3,6 +3,7 @@ package de.challenges.app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.eko.RNBackgroundDownloaderPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
@@ -43,6 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new RNBackgroundDownloaderPackage(),
             new FastImageViewPackage(),
             new OrientationPackage(),
             new KCKeepAwakePackage(),

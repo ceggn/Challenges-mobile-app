@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "Firestore/core/src/firebase/firestore/core/query_listener.h"
+#include "Firestore/core/src/firebase/firestore/core/query_listener.h"
 
 #include <utility>
 #include <vector>
@@ -35,6 +35,18 @@ using model::OnlineState;
 using model::TargetId;
 using util::MakeStatus;
 using util::Status;
+
+QueryListener::QueryListener(FSTQuery* query,
+                             ListenOptions options,
+                             ViewSnapshot::SharedListener&& listener)
+    : query_(query),
+      options_(std::move(options)),
+      listener_(std::move(listener)) {
+}
+
+FSTQuery* QueryListener::query() const {
+  return query_;
+}
 
 void QueryListener::OnViewSnapshot(ViewSnapshot snapshot) {
   HARD_ASSERT(
