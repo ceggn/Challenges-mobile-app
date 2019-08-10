@@ -70,4 +70,5 @@ awsmobilejs/\#current-backend-info
 ~awsmobilejs-*/
 *.apk
 *.aab
-Pods/
+ios/Pods/
+ios/Podfile.lock
