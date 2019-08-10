@@ -62,7 +62,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need camera to record new video challeges</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>We need an access to your Locatioin</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need your microphone while recordin challege video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
