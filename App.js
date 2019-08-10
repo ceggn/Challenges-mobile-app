@@ -2038,7 +2038,7 @@ class VideoScreen extends React.Component {
               <Right></Right>
             </Header>
             }
-            <KeyboardAwareScrollView {...( Platform.OS === 'ios' ? { stickyHeaderIndices: [1]} : {})}>
+            <KeyboardAwareScrollView>
               { this.state.videoExpanded ? <Grid></Grid>:
               <Grid style={styles.trendingCardHeader} >
                 <Row>
@@ -2115,7 +2115,7 @@ class VideoScreen extends React.Component {
                     progress: '#E75B3A',
                     loading: '#ED923D'
                   }}
-                  lockRatio={16/9}
+                  lockRatio={9/16}
                 />
               </View>
               <Grid style={styles.trendingCardFooter} >
@@ -2467,8 +2467,8 @@ class AddChallengeScreen extends React.Component {
       takePhotoButtonTitle: I18n.get('Take Photo'),
       chooseFromLibraryButtonTitle: I18n.get('Choose from Library'),
       quality: 0.8,
-      maxWidth: 1280,
-      maxHeight: 720,
+      maxWidth: 720,
+      maxHeight: 1280,
       storageOptions: {
         skipBackup: true,
         path: 'images'
@@ -3401,7 +3401,7 @@ class HomeScreen extends React.Component {
               style={{
                 width: null,
                 height: null,
-                aspectRatio: 1000 / 564
+                aspectRatio: 720 / 1280
               }}
               source={
                 (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
@@ -3919,7 +3919,8 @@ class VideoCapture extends React.Component {
       const options = {
         quality: RNCamera.Constants.VideoQuality["720p"],
         flashMode: this.state.isTorch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off,
-        type: this.state.isFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back
+        type: this.state.isFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back,
+        orientation: 'portrait'
       };
       if(this.state.isRecording){
         this.Rcamera.stopRecording();
