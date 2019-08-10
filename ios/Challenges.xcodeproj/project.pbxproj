@@ -68,7 +68,6 @@
 		BD276474C42C311EEB2D5916 /* libPods-Challenges.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA00AB3813318AC841455BC6 /* libPods-Challenges.a */; };
 		CE0D98C211D64AA1B29AD91B /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8EAFA58F966441EA4816011 /* MaterialCommunityIcons.ttf */; };
 		DC805F3400614D80B1E3DB7C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A785F509612A41EDB14C0359 /* Octicons.ttf */; };
-		F3352FD2F2AF4FEFA8876390 /* libRNBackgroundDownloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A12BA4019904065AC37706D /* libRNBackgroundDownloader.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -621,7 +620,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				BD276474C42C311EEB2D5916 /* libPods-Challenges.a in Frameworks */,
-				F3352FD2F2AF4FEFA8876390 /* libRNBackgroundDownloader.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

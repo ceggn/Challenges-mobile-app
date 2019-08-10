@@ -268,6 +268,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNFS (2.14.1):
+    - React
   - SDWebImage (5.1.0):
     - SDWebImage/Core (= 5.1.0)
   - SDWebImage/Core (5.1.0)
@@ -302,6 +304,7 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -362,6 +365,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-orientation"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -409,9 +414,10 @@ SPEC CHECKSUMS:
   react-native-keep-awake: 0de4bd66de0c23178107dce0c2fcc3354b2a8e94
   react-native-orientation: 3d9a0a8273d18260f7528414093a6a36491382b6
   react-native-webview: a42108b827082f8f0333529b0772102031d5960d
+  RNFS: 6a2bfb5d0b14cf0ad72667f76202358abba4aacf
   SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: a5f3ca5400cb9a32bd827b09aeff9a83661e2375
+PODFILE CHECKSUM: 90eae16cfc77bb453f3edfb92014a0c1448d8a3c
 
 COCOAPODS: 1.5.3

@@ -22,7 +22,8 @@ import {
   Platform,
   Modal,
   StatusBar,
-  PermissionsAndroid
+  PermissionsAndroid,
+  CameraRoll
 } from 'react-native';
 
 import { WebView } from "react-native-webview";
@@ -32,7 +33,7 @@ import DatePicker from 'react-native-datepicker'
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import InViewPort from 'react-native-inviewport';
-import RNBackgroundDownloader from 'react-native-background-downloader';
+import RNFS from 'react-native-fs';
 import FastImage from 'react-native-fast-image';
 import {
   Root,
@@ -4132,26 +4133,31 @@ class ProfileScreen extends React.Component {
     )
   }
   downloadVideo(challengeId) {
-    const path = "/videos/object/"+challengeId;
-    API.get("videosCRUD", path)
-    .then(
-      result => {
-        console.log(result);
-        let task = RNBackgroundDownloader.download({
-          id: result.userId,
-          url: result.videoFile,
-          destination: `${RNBackgroundDownloader.directories.documents}/challengeId.mp4`
-        }).begin((expectedBytes) => {
-            console.log(`Going to download ${expectedBytes} bytes!`);
-        }).progress((percent) => {
-            console.log(`Downloaded: ${percent * 100}%`);
-        }).done(() => {
-            console.log('Download is done!');
-        }).error((error) => {
-            console.log('Download canceled due to error: ', error);
-        });
-      }
-    ).catch(err => console.log(err));
+    Alert.alert(
+      I18n.get('Download Video?'),
+      '',
+      [
+        {text: I18n.get('Cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: I18n.get('Ok'), onPress: () => {
+          const path = "/videos/object/"+challengeId;
+          API.get("videosCRUD", path)
+          .then(
+            result => {
+              console.log(result);
+              const destinationPath = RNFS.CachesDirectoryPath + '/' + challengeId + '.mp4';
+              RNFS.downloadFile({
+                fromUrl: result.videoFile,
+                toFile: destinationPath
+              }).promise.then((r) => {
+                console.log('video download complete', r);
+                CameraRoll.saveToCameraRoll(destinationPath);
+              });
+            }
+          ).catch(err => console.log(err));
+        }},
+      ],
+      { cancelable: true }
+    )
   }
   _videoRender({item, index}){
     return (
