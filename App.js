@@ -22,7 +22,8 @@ import {
   Platform,
   Modal,
   StatusBar,
-  PermissionsAndroid
+  PermissionsAndroid,
+  CameraRoll
 } from 'react-native';
 
 import { WebView } from "react-native-webview";
@@ -30,7 +31,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { createBottomTabNavigator, createStackNavigator, SafeAreaView } from 'react-navigation';
 import DatePicker from 'react-native-datepicker'
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import InViewPort from 'react-native-inviewport';
+import RNFS from 'react-native-fs';
 import FastImage from 'react-native-fast-image';
 import {
   Root,
@@ -3261,39 +3264,41 @@ class HomeScreen extends React.Component {
       <View>
         { ( Platform.OS === 'ios' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
         <InViewPort onChange={this.checkVisible}>
-          <Text style={{
-            color: "rgb(231,91,58)",
-            fontSize: 11,
-            textAlign: "right",
-            paddingRight: 15,
-            paddingBottom: 5
-          }}>{I18n.get('Advertisement')}</Text>
-          <VideoAf
-            style={{
-              marginBottom: 0
-            }}
-            url={this.state.adsResponse[index/2-1].resource}
-            autoPlay={true}
-            rate={this.state.visible ? 1.0 : 0}
-            onEnd={ () => this._set_adv_view(this.state.adsResponse[index/2-1].id) }
-            resizeMode='contain'
-            loop={true}
-            inlineOnly={true}
-            volume={0}
-            theme={{
-              title: '#FFF',
-              more: '#FFF',
-              center: '#ED923D',
-              fullscreen: '#FFF',
-              volume: '#FFF',
-              scrubberThumb: '#E75B3A',
-              scrubberBar: '#ED923D',
-              seconds: '#FFF',
-              duration: '#FFF',
-              progress: '#E75B3A',
-              loading: '#ED923D'
-            }}
-          />
+          <View>
+            <Text style={{
+              color: "rgb(231,91,58)",
+              fontSize: 11,
+              textAlign: "right",
+              paddingRight: 15,
+              paddingBottom: 5
+            }}>{I18n.get('Advertisement')}</Text>
+            <VideoAf
+              style={{
+                marginBottom: 0
+              }}
+              url={this.state.adsResponse[index/2-1].resource}
+              autoPlay={true}
+              rate={this.state.visible ? 1.0 : 0}
+              onEnd={ () => this._set_adv_view(this.state.adsResponse[index/2-1].id) }
+              resizeMode='contain'
+              loop={true}
+              inlineOnly={true}
+              volume={0}
+              theme={{
+                title: '#FFF',
+                more: '#FFF',
+                center: '#ED923D',
+                fullscreen: '#FFF',
+                volume: '#FFF',
+                scrubberThumb: '#E75B3A',
+                scrubberBar: '#ED923D',
+                seconds: '#FFF',
+                duration: '#FFF',
+                progress: '#E75B3A',
+                loading: '#ED923D'
+              }}
+              />
+          </View>
         </InViewPort>
         }
         { ( Platform.OS === 'android' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
@@ -4128,6 +4133,33 @@ class ProfileScreen extends React.Component {
       { cancelable: true }
     )
   }
+  downloadVideo(challengeId) {
+    Alert.alert(
+      I18n.get('Download Video?'),
+      '',
+      [
+        {text: I18n.get('Cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: I18n.get('Ok'), onPress: () => {
+          const path = "/videos/object/"+challengeId;
+          API.get("videosCRUD", path)
+          .then(
+            result => {
+              console.log(result);
+              const destinationPath = RNFS.CachesDirectoryPath + '/' + challengeId + '.mp4';
+              RNFS.downloadFile({
+                fromUrl: result.videoFile,
+                toFile: destinationPath
+              }).promise.then((r) => {
+                console.log('video download complete', r);
+                CameraRoll.saveToCameraRoll(destinationPath);
+              });
+            }
+          ).catch(err => console.log(err));
+        }},
+      ],
+      { cancelable: true }
+    )
+  }
   _videoRender({item, index}){
     return (
       <View style={{ marginTop: 20, paddingHorizontal: 15 }}>
@@ -4190,6 +4222,17 @@ class ProfileScreen extends React.Component {
                   letterSpacing: 0.45,
                   color: "#373744"
                 }}>{item.rating} {I18n.get('Likes')}</Text>
+              </Button>
+            </Col>
+            <Col style={{
+              width: 32,
+              paddingLeft: 6,
+            }}>
+              <Button onPress={() => this.downloadVideo(item.challengeId)} block bordered danger style={{
+                height: 26,
+                width: 26
+              }}>
+                <FontAwesomeIcon name='download' size={20} color={'#373744'} />
               </Button>
             </Col>
             <Col style={{

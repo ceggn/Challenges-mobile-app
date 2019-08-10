@@ -16,8 +16,6 @@
 
 #import "FIRMessagingReceiver.h"
 
-#import <UIKit/UIKit.h>
-
 #import "FIRMessaging.h"
 #import "FIRMessagingLogger.h"
 #import "FIRMessagingUtilities.h"
@@ -27,10 +25,6 @@ static NSString *const kUpstreamMessageIDUserInfoKey = @"messageID";
 static NSString *const kUpstreamErrorUserInfoKey = @"error";
 
 static int downstreamMessageID = 0;
-
-@interface FIRMessagingReceiver ()
-@property(nonatomic, strong) GULUserDefaults *defaults;
-@end
 
 @implementation FIRMessagingReceiver
 
