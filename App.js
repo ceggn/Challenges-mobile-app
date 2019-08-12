@@ -32,7 +32,6 @@ import { createBottomTabNavigator, createStackNavigator, SafeAreaView } from 're
 import DatePicker from 'react-native-datepicker'
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import InViewPort from 'react-native-inviewport';
 import RNFS from 'react-native-fs';
 import FastImage from 'react-native-fast-image';
 import {
@@ -3263,7 +3262,6 @@ class HomeScreen extends React.Component {
     return (
       <View>
         { ( Platform.OS === 'ios' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
-        <InViewPort onChange={this.checkVisible}>
           <View>
             <Text style={{
               color: "rgb(231,91,58)",
@@ -3299,7 +3297,6 @@ class HomeScreen extends React.Component {
               }}
               />
           </View>
-        </InViewPort>
         }
         { ( Platform.OS === 'android' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
         <View>

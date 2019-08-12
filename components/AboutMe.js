@@ -42,7 +42,6 @@ export default class AboutMe extends Component {
                     partnerPreferedName: this.props.navigation.state.params.partnerPreferedName,
                     partnerPicture: this.props.navigation.state.params.partnerPicture,
                     firstMessage: true,
-        
                     me: this.props.me,
                     conversationId: conversationId ? conversationId : this.props.me.cognitoId+'-'+this.props.navigation.state.params.sub,
                     conversationName: this.props.navigation.state.params.partnerPreferedName
@@ -54,7 +53,11 @@ export default class AboutMe extends Component {
         this.props.subscribeToNewChats();
     }
     componentDidUpdate(){
-        if( this.props.navigation.getParam('needToCheck', '') ){
+        if( this.props.navigation.getParam('needToCheck', '') ) {
+            if (!this.props.me) {
+                this.props.subscribeToNewChats();
+                return;
+            }
             var myID = this.props.me.cognitoId;
             var partnerID = this.props.navigation.state.params.sub;
             if( this.props.me && this.props.me.conversations ){
