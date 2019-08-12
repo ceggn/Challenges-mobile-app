@@ -72,3 +72,4 @@ awsmobilejs/\#current-backend-info
 *.aab
 ios/Pods/
 ios/Podfile.lock
+ios/Challenges.xcodeproj/

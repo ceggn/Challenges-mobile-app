@@ -2074,7 +2074,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.challenges.app;
 				PRODUCT_NAME = Challenges;
-				PROVISIONING_PROFILE_SPECIFIER = "Challenges Apple Store - Smile";
+				PROVISIONING_PROFILE_SPECIFIER = "Challenges App Distribution - Smile";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNVideoProcessing/Challenges-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

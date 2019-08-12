@@ -55,7 +55,7 @@ import icoMoonConfig from './components/selection.json';
 import getTheme from './native-base-theme/components';
 import customStyle from './native-base-theme/variables/platform';
 //import VideoPlayer from 'react-native-video-player';
-import VideoAf from 'react-native-af-video-player'
+import VideoAf from 'react-native-af-video-player';
 import { RNCamera } from 'react-native-camera';
 import { BlurView } from 'react-native-blur';
 import UUIDGenerator from 'react-native-uuid-generator';
@@ -2844,7 +2844,8 @@ class HomeScreen extends React.Component {
       LIVErefreshing: false,
       LIVElastEvaluatedKey: null,
       LIVEloadingMore: null,
-      hiddenVideos: []
+      hiddenVideos: [],
+      _videoRef: []
      };
      this._get_all_challenges = this._get_all_challenges.bind(this);
      this._get_challenges_by_cat = this._get_challenges_by_cat.bind(this);
@@ -3373,48 +3374,55 @@ class HomeScreen extends React.Component {
                 </Col>
             </Row>
             <Row marginTop={15}>
-              <Text style={styles.trendingExcerpt}>{item.description}</Text>
+              <TouchableOpacity style={{backgroundColor: "#F7F8F8"}} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
+                  videoThumb: item.videoThumb,
+                  userThumb: item.userThumb,
+                  videoURL: item.videoFile,
+                  videoTitle: item.title,
+                  videoDescription: item.description,
+                  videoAuthor: item.author,
+                  videoDate: item.creationDate,
+                  videoDeadline: item.deadlineDate,
+                  videoCompleted: item.completed,
+                  prizeTitle: item.prizeTitle,
+                  prizeDescription: item.prizeDescription,
+                  prizeUrl: item.prizeUrl,
+                  prizeImage:item.prizeImage,
+                  hasParent: item.parent == 'null' ? false : item.parent,
+                  videoCategory: I18n.get('Popular'),
+                  videoPayment: item.payment,
+                  challengeId: item.challengeId,
+                  views: item.views,
+                  rating: item.rating,
+                  authorSub: item.authorSub, authorUsername: item.authorUsername
+                })}
+              >
+                <Text style={styles.trendingExcerpt}>{item.description}</Text>
+              </TouchableOpacity>
             </Row>
           </Grid>
-          <TouchableHighlight style={{backgroundColor: "#F7F8F8"}} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
-              videoThumb: item.videoThumb,
-              userThumb: item.userThumb,
-              videoURL: item.videoFile,
-              videoTitle: item.title,
-              videoDescription: item.description,
-              videoAuthor: item.author,
-              videoDate: item.creationDate,
-              videoDeadline: item.deadlineDate,
-              videoCompleted: item.completed,
-              prizeTitle: item.prizeTitle,
-              prizeDescription: item.prizeDescription,
-              prizeUrl: item.prizeUrl,
-              prizeImage:item.prizeImage,
-              hasParent: item.parent == 'null' ? false : item.parent,
-              videoCategory: I18n.get('Popular'),
-              videoPayment: item.payment,
-              challengeId: item.challengeId,
-              views: item.views,
-              rating: item.rating,
-              authorSub: item.authorSub, authorUsername: item.authorUsername
-            })}
-          >
-            <FastImage
-              style={{
-                width: null,
-                height: null,
-                aspectRatio: 720 / 1280
+          <TouchableHighlight style={{backgroundColor: "#F7F8F8"}}>
+            <VideoAf
+              url={item.videoFile}
+              placeholder={item.videoThumb}
+              ref={ref => this.state._videoRef[index] = ref}
+              resizeMode='cover'
+              logo='#'
+              theme={{
+                title: '#FFF',
+                more: '#FFF',
+                center: '#ED923D',
+                fullscreen: '#FFF',
+                volume: '#FFF',
+                scrubberThumb: '#E75B3A',
+                scrubberBar: '#ED923D',
+                seconds: '#FFF',
+                duration: '#FFF',
+                progress: '#E75B3A',
+                loading: '#ED923D'
               }}
-              source={
-                (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                require('./assets/images/placeholder-alt-1.jpg') :
-                {
-                  uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
-                  priority: FastImage.priority.normal,
-                }
-              }
-              resizeMode={FastImage.resizeMode.cover}
-            />    
+              lockRatio={9/16}
+            />
           </TouchableHighlight>
           <Grid style={styles.trendingCardFooter} >
             <Col>
@@ -3432,6 +3440,16 @@ class HomeScreen extends React.Component {
       </View>
     )
   }
+
+  onViewableItemsChanged = ({ viewableItems }) => {
+    const videoItem = viewableItems[0];
+    this.state._videoRef.map((videoRef, index) => {
+      if (videoRef) {
+        videoItem.index == index ? videoRef.play() : videoRef.pause();
+      }
+    })
+  }
+
   render() {
     return (
       <ImageBackground
@@ -3525,6 +3543,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_all_challenges()}
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
@@ -3539,6 +3558,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_challenges_by_cat(1) }
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
@@ -3554,6 +3574,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_challenges_by_cat(2) }
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
@@ -3568,6 +3589,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_challenges_by_cat(3) }
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
@@ -3582,6 +3604,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_challenges_by_cat(4) }
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
@@ -3596,6 +3619,7 @@ class HomeScreen extends React.Component {
                        onRefresh={ () => this._get_challenges_by_cat(5) }
                       />
                     }
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                     renderItem={this._challengeRender.bind(this)}
                   />
                 </Tab>
