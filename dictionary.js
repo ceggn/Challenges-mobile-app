@@ -159,6 +159,7 @@ const cahallengesDict = {
         'Upload a thumbnail': "Upload a thumbnail",
         'There was an error playing this video, please try again later.': "There was an error playing this video, please try again later.",
         'The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.': "The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.",
+        'To the challenge': "Zur Challenge",
     },
     'de': {
         'Challenge': "Challenge",
@@ -320,6 +321,7 @@ const cahallengesDict = {
         'Upload a thumbnail': "Vorschaubild hochladen",
         'There was an error playing this video, please try again later.': "Ein Fehler ist aufgetreten, bitte versuche es später erneuet.",
         'The password must be at least 8 characters length, include a number, an uppercase and a lowercase letter.': "Dass Passwort muss mindestens 8 Zeichen lang sein, eine Zahl und jeweils einen Groß- und einen Kleinbuchstaben haben.",
+        'To the challenge': "Zur Challenge",
     }
 }
 

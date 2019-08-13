@@ -1314,6 +1314,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  blackButtonText: {
+    height: 24,
+    textAlign: 'center',
+    color: "#ffffff"
   }
 });
 
@@ -2150,11 +2155,7 @@ class VideoScreen extends React.Component {
                     alignSelf: 'center',
                   }}>
                     <TouchableOpacity onPress={() => this.purchase(videoPayment)}>
-                      <Text style={{
-                        height: 24,
-                        textAlign: 'center',
-                        color: "#ffffff",
-                      }}>
+                      <Text style={styles.blackButtonText}>
                         {I18n.get('Participate')}
                         {/* { videoPayment == 0 ? I18n.get('Free') : '$'+videoPayment } */}
                       </Text>
@@ -3374,31 +3375,7 @@ class HomeScreen extends React.Component {
                 </Col>
             </Row>
             <Row marginTop={15}>
-              <TouchableOpacity style={{backgroundColor: "#F7F8F8"}} onPress={() => item.videoFile == '-' ? '':this.props.navigation.navigate('Video', {
-                  videoThumb: item.videoThumb,
-                  userThumb: item.userThumb,
-                  videoURL: item.videoFile,
-                  videoTitle: item.title,
-                  videoDescription: item.description,
-                  videoAuthor: item.author,
-                  videoDate: item.creationDate,
-                  videoDeadline: item.deadlineDate,
-                  videoCompleted: item.completed,
-                  prizeTitle: item.prizeTitle,
-                  prizeDescription: item.prizeDescription,
-                  prizeUrl: item.prizeUrl,
-                  prizeImage:item.prizeImage,
-                  hasParent: item.parent == 'null' ? false : item.parent,
-                  videoCategory: I18n.get('Popular'),
-                  videoPayment: item.payment,
-                  challengeId: item.challengeId,
-                  views: item.views,
-                  rating: item.rating,
-                  authorSub: item.authorSub, authorUsername: item.authorUsername
-                })}
-              >
-                <Text style={styles.trendingExcerpt}>{item.description}</Text>
-              </TouchableOpacity>
+              <Text style={styles.trendingExcerpt}>{item.description}</Text>
             </Row>
           </Grid>
           <TouchableHighlight style={{backgroundColor: "#F7F8F8"}}>
@@ -3427,6 +3404,18 @@ class HomeScreen extends React.Component {
           <Grid style={styles.trendingCardFooter} >
             <Col>
               <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
+                <TouchableOpacity style={{
+                    height: 30,
+                    width: 150,
+                    borderRadius: 12,
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    marginRight: 15,
+                    paddingVertical: 5,
+                    alignSelf: 'center',
+                  }} 
+                  onPress={() => this._navigateVideoPage(item, index)}>
+                  <Text style={styles.blackButtonText}>{I18n.get('To the challenge')}</Text>
+                </TouchableOpacity>
                 <Text style={styles.trendingCardFooterText}>
                   <Icon name={'award1'} size={15} color={'#000000'} /> { item.participants ? item.participants : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
@@ -3448,6 +3437,37 @@ class HomeScreen extends React.Component {
         videoItem.index == index ? videoRef.play() : videoRef.pause();
       }
     })
+  }
+
+  _navigateVideoPage(item, index) {
+    let videoRef = this.state._videoRef[index]
+    if (videoRef) {
+      videoRef.pause();
+    }
+    if (item.videoFile != '-') {
+      this.props.navigation.navigate('Video', {
+        videoThumb: item.videoThumb,
+        userThumb: item.userThumb,
+        videoURL: item.videoFile,
+        videoTitle: item.title,
+        videoDescription: item.description,
+        videoAuthor: item.author,
+        videoDate: item.creationDate,
+        videoDeadline: item.deadlineDate,
+        videoCompleted: item.completed,
+        prizeTitle: item.prizeTitle,
+        prizeDescription: item.prizeDescription,
+        prizeUrl: item.prizeUrl,
+        prizeImage:item.prizeImage,
+        hasParent: item.parent == 'null' ? false : item.parent,
+        videoCategory: I18n.get('Popular'),
+        videoPayment: item.payment,
+        challengeId: item.challengeId,
+        views: item.views,
+        rating: item.rating,
+        authorSub: item.authorSub, authorUsername: item.authorUsername
+      });
+    }
   }
 
   render() {
