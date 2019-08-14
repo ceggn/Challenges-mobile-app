@@ -311,6 +311,7 @@ class MyLoading extends Loading {
 class MySignIn extends SignIn {
   constructor(props) {
     super(props);
+    StatusBar.setHidden(true);
   }
   static navigationOptions = ({ navigate, navigation }) => ({
     header: null,
