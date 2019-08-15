@@ -11,7 +11,6 @@ import Amplify, { Auth, API, Storage } from 'aws-amplify';
 import SingleMessage from './single.message.component';
 import FastImage from 'react-native-fast-image';
 
-
 export default class AboutMe extends Component {
     state = {
         username: undefined,
@@ -20,6 +19,7 @@ export default class AboutMe extends Component {
         avatar: undefined,
         refreshing: false
     };
+
     constructor(props) {
         super(props);
         this.getUserAvatar = this.getUserAvatar.bind(this);
@@ -29,6 +29,7 @@ export default class AboutMe extends Component {
         this.sendConversation = this.sendConversation.bind(this);
         this.refresh = this.refresh.bind(this);
     }
+
     sendConversation( conversationId = false ){
         this.props.createConversation({
             createdAt: new Date().valueOf(),
@@ -49,9 +50,11 @@ export default class AboutMe extends Component {
             }
         ).catch( error => console.log('Create converstion error', error));
     }
+
     componentWillMount() {
         this.props.subscribeToNewChats();
     }
+
     componentDidUpdate(){
         if( this.props.navigation.getParam('needToCheck', '') ) {
             if (!this.props.me) {
@@ -83,10 +86,12 @@ export default class AboutMe extends Component {
             }
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
         
     }
-    refresh(){
+
+    refresh() {
         this.setState({
             refreshing: true
         });
@@ -95,27 +100,31 @@ export default class AboutMe extends Component {
             refreshing: false
         });
     }
-    getUserName(sub){
-        if( this.state[sub] ){
+
+    getUserName(sub) {
+        if( this.state[sub] ) {
             return this.state[sub]['username'];
         }else{
             return false;
         }
     }
-    getAvatar(sub){
-        if( this.state[sub] ){
+
+    getAvatar(sub) {
+        if( this.state[sub] ) {
             return this.state[sub]['avatar'];
         }else{
             return false;
         }
     }
-    getPrefferedName(sub){
-        if( this.state[sub] ){
+
+    getPrefferedName(sub) {
+        if( this.state[sub] ) {
             return this.state[sub]['name'];
         }else{
             return false;
         }
     }
+    
     getUserAvatar(sub){
         if( this.state[sub] ){
             return this.state[sub]['avatar'];
@@ -152,7 +161,6 @@ export default class AboutMe extends Component {
                         sub: item.associated[0].userId == this.props.me.cognitoId ? item.associated[1].userId : item.associated[0].userId,
                         partnerPreferedName: this.getPrefferedName( item.associated[0].userId == this.props.me.cognitoId ? item.associated[1].userId : item.associated[0].userId ),
                         partnerPicture: this.getAvatar( item.associated[0].userId == this.props.me.cognitoId ? item.associated[1].userId : item.associated[0].userId ),
-
                         me: this.props.me,
                         conversationId: item.conversationId,
                         conversationName: this.getPrefferedName( item.associated[0].userId == this.props.me.cognitoId ? item.associated[1].userId : item.associated[0].userId )

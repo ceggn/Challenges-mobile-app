@@ -1362,8 +1362,6 @@ class VideoScreen extends React.Component {
       tabBarVisible: true,
     }
   }
-  async componentWillMount() {
-  }
   componentDidMount(){
     Auth.currentAuthenticatedUser().then(
       myUser => {
@@ -1377,7 +1375,9 @@ class VideoScreen extends React.Component {
     this._firstVideoPopup();
   }
   componentWillUnmount(){
-    this.player.pause();
+    if (this.player) {
+      this.player.pause();
+    }
   }
   _firstVideoPopup = async () => {
     try {
@@ -2259,6 +2259,8 @@ class VideoScreen extends React.Component {
 }
 
 class AddChallengeScreen extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -2279,70 +2281,82 @@ class AddChallengeScreen extends React.Component {
       sub: '',
       isParent: false,
       parentVideo: [],
-      thumbResponse: {}
+      thumbResponse: {},
+      thumbnail: ''
     };
     this.share = this.share.bind(this);
     this.addChallenge = this.addChallenge.bind(this);
     this.setDate = this.setDate.bind(this);
     this.onFullScreen = this.onFullScreen.bind(this);
   }
+
   componentDidMount() {
+    this._isMounted = true;
     Auth.currentAuthenticatedUser().then(
       data => {
-        this.setState({
-          pp: data.attributes.picture && data && data.attributes ? data.attributes.picture : null,
-          sub: data.signInUserSession.idToken.payload.sub,
-          username: data.username,
-          isParent: this.props.navigation.getParam('parentChallengeId', '') ? true : false
-        })
+        if (this._isMounted && data) {
+          const userAttributes = data.attributes;
+          this.setState({
+            pp: userAttributes && userAttributes.picture ? userAttributes.picture : null,
+            sub: data.signInUserSession.idToken.payload.sub,
+            username: userAttributes.preferred_username ? userAttributes.preferred_username : data.username,
+            isParent: this.props.navigation.getParam('parentChallengeId', '') ? true : false
+          })
+        }
       }
     );
+
     if( this.props.navigation.getParam('parentChallengeId', '') ){
       console.log( this.props.navigation.getParam('parentChallengeId', '') );
       const path = "/videos/object/"+this.props.navigation.getParam('parentChallengeId', '');
       API.get("videosCRUD", path)
         .then(
           challenge => {
-            this.setState({
-              parentVideo: challenge
-            });
+            if (this._isMounted) {
+              this.setState({
+                parentVideo: challenge
+              });
+            }
           }
         ).catch(err => console.log(err));
     }
   }
+
   componentWillUnmount() {
-    this.setState({
-      thumbnail: '',
-      width: '',
-      height: ''
-    })
+    this._isMounted = false;
   }
+
   static navigationOptions = ({ navigation  }) => {
     return {
       header: null,
       tabBarVisible: false
     }
   }
+
   categoryChange(value) {
     this.setState({
       category: value
     });
   }
+
   onFullScreen(status) {
     this.setState({
       videoExpanded: !this.state.videoExpanded
     });
   }
+
   paymentChange(value) {
     this.setState({
       payment: value
     });
   }
+
   setDate(newDate) {
     this.setState({
       deadline: moment(newDate)
     });
   }
+
   async uploadFile(uuid, uri) {
     let self = this;
     const videorResponse = await fetch( uri );
@@ -2369,6 +2383,7 @@ class AddChallengeScreen extends React.Component {
     )
     .catch(err => console.log(err));
   }
+
   addChallenge( uuid, isThumbImage ) {
     let self = this;
     let newChallenge = {
@@ -2439,7 +2454,8 @@ class AddChallengeScreen extends React.Component {
       }
     );
   }
-  share(){
+
+  share() {
     let self = this;
     this.setState({
       loading: true
@@ -2465,6 +2481,7 @@ class AddChallengeScreen extends React.Component {
       }
     });
   }
+
   getPhotos = () => {
     let self = this;
     var options = {
@@ -2499,6 +2516,7 @@ class AddChallengeScreen extends React.Component {
       }
     });
   }
+
   render() {
     return (
       <ImageBackground
