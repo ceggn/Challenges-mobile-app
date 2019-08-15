@@ -122,6 +122,7 @@ import LikedVideosScreen from './components/LikedVideosScreen';
 import UserProfileScreen from './components/UserProfile';
 import PayOutScreen from './components/PayOutScreen';
 
+console.disableYellowBox = true;
 // Custom UI
 //const FBLoginButton = require('./components/FBLoginButton');
 const AuthTheme = Object.assign({}, AmplifyTheme, {
@@ -1743,19 +1744,19 @@ class VideoScreen extends React.Component {
         <Grid>
           <Row>
             <Col style={{ width: 46, justifyContent: 'center' }}>
-              { item.place == 1 && <Icon name='trophy, cup, prize, award, winner, tournament' size={35} color='#D6AF36' style={{
+              { item.place == 1 && <FontAwesomeIcon name='trophy' size={35} color='#D6AF36' style={{
                 position: 'absolute',
                 top: '50%',
                 marginTop: -12,
                 left: 6
               }} />}
-              { item.place == 2 && <Icon name='trophy, cup, prize, award, winner, tournament' size={35} color='#A7A7AD' style={{
+              { item.place == 2 && <FontAwesomeIcon name='trophy' size={35} color='#A7A7AD' style={{
                 position: 'absolute',
                 top: '50%',
                 marginTop: -12,
                 left: 6
               }} />}
-              { item.place == 3 && <Icon name='trophy, cup, prize, award, winner, tournament' size={35} color='#824A02' style={{
+              { item.place == 3 && <FontAwesomeIcon name='trophy' size={35} color='#824A02' style={{
                 position: 'absolute',
                 top: '50%',
                 marginTop: -12,
@@ -2110,6 +2111,7 @@ class VideoScreen extends React.Component {
                   onEnd={ () => {this.setNewView(challengeId)} }
                   onFullScreen={status => this.onFullScreen(status)}
                   resizeMode='cover'
+                  logo="#"
                   theme={{
                     title: '#FFF',
                     more: '#FFF',
@@ -2557,6 +2559,7 @@ class AddChallengeScreen extends React.Component {
                       onFullScreen={status => this.onFullScreen(status)}
                       resizeMode='contain'
                       loop={true}
+                      logo="#"
                       theme={{
                         title: '#FFF',
                         more: '#FFF',
@@ -4285,7 +4288,7 @@ class ProfileScreen extends React.Component {
                 height: 26,
                 width: 26
               }}>
-                <Icon name='bin, trashcan, remove, delete, recycle, dispose' size={13} style={{color: "#d88586"}} />
+                <FontAwesomeIcon name='trash' size={14} style={{color: "#d88586"}} />
               </Button>
             </Col>
           </Row>

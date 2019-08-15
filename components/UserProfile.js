@@ -564,7 +564,7 @@ export default class UserProfileScreen extends Component {
         API.get("videosCRUD", path)
           .then(
             data => {
-                console.log(data);
+                console.log("videosCRUD: ", data);
                 var avatarObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'picture'; });
                 var descriptionObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'profile'; });
                 var countryObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'custom:country'; });
