@@ -212,31 +212,34 @@ class ChatScreen extends Component {
 
     }
     async send() {
-        if( this.props.navigation.state.params.firstMessage ){
-            await this.sendUserConversation();
+        if (this.state.text) {
+            let msg = this.state.text.replace('\n', '\\n');
+            if( this.props.navigation.state.params.firstMessage ){
+                await this.sendUserConversation();
+            }
+            UUIDGenerator.getRandomUUID((uuid) => {
+                this.props.createMessage({
+                    conversationId: this.props.navigation.state.params.conversationId,
+                    content: msg,
+                    id: uuid,
+                    createdAt: new Date().valueOf(),
+                    sub: this.props.navigation.state.params.me.cognitoId
+                }).then(data => {
+                    if( this.props.navigation.state.params.firstMessage ){
+                        this.props.navigation.state.params.firstMessage = false;
+                    }else{
+                        this.flatList.scrollToIndex({ index: 0, animated: true });
+                    }
+                    this.setState({
+                        text: ''
+                    });
+                }).catch(
+                    e => {
+                        console.log(e);
+                    }
+                );
+            });
         }
-        UUIDGenerator.getRandomUUID((uuid) => {
-            this.props.createMessage({
-                conversationId: this.props.navigation.state.params.conversationId,
-                content: this.state.text,
-                id: uuid,
-                createdAt: new Date().valueOf(),
-                sub: this.props.navigation.state.params.me.cognitoId
-            }).then(data => {
-                if( this.props.navigation.state.params.firstMessage ){
-                    this.props.navigation.state.params.firstMessage = false;
-                }else{
-                    this.flatList.scrollToIndex({ index: 0, animated: true });
-                }
-                this.setState({
-                    text: ''
-                });
-            }).catch(
-                e => {
-                    console.log(e);
-                }
-            );
-        });
     }
     keyExtractor = item => item.id.toString();
 

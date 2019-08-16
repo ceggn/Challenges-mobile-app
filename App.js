@@ -2868,7 +2868,8 @@ class HomeScreen extends React.Component {
       LIVElastEvaluatedKey: null,
       LIVEloadingMore: null,
       hiddenVideos: [],
-      _videoRef: []
+      _videoRef: [],
+      activeTab: 'popular'
      };
      this._get_all_challenges = this._get_all_challenges.bind(this);
      this._get_challenges_by_cat = this._get_challenges_by_cat.bind(this);
@@ -3157,26 +3158,47 @@ class HomeScreen extends React.Component {
     }
   }
   _get_challenges_by_cat(tab_id){
-    let self = this;
     switch (tab_id) {
+      case 0:
+        this.state.activeTab = 'popular';
+        break;
       case 1:
-        var cat_name = 'FRIENDS';
+        this.state.activeTab = 'friends';
         break;
       case 2:
-        var cat_name = 'SPORT';
+        this.state.activeTab = 'sport';
         break;
       case 3:
-        var cat_name = 'GAMES';
+        this.state.activeTab = 'games';
         break;
       case 4:
-        var cat_name = 'MUSIK';
+        this.state.activeTab = 'music';
         break;
       case 5:
-        var cat_name = 'LIVE';
+        this.state.activeTab = 'live';
         break;
-      default:
-        var cat_name = false;
     }
+
+    tab_id = isGuest ? tab_id+1 : tab_id;
+    let cat_name = '';
+    switch (tab_id) {
+      case 1:
+        cat_name = 'FRIENDS';
+        break;
+      case 2:
+        cat_name = 'SPORT';
+        break;
+      case 3:
+        cat_name = 'GAMES';
+        break;
+      case 4:
+        cat_name = 'MUSIK';
+        break;
+      case 5:
+        cat_name = 'LIVE';
+        break;
+    }
+    let self = this;
     if( cat_name ){
       if( cat_name == 'FRIENDS' ){
         if( !this.state[cat_name+'refreshing'] ){
@@ -3278,7 +3300,7 @@ class HomeScreen extends React.Component {
         }
     )
   }
-  _challengeRender({item, index}){
+  _challengeRender = ({item, index}, type) => {
     item.payment = 0;
     if( !item.approved ){
       return;
@@ -3404,7 +3426,7 @@ class HomeScreen extends React.Component {
             <VideoAf
               url={item.videoFile}
               placeholder={item.videoThumb}
-              ref={ref => this.state._videoRef[index] = ref}
+              ref={ref => this.state._videoRef[`${type}-${index}`] = ref}
               resizeMode='cover'
               logo='#'
               theme={{
@@ -3454,18 +3476,21 @@ class HomeScreen extends React.Component {
 
   onViewableItemsChanged = ({ viewableItems }) => {
     const videoItem = viewableItems[0];
-    this.state._videoRef.map((videoRef, index) => {
-      if (videoRef) {
-        videoItem.index == index ? videoRef.play() : videoRef.pause();
-      }
-    })
+    const currentVideoKey = `${this.state.activeTab}-${videoItem.index}`;
+    for (let key in this.state._videoRef) {
+      this.state._videoRef[key].pause();
+    }
+    if (this.state._videoRef[currentVideoKey]) {
+      this.state._videoRef[currentVideoKey].play();
+    }
   }
 
   _navigateVideoPage(item, index) {
-    let videoRef = this.state._videoRef[index]
-    if (videoRef) {
-      videoRef.pause();
+    const currentVideoKey = `${this.state.activeTab}-${index}`;
+    if (this.state._videoRef[currentVideoKey]) {
+      this.state._videoRef[currentVideoKey].pause();
     }
+
     if (item.videoFile != '-') {
       this.props.navigation.navigate('Video', {
         videoThumb: item.videoThumb,
@@ -3573,7 +3598,7 @@ class HomeScreen extends React.Component {
                   </View>
                 </View>
               </Modal>
-              <Tabs onChangeTab={({ i, ref, from })=> this._get_challenges_by_cat( isGuest ? i+1 : i)} renderTabBar={()=> <ScrollableTab />} tabBarBackgroundColor={'transparent'}>
+              <Tabs onChangeTab={({ i, ref, from })=> this._get_challenges_by_cat(i)} renderTabBar={()=> <ScrollableTab />} tabBarBackgroundColor={'transparent'}>
                 <Tab heading={I18n.get('Popular')} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
                   <FlatList
                     data={this.state.apiResponse}
@@ -3586,7 +3611,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'popular')}
                   />
                 </Tab>
                 { !isGuest &&
@@ -3601,7 +3626,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'friends')}
                   />
                 </Tab>
                 }
@@ -3617,7 +3642,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'sport')}
                   />
                 </Tab>
                 <Tab heading={I18n.get('Games').toUpperCase()} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
@@ -3632,7 +3657,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'games')}
                   />
                 </Tab>
                 <Tab heading={I18n.get('Music').toUpperCase()} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
@@ -3647,7 +3672,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'music')}
                   />
                 </Tab>
                 <Tab heading={I18n.get('Live').toUpperCase()} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
@@ -3662,7 +3687,7 @@ class HomeScreen extends React.Component {
                       />
                     }
                     onViewableItemsChanged={this.onViewableItemsChanged}
-                    renderItem={this._challengeRender.bind(this)}
+                    renderItem={({item, index}) => this._challengeRender({item, index}, 'live')}
                   />
                 </Tab>
               </Tabs>
