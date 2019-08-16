@@ -3402,7 +3402,7 @@ class HomeScreen extends React.Component {
               </Col>
               <Col>
                   <Text style={styles.trendingTitleText}>{item.title}</Text>
-                  <Text style={styles.trendingTitleDescriptionText}><TimeAgo time={item.creationDate} /></Text>
+                  <Text style={styles.trendingTitleDescriptionText}><TimeAgo time={item.creationDate} /> {I18n.get('by')+' '+item.authorUsername}</Text>
                   { item.deadlineDate > new Date().valueOf() || ( item.deadlineDate < new Date().valueOf() && !item.completed ) ?
                     <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Live')}</Text>:
                     <Text style={[styles.trendingTitleDescriptionText, {color: '#e6643a', fontSize: 12, fontWeight: "bold", lineHeight: 14, marginTop: 4}]}>{I18n.get('Ended')} { moment( parseInt( item.deadlineDate ) ).format('lll') }</Text>
