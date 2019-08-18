@@ -23,7 +23,8 @@ import {
   Modal,
   StatusBar,
   PermissionsAndroid,
-  CameraRoll
+  CameraRoll,
+  Dimensions
 } from 'react-native';
 
 import { WebView } from "react-native-webview";
@@ -105,6 +106,8 @@ moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
 var isGuest = false;
+
+const Win = Dimensions.get('window');
 
 // AppSync
 import AppSync from './AppSync.js';
@@ -2007,7 +2010,7 @@ class VideoScreen extends React.Component {
     const videoDate = navigation.getParam('videoDate', '');
     const videoDeadline = navigation.getParam('videoDeadline', '');
     const videoCompleted = navigation.getParam('videoCompleted', '');
-    //const videoPayment = navigation.getParam('videoPayment', '');
+    const userThumb = navigation.getParam('userThumb', '');
     const videoPayment = 0;
     const challengeId = navigation.getParam('challengeId', '');
     const authorUsername = navigation.getParam('authorUsername', '');
@@ -2105,7 +2108,7 @@ class VideoScreen extends React.Component {
               <View>
                 <VideoAf
                   url={videoURL}
-                  placeholder={videoThumb}
+                  placeholder={userThumb ? userThumb: videoThumb}
                   autoPlay={true}
                   ref={r => this.player = r}
                   onEnd={ () => {this.setNewView(challengeId)} }
@@ -2126,6 +2129,7 @@ class VideoScreen extends React.Component {
                     loading: '#ED923D'
                   }}
                   lockRatio={9/16}
+                  style={{height: Win.height}}
                 />
               </View>
               <Grid style={styles.trendingCardFooter} >
@@ -3300,11 +3304,37 @@ class HomeScreen extends React.Component {
         }
     )
   }
+  
+  getChallengersVideos= async (challengeId) => {
+    const challengersPath = `/videos?parent=${challengeId}`;
+    const challengersVideos = await API.get("videosCRUD", challengersPath);
+    let participants = [];
+    if(challengersVideos && challengersVideos.length > 0) {
+      let sortedVideos = challengersVideos.sort(function(a, b) {
+        return b.rating - a.rating;
+      });
+      sortedVideos.map(video => {
+        if (video && participants.length < 3) {
+          let thumb = video.userThumb;
+          if (!thumb || thumb == '-') {
+            thumb = video.videoThumb;
+          }
+          if (thumb && thumb != '-') {
+            participants.push(thumb);
+          }
+        }
+      });
+      console.log("participants: ", participants)
+    }
+    return participants;
+  }
+
   _challengeRender = ({item, index}, type) => {
     item.payment = 0;
     if( !item.approved ){
       return;
     }
+    let participants = [];
     return (
       <View>
         { ( Platform.OS === 'ios' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
@@ -3425,7 +3455,7 @@ class HomeScreen extends React.Component {
           <TouchableHighlight style={{backgroundColor: "#F7F8F8"}}>
             <VideoAf
               url={item.videoFile}
-              placeholder={item.videoThumb}
+              placeholder={item.userThumb ? item.userThumb : item.videoThumb}
               ref={ref => this.state._videoRef[`${type}-${index}`] = ref}
               resizeMode='cover'
               logo='#'
@@ -3443,11 +3473,23 @@ class HomeScreen extends React.Component {
                 loading: '#ED923D'
               }}
               lockRatio={9/16}
+              style={{height: Win.height}}
             />
           </TouchableHighlight>
           <Grid style={styles.trendingCardFooter} >
             <Col>
               <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
+                <TouchableOpacity style={{ position: 'absolute', top: 0, left: 0, flexDirection: 'row'}}
+                  onPress={() => this._navigateVideoPage(item, index)}>
+                  {participants.map((uri, index)=>(
+                    <FastImage
+                      key={index}
+                      style={{ width: 28, height: 28, borderRadius: 14, aspectRatio: 1}}
+                      source={{uri: uri, priority: FastImage.priority.normal}}
+                      resizeMode={FastImage.resizeMode.cover}
+                    />
+                  ))}                  
+                </TouchableOpacity>
                 <TouchableOpacity style={{
                     height: 30,
                     width: 150,
@@ -3478,7 +3520,9 @@ class HomeScreen extends React.Component {
     const videoItem = viewableItems[0];
     const currentVideoKey = `${this.state.activeTab}-${videoItem.index}`;
     for (let key in this.state._videoRef) {
-      this.state._videoRef[key].pause();
+      if (this.state._videoRef[key]) {
+        this.state._videoRef[key].pause();
+      }
     }
     if (this.state._videoRef[currentVideoKey]) {
       this.state._videoRef[currentVideoKey].play();
@@ -3603,6 +3647,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.apiResponse}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     onEndReached={ () => this._loadmore()}
                     refreshControl={
                       <RefreshControl
@@ -3619,6 +3664,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.FRIENDS}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     refreshControl={
                       <RefreshControl
                        refreshing={this.state.FRIENDSrefreshing}
@@ -3634,6 +3680,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.SPORT}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     onEndReached={ () => this._loadmore_category('SPORT')}
                     refreshControl={
                       <RefreshControl
@@ -3649,6 +3696,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.GAMES}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     onEndReached={ () => this._loadmore_category('GAMES')}
                     refreshControl={
                       <RefreshControl
@@ -3664,6 +3712,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.MUSIK}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     onEndReached={ () => this._loadmore_category('MUSIK')}
                     refreshControl={
                       <RefreshControl
@@ -3679,6 +3728,7 @@ class HomeScreen extends React.Component {
                   <FlatList
                     data={this.state.LIVE}
                     keyExtractor={item => item.challengeId}
+                    initialNumToRender={3}
                     onEndReached={ () => this._loadmore_category('LIVE')}
                     refreshControl={
                       <RefreshControl
