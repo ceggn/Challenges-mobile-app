@@ -88,7 +88,7 @@ class Message extends PureComponent {
               fontWeight: "normal",
               fontStyle: "normal",
               letterSpacing: -0.24
-              }}>{message.content.replace('\\n', '\n')}</Text>
+              }}>{message.content}</Text>
           </LinearGradient>
             { !isCurrentUser && <Text style={{
               fontSize: 11,

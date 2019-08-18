@@ -213,7 +213,10 @@ class ChatScreen extends Component {
     }
     async send() {
         if (this.state.text) {
-            let msg = this.state.text.replace('\n', '\\n');
+            let msg = this.state.text.replace(/\n/g, '\\n');
+            this.setState({
+                text: ''
+            });
             if( this.props.navigation.state.params.firstMessage ){
                 await this.sendUserConversation();
             }
@@ -230,9 +233,6 @@ class ChatScreen extends Component {
                     }else{
                         this.flatList.scrollToIndex({ index: 0, animated: true });
                     }
-                    this.setState({
-                        text: ''
-                    });
                 }).catch(
                     e => {
                         console.log(e);
@@ -244,8 +244,8 @@ class ChatScreen extends Component {
     keyExtractor = item => item.id.toString();
 
     renderItem = ({ item }) => {
-        const message = item;
-
+        let message = item;
+        message.content = message.content.replace(/\\n/g, '\n');
         return (
         <Message
             isCurrentUser={ this.props.navigation.state.params.me.cognitoId == message.sender ? true : false }
