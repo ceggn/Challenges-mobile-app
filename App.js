@@ -1662,41 +1662,43 @@ class VideoScreen extends React.Component {
       />
     );
   };
+
   _like(challengeId){
+    this._setLike(!this.state.liked, this.state.rating, true)
     let self = this;
-    self.setState({
-      liking: true
-    });
-    if( self.state.liked ){
+    if ( self.state.liked) {
       const path = "/likes/object/"+challengeId;
-      API.del("likesCRUD", path)
-      .then(
-        like => {
-          self.setState({
-            liked: false,
-            liking: false,
-            rating: self.state.rating == 0 ? 0 : (self.state.rating - 1)
-          });
-        }
-      ).catch(err => console.log(err));
-    }else{
+      API.del("likesCRUD", path).then(like => {
+        const rating = self.state.rating == 0 ? 0 : (self.state.rating - 1)
+        self._setLike(self.state.liked, rating);
+      }).catch(err =>  {
+        console.log(err);
+        self._setLike(!self.state.liked, self.state.rating);
+      });
+    } else {
       const path = "/likes";
       API.put("likesCRUD", path, {
         body: {
           "challengeId": challengeId
         }
-      })
-        .then(
-          like => {
-            self.setState({
-              liked: true,
-              liking: false,
-              rating: self.state.rating + 1
-            });
-          }
-        ).catch(err => console.log(err));
+      }).then(like => {
+        const rating = self.state.rating + 1;
+        self._setLike(self.state.liked, rating);
+      }).catch(err => {
+        console.log(err);
+        self._setLike(!self.state.liked, self.state.rating);
+      });
     }
   }
+
+  _setLike(liked, rating, liking = false) {
+    this.setState({
+      liked: liked,
+      rating: rating,
+      liking: liking
+    });
+  }
+
   _share(challengeId, title){
     Share.share(
       {
