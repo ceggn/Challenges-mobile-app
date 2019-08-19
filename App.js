@@ -2378,9 +2378,11 @@ class AddChallengeScreen extends React.Component {
       level: "private",
       contentType: file.type,
       progressCallback(progress) {
-        self.setState({
-          progress: progress.loaded / progress.total,
-        });
+        if (self._isMounted) {
+          self.setState({
+            progress: progress.loaded / progress.total,
+          });
+        }
       },
     }).then(
       response => {
@@ -2875,8 +2877,10 @@ class HomeScreen extends React.Component {
       LIVEloadingMore: null,
       hiddenVideos: [],
       _videoRef: [],
+      currentVideoKey: null,
       activeTab: 'popular'
      };
+     timeout = null;
      this._get_all_challenges = this._get_all_challenges.bind(this);
      this._get_challenges_by_cat = this._get_challenges_by_cat.bind(this);
      this._loadmore = this._loadmore.bind(this);
@@ -2918,6 +2922,9 @@ class HomeScreen extends React.Component {
     .catch(
       e => console.log(e)
     );
+  }
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
   }
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
@@ -3333,9 +3340,9 @@ class HomeScreen extends React.Component {
 
   _challengeRender = ({item, index}, type) => {
     item.payment = 0;
-    if( !item.approved ){
-      return;
-    }
+    const videoUrl = item.videoFile && item.videoFile != '-' ? item.videoFile : '';
+    if (!videoUrl || !item.approved) return;
+    const thumb = item.userThumb && item.userThumb != '-' ? item.userThumb : (item.videoThumb && item.videoThumb != '-' ? item.videoThumb : '');
     let participants = [];
     return (
       <View>
@@ -3457,10 +3464,9 @@ class HomeScreen extends React.Component {
           <TouchableHighlight style={{backgroundColor: "#F7F8F8"}}>
             <VideoAf
               url={item.videoFile}
-              placeholder={item.userThumb ? item.userThumb : item.videoThumb}
+              placeholder={thumb}
               ref={ref => this.state._videoRef[`${type}-${index}`] = ref}
               resizeMode='cover'
-              logo='#'
               theme={{
                 title: '#FFF',
                 more: '#FFF',
@@ -3518,16 +3524,27 @@ class HomeScreen extends React.Component {
     )
   }
 
+  componentDidUpdate(prevProps) {
+    clearTimeout(this.timeout);
+    let self = this;
+    this.timeout = setTimeout(() => {
+      for (let key in self.state._videoRef) {
+        if (self.state._videoRef[key]) {
+          self.state._videoRef[key].pause();
+        }
+      }
+      const newKey = self.state.currentVideoKey;
+      if (self.state._videoRef[newKey]) {
+        self.state._videoRef[newKey].play();
+      }
+    }, 1200);
+  }
+
   onViewableItemsChanged = ({ viewableItems }) => {
     const videoItem = viewableItems[0];
-    const currentVideoKey = `${this.state.activeTab}-${videoItem.index}`;
-    for (let key in this.state._videoRef) {
-      if (this.state._videoRef[key]) {
-        this.state._videoRef[key].pause();
-      }
-    }
-    if (this.state._videoRef[currentVideoKey]) {
-      this.state._videoRef[currentVideoKey].play();
+    if (videoItem && videoItem.index) {
+      const currentVideoKey = `${this.state.activeTab}-${videoItem.index}`;
+      this.setState({currentVideoKey: currentVideoKey});
     }
   }
 
