@@ -3,6 +3,7 @@ package de.challenges.app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.bugsnag.BugsnagReactNative;
 import com.rnfs.RNFSPackage;
 import com.eko.RNBackgroundDownloaderPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
@@ -45,6 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            BugsnagReactNative.getPackage(),
             new RNFSPackage(),
             new RNBackgroundDownloaderPackage(),
             new FastImageViewPackage(),

@@ -90,6 +90,10 @@ Amplify.configure({
   },
 });
 import { ErrorRow, Loading, SignIn, SignUp, ConfirmSignUp, ConfirmSignIn, VerifyContact, ForgotPassword, RequireNewPassword, AmplifyTheme } from 'aws-amplify-react-native';
+
+import { Client } from 'bugsnag-react-native';
+const bugsnag = new Client("e1899735244c054012ec84f4e239defc");
+
 import { withAuthenticator } from './components/customAuth';
 import { LoginUsername, LoginPassword } from './custom-login-ui/FormElements';
 
@@ -2887,7 +2891,7 @@ class HomeScreen extends React.Component {
      this._loadmore_category = this._loadmore_category.bind(this);
      this.checkVisible = this.checkVisible.bind(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     Auth.currentAuthenticatedUser().then(
       myUser => {
         this.setState({
@@ -3528,14 +3532,18 @@ class HomeScreen extends React.Component {
     clearTimeout(this.timeout);
     let self = this;
     this.timeout = setTimeout(() => {
-      for (let key in self.state._videoRef) {
-        if (self.state._videoRef[key]) {
-          self.state._videoRef[key].pause();
+      try {
+        for (let key in self.state._videoRef) {
+          if (self.state._videoRef[key]) {
+            self.state._videoRef[key].pause();
+          }
         }
-      }
-      const newKey = self.state.currentVideoKey;
-      if (self.state._videoRef[newKey]) {
-        self.state._videoRef[newKey].play();
+        const newKey = self.state.currentVideoKey;
+        if (self.state._videoRef[newKey]) {
+          self.state._videoRef[newKey].play();
+        }
+      } catch (error) {
+        bugsnag.notify(error);
       }
     }, 1200);
   }

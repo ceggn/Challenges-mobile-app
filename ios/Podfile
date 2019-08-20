@@ -47,6 +47,8 @@ target 'Challenges' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'BugsnagReactNative', :path => '../node_modules/bugsnag-react-native'
+
 end
 
 post_install do |installer|
