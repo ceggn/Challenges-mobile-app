@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.bugsnag.BugsnagReactNative;
 import com.rnfs.RNFSPackage;
-import com.eko.RNBackgroundDownloaderPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
@@ -48,7 +47,6 @@ public class MainApplication extends Application implements ReactApplication {
         new MainReactPackage(),
             BugsnagReactNative.getPackage(),
             new RNFSPackage(),
-            new RNBackgroundDownloaderPackage(),
             new FastImageViewPackage(),
             new OrientationPackage(),
             new KCKeepAwakePackage(),
