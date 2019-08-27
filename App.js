@@ -2119,7 +2119,6 @@ class VideoScreen extends React.Component {
                   onEnd={ () => {this.setNewView(challengeId)} }
                   onFullScreen={status => this.onFullScreen(status)}
                   resizeMode='cover'
-                  logo="#"
                   theme={{
                     title: '#FFF',
                     more: '#FFF',
@@ -2588,7 +2587,6 @@ class AddChallengeScreen extends React.Component {
                       onFullScreen={status => this.onFullScreen(status)}
                       resizeMode='contain'
                       loop={true}
-                      logo="#"
                       theme={{
                         title: '#FFF',
                         more: '#FFF',
@@ -3548,15 +3546,15 @@ class HomeScreen extends React.Component {
   }
 
   onViewableItemsChanged = ({ viewableItems }) => {
-    const videoItem = viewableItems[0];
-    if (videoItem && videoItem.index) {
+    let videoItem = viewableItems[0];
+    if (videoItem && videoItem.index >= 0) {
       const currentVideoKey = `${this.state.activeTab}-${videoItem.index}`;
       this.setState({currentVideoKey: currentVideoKey});
     }
   }
 
   _navigateVideoPage(item, index) {
-    const currentVideoKey = `${this.state.activeTab}-${index}`;
+    const currentVideoKey = this.state.currentVideoKey;
     if (this.state._videoRef[currentVideoKey]) {
       this.state._videoRef[currentVideoKey].pause();
     }
