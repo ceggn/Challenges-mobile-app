@@ -55,7 +55,6 @@ import {
 import icoMoonConfig from './components/selection.json';
 import getTheme from './native-base-theme/components';
 import customStyle from './native-base-theme/variables/platform';
-//import VideoPlayer from 'react-native-video-player';
 import VideoAf from 'react-native-af-video-player';
 import { RNCamera } from 'react-native-camera';
 import { BlurView } from 'react-native-blur';
