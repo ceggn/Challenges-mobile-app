@@ -1350,7 +1350,8 @@ class VideoScreen extends React.Component {
       allowed: false,
       canParticipate: false,
       videoExpanded: false,
-      liking: false
+      liking: false,
+      parentVideoTitle: ''
     };
     this.renderHeader = this.renderHeader.bind(this);
     this.postComment = this.postComment.bind(this);
@@ -1424,7 +1425,8 @@ class VideoScreen extends React.Component {
   _loadData(){
     this.setState({
       hasParent: this.props.navigation.getParam('hasParent', '') ? true : false,
-      commentsView: this.props.navigation.getParam('hasParent', '')? true : false
+      commentsView: this.props.navigation.getParam('hasParent', '')? true : false,
+      parentVideoTitle: this.props.navigation.getParam('videoTitle', ''),
     });
     const path = "/comments?getAllCommentsForChallenge=1&challengeId="+this.props.navigation.getParam('challengeId', '');
     API.get("commentsCRUD", path)
@@ -1716,9 +1718,7 @@ class VideoScreen extends React.Component {
     });
   }
   _processNavigate(item){
-    if( item.videoFile == '-' ){
-
-    }else{
+    if (item && item.videoFile !== '-') {
       this.player.pause();
       this.props.navigation.push('Video', {
         videoThumb: item.videoThumb,
@@ -1742,7 +1742,8 @@ class VideoScreen extends React.Component {
         rating: item.rating,
         needUpdate: true,
         authorSub: item.authorSub,
-        authorUsername: item.authorUsername
+        authorUsername: item.authorUsername,
+        parentVideoTitle: this.state.parentVideoTitle
       });
     }
   }
@@ -2010,6 +2011,7 @@ class VideoScreen extends React.Component {
     const videoThumb = navigation.getParam('videoThumb', '');
     const videoURL = navigation.getParam('videoURL', '');
     const videoTitle = navigation.getParam('videoTitle', '');
+    const parentVideoTitle = navigation.getParam('parentVideoTitle', '');
     const videoDescription = navigation.getParam('videoDescription', '');
     const videoAuthor = navigation.getParam('videoAuthor', '');
     const videoDate = navigation.getParam('videoDate', '');
@@ -2058,6 +2060,15 @@ class VideoScreen extends React.Component {
             <KeyboardAwareScrollView>
               { this.state.videoExpanded ? <Grid></Grid>:
               <Grid style={styles.trendingCardHeader} >
+                { !this.state.hasParent ? <Row></Row>:
+                <Row>
+                  <Col style={{ marginLeft: 50, marginBottom: 16}}>
+                    <TouchableOpacity onPress={() => {}}>
+                      <Text style={styles.trendingTitleText}>{parentVideoTitle}</Text>
+                    </TouchableOpacity>
+                  </Col>
+                </Row>
+                }
                 <Row>
                   <Col style={{ width: 50 }}>
                     <TouchableOpacity onPress={() =>
@@ -3542,7 +3553,7 @@ class HomeScreen extends React.Component {
       } catch (error) {
         bugsnag.notify(error);
       }
-    }, 1200);
+    }, 1000);
   }
 
   onViewableItemsChanged = ({ viewableItems }) => {
@@ -3554,12 +3565,14 @@ class HomeScreen extends React.Component {
   }
 
   _navigateVideoPage(item, index) {
-    const currentVideoKey = this.state.currentVideoKey;
-    if (this.state._videoRef[currentVideoKey]) {
-      this.state._videoRef[currentVideoKey].pause();
-    }
-
     if (item.videoFile != '-') {
+      const currentVideoKey = this.state.currentVideoKey;
+      if (this.state._videoRef[currentVideoKey]) {
+        let self = this;
+        setTimeout(() => {
+          self.state._videoRef[currentVideoKey].pause();
+        }, 1200);
+      }
       this.props.navigation.navigate('Video', {
         videoThumb: item.videoThumb,
         userThumb: item.userThumb,
@@ -4084,7 +4097,7 @@ class VideoCapture extends React.Component {
 
     if (this.Rcamera && allowed) {
       const options = {
-        quality: RNCamera.Constants.VideoQuality["720p"],
+        quality: RNCamera.Constants.VideoQuality["480p"],
         flashMode: this.state.isTorch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off,
         type: this.state.isFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back,
         orientation: 'portrait'
@@ -4136,7 +4149,6 @@ class VideoCapture extends React.Component {
                     ref={ref => {
                       this.Rcamera = ref;
                     }}
-                    //quality = {RNCamera.Constants.VideoQuality["720p"]}
                     style = {styles.preview}
                     type={this.state.isFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back}
                     flashMode={this.state.isTorch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
