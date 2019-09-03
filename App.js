@@ -4278,9 +4278,24 @@ class ProfileScreen extends React.Component {
       mylikes: 0,
       balance: "0.00",
     }
+    this._checkDownloadPermission = this._checkDownloadPermission.bind(this);
     this._loadUser = this._loadUser.bind(this);
     this._loadFollowers = this._loadFollowers.bind(this);
   }
+
+  _checkDownloadPermission = async () => {
+    if(Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        ]);
+      } catch (err) {
+        console.warn(err)
+      }
+    }
+  }
+
   deleteVideo( challengeId, parentId = false ){
     Alert.alert(
       I18n.get('Remove Video?'),
@@ -4318,13 +4333,16 @@ class ProfileScreen extends React.Component {
           API.get("videosCRUD", path)
           .then(
             result => {
-              console.log(result);
-              const destinationPath = RNFS.CachesDirectoryPath + '/' + challengeId + '.mp4';
+              let destinationPath = `${RNFS.DocumentDirectoryPath}/${challengeId}.mp4`;
+              console.log(result, destinationPath); 
               RNFS.downloadFile({
                 fromUrl: result.videoFile,
-                toFile: destinationPath
+                toFile: destinationPath,
               }).promise.then((r) => {
                 console.log('video download complete', r);
+                if(Platform.OS === 'android') {
+                  destinationPath = `file://${destinationPath}`;
+                }
                 CameraRoll.saveToCameraRoll(destinationPath);
               });
             }
@@ -4524,6 +4542,7 @@ class ProfileScreen extends React.Component {
     );
   }
   componentDidMount() {
+    this._checkDownloadPermission();
     this._loadUser();
     this._firstProfilePopup();
   }
@@ -5385,13 +5404,6 @@ function AuthenticatorHOC(App) {
   };
 }
 
-//export default InitialScreen;
-// export default class AuthenticatorApp extends React.Component {
-//   render() {
-//     const WrappedApp = AuthenticatorHOC(InitialScreen);
-//     return <WrappedApp {...this.props} />;
-//   }
-// }
 export default props =>  {
   const WrappedApp = AuthenticatorHOC(InitialScreen);
   return <WrappedApp {...props} />;
