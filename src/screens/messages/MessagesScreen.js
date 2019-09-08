@@ -8,29 +8,29 @@ import {
     StyleProvider,
 } from 'native-base';
 import { graphql, compose } from 'react-apollo';
-//import update from 'immutability-helper';
-import GetMe from '../queries/GetMe';
+import GetMe from '../../api/queries/GetMe';
 import AboutMe from './AboutMe';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import ChatAddedSubscription from '../subscriptions/ChatAddedSubscription';
-import CreateConversation from '../mutations/CreateConversation';
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
+import ChatAddedSubscription from '../../../subscriptions/ChatAddedSubscription';
+import CreateConversation from '../../../mutations/CreateConversation';
 
 import { I18n } from 'aws-amplify';
-import cahallengesDict from '../dictionary';
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
-export default class MessagesPage extends Component {
+export default class MessagesScreen extends Component {
     constructor(props) {
         super(props);
     }
@@ -47,7 +47,7 @@ export default class MessagesPage extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,

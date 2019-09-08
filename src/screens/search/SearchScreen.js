@@ -7,16 +7,10 @@ import {
     TouchableOpacity,
     StatusBar
 } from 'react-native';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import TimeAgo from './TimeAgo';
 import {
     Container,
     Row,
     Content,
-    Col,
-    Thumbnail,
     Header,
     Title,
     Button,
@@ -31,21 +25,26 @@ import {
     View
 } from 'native-base';
 import FastImage from 'react-native-fast-image';
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
-import { Auth, API, I18n } from 'aws-amplify';
 
-import cahallengesDict from '../dictionary';
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
+import TimeAgo from '../../components/TimeAgo';
+
+import { Auth, API, I18n } from 'aws-amplify';
+import cahallengesDict from '../../config/dictionary';
 let moment = require('moment/min/moment-with-locales');
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+
 var isGuest = false;
 
 export default class SearchScreen extends Component {
@@ -197,7 +196,7 @@ export default class SearchScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,
@@ -335,7 +334,7 @@ export default class SearchScreen extends Component {
                                                     {
                                                         uri: this.getUserAvatar(item),
                                                         priority: FastImage.priority.normal
-                                                    } : require('../assets/images/avatar.png')
+                                                    } : require('../../assets/images/avatar.png')
                                                 }
                                                 resizeMode={FastImage.resizeMode.cover}
                                             />
@@ -372,7 +371,7 @@ export default class SearchScreen extends Component {
                                             style={{ width: 30, height: 30, borderRadius: 15 }}
                                             source={
                                                 item.fields.author[0] == '-' ?
-                                                require('../assets/images/avatar.png') : 
+                                                require('../../assets/images/avatar.png') : 
                                                 {
                                                     uri: item.fields.author[0],
                                                     priority: FastImage.priority.normal

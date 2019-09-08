@@ -7,7 +7,7 @@ import {
     Grid,
     Text
 } from 'native-base';
-import Amplify, { Auth, API, Storage } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import SingleMessage from './single.message.component';
 import FastImage from 'react-native-fast-image';
 
@@ -175,7 +175,7 @@ export default class AboutMe extends Component {
                                     {
                                         uri: this.getAvatar( item.associated[0].userId == this.props.me.cognitoId && item.associated[1] ? item.associated[1].userId : item.associated[0].userId ),
                                         priority: FastImage.priority.normal
-                                    } : require('../assets/images/avatar.png')
+                                    } : require('../../assets/images/avatar.png')
                                 }
                                 resizeMode={FastImage.resizeMode.cover}
                             />

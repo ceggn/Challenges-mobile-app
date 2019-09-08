@@ -6,7 +6,6 @@ import {
     ActivityIndicator,
     FlatList,
     KeyboardAvoidingView,
-    SafeAreaView,
     Platform,
     NativeModules,
     StatusBar,
@@ -21,32 +20,32 @@ import {
     Textarea,
     StyleProvider
 } from 'native-base';
-//import update from 'immutability-helper';
 import { API, Auth, I18n} from 'aws-amplify';
 import UUIDGenerator from 'react-native-uuid-generator';
 import { graphql, compose } from 'react-apollo';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import ListMessages from '../queries/ListMessages';
-import CreateUserConversations from '../mutations/CreateUserConversations';
-import CreateMessage from '../mutations/CreateMessage';
-import MessageAddedSubscription from '../subscriptions/MessagesAddedSubscription';
+import ListMessages from '../../api/queries/ListMessages';
+import CreateUserConversations from '../../../mutations/CreateUserConversations';
+import CreateMessage from '../../../mutations/CreateMessage';
+import MessageAddedSubscription from '../../../subscriptions/MessagesAddedSubscription';
 import Message from './message.component';
 import FastImage from 'react-native-fast-image';
 
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
 
-import cahallengesDict from '../dictionary';
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const styles = StyleSheet.create({
     container: {
@@ -327,7 +326,7 @@ class ChatScreen extends Component {
         // render list of messages for conversation
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,
@@ -363,7 +362,7 @@ class ChatScreen extends Component {
                                             uri: this.props.navigation.state.params.partnerPicture,
                                             priority: FastImage.priority.normal
                                         }:
-                                        require('../assets/images/avatar.png')
+                                        require('../../assets/images/avatar.png')
                                     }
                                     resizeMode={FastImage.resizeMode.cover}
                                 />

@@ -13,7 +13,6 @@ import {
   StatusBar
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import {
   Row,
   Container,
@@ -22,32 +21,30 @@ import {
   Right,
   Body,
   Col,
-  Thumbnail,
   Grid,
   Button,
   StyleProvider,
   ActionSheet,
   Text, } from 'native-base';
-import icoMoonConfig from './selection.json';
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
-import TimeAgo from './TimeAgo';
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
+import TimeAgo from '../../components/TimeAgo';
 
 import { Auth, API, I18n } from 'aws-amplify';
-
-import cahallengesDict from '../dictionary';
+import cahallengesDict from '../../config/dictionary';
 let moment = require('moment/min/moment-with-locales');
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
-
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+
 const styles = StyleSheet.create({
     tab: {
       backgroundColor: 'transparent'
@@ -391,7 +388,7 @@ export default class UserProfileScreen extends Component {
                       style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                       source={
                         (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                        require('../assets/images/placeholder-alt-1.jpg') :
+                        require('../../assets/images/placeholder-alt-1.jpg') :
                         {
                           uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                           priority: FastImage.priority.normal,
@@ -440,13 +437,13 @@ export default class UserProfileScreen extends Component {
                         {
                             uri: this.state.avatar,
                             priority: FastImage.priority.normal
-                        } : require('../assets/images/avatar.png')
+                        } : require('../../assets/images/avatar.png')
                       }
                       resizeMode={FastImage.resizeMode.cover}
                   />
                   <FastImage
                       style={{ top: 29, width: 110, height: 110, position: 'absolute', zIndex:1 }}
-                      source={require('../assets/images/oval.png')}
+                      source={require('../../assets/images/oval.png')}
                       resizeMode={FastImage.resizeMode.cover}
                   />
                 </Col>
@@ -692,7 +689,7 @@ export default class UserProfileScreen extends Component {
       render() {
         return (
           <ImageBackground
-            source={require('../assets/images/screen-bg.png')}
+            source={require('../../assets/images/screen-bg.png')}
             style={{
               flex: 1,
               width: null,

@@ -3,8 +3,7 @@ import {
   View,  
   Text
 } from 'native-base';
-import ListMessages from '../queries/ListMessages';
-import MessageAddedSubscription from '../subscriptions/MessagesAddedSubscription';
+import ListMessages from '../../api/queries/ListMessages';
 import { graphql, compose } from 'react-apollo';
 
 const LastMessageQuery = compose(

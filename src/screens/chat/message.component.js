@@ -6,24 +6,23 @@ import {
   Platform,
   NativeModules
 } from 'react-native';
+import { Text } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
-import {
-  Text,
-  Thumbnail
-} from 'native-base';
 import FastImage from 'react-native-fast-image';
 import { I18n } from 'aws-amplify';
-import cahallengesDict from '../dictionary';
+import cahallengesDict from '../../config/dictionary';
 let moment = require('moment/min/moment-with-locales');
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const styles = StyleSheet.create({
   container: {
@@ -70,7 +69,7 @@ class Message extends PureComponent {
                   uri: avatar,
                   priority: FastImage.priority.normal,
                 } :
-                require('../assets/images/avatar.png')
+                require('../../assets/images/avatar.png')
               }
               resizeMode={FastImage.resizeMode.cover}
           />

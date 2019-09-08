@@ -10,14 +10,6 @@ import {
     NativeModules,
     StatusBar
 } from 'react-native';
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
-import FastImage from 'react-native-fast-image';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-import TimeAgo from './TimeAgo';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import { API, I18n } from 'aws-amplify';
 import {
     Container,
     Content,
@@ -33,15 +25,25 @@ import {
     Button,
     StyleProvider
 } from 'native-base';
-import cahallengesDict from '../dictionary';
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
-}
-var languageCode = locale.substring(0, 2);
+import FastImage from 'react-native-fast-image';
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
+import TimeAgo from '../../components/TimeAgo';
+
+import { API, I18n } from 'aws-amplify';
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+    locale = NativeModules.SettingsManager.settings.AppleLocale;
+  }
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const styles = StyleSheet.create({
     trendingTitleText: {
@@ -153,7 +155,7 @@ export default class LikedVideosScreen extends Component {
                         style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                         source={
                             (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                            require('../assets/images/placeholder-alt-1.jpg') :
+                            require('../../assets/images/placeholder-alt-1.jpg') :
                             {
                               uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                               priority: FastImage.priority.normal,
@@ -199,7 +201,7 @@ export default class LikedVideosScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,

@@ -10,25 +10,14 @@ import {
     StatusBar,
     StyleSheet
 } from 'react-native';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
-import { API, Auth, I18n } from 'aws-amplify';
-import getTheme from '../native-base-theme/components';
-import customStyle from '../native-base-theme/variables/platform';
 import {
     Container,
     Content,
-    Grid,
-    Row,
-    Col,
     Thumbnail,
     Header,
     Button,
     Text,
     ListItem,
-    Item,
-    Input,
     Left,
     Body,
     Title,
@@ -36,15 +25,24 @@ import {
     ActionSheet,
     StyleProvider
 } from 'native-base';
-import cahallengesDict from '../dictionary';
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+
+import getTheme from '../../library/native-base-theme/components';
+import customStyle from '../../library/native-base-theme/variables/platform';
+
+import { Auth, API, I18n } from 'aws-amplify';
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const styles = StyleSheet.create({
     trendingTitleDescriptionText: {
@@ -193,7 +191,7 @@ export default class AllFollowersScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,
@@ -241,7 +239,7 @@ export default class AllFollowersScreen extends Component {
                                             user: item.Username,
                                             needUpdate: true
                                         })}>
-                                            <Thumbnail small style={{ width: 30, height: 30, borderRadius: 15}}  source={ this.getUserAvatar(item) ? { uri: this.getUserAvatar(item) } : require('../assets/images/avatar.png') } />
+                                            <Thumbnail small style={{ width: 30, height: 30, borderRadius: 15}}  source={ this.getUserAvatar(item) ? { uri: this.getUserAvatar(item) } : require('../../assets/images/avatar.png') } />
                                         </TouchableOpacity>
                                     </Left>
                                     <Body>

@@ -7,26 +7,27 @@ import {
     NativeModules,
     StatusBar
 } from 'react-native';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './selection.json';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 import {
     Container, Header, Content, Form, Item, Input, Label, Text, Button, Left,
     Right,
     Body,
     Title,
 } from 'native-base';
-import { I18n, Auth, API } from 'aws-amplify';
-import cahallengesDict from '../dictionary';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Auth, API, I18n } from 'aws-amplify';
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
 if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
 }
-var languageCode = locale.substring(0, 2);
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const styles = StyleSheet.create({
     trendingTitleText: {
@@ -125,7 +126,7 @@ export default class PayOutScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../assets/images/screen-bg.png')}
+                source={require('../../assets/images/screen-bg.png')}
                 style={{
                 flex: 1,
                 width: null,
