@@ -67,7 +67,7 @@ import TimeAgo from './src/components/TimeAgo';
 import Amplify, { I18n, Auth, API, Storage, Hub } from 'aws-amplify';
 import PushNotification from '@aws-amplify/pushnotification';
 import * as mime from 'react-native-mime-types';
-import aws_exports from './aws-exports';
+import aws_exports from './src/config/aws-exports';
 Amplify.configure(aws_exports);
 PushNotification.configure(aws_exports);
 Amplify.configure({
@@ -108,13 +108,13 @@ import { Client } from 'bugsnag-react-native';
 const bugsnag = new Client("e1899735244c054012ec84f4e239defc");
 
 import { withAuthenticator } from './components/customAuth';
-import { LoginUsername, LoginPassword } from './custom-login-ui/FormElements';
+import { LoginUsername, LoginPassword } from './src/components/custom-login-ui/FormElements';
 
 var isGuest = false;
 const Win = Dimensions.get('window');
 
 // AppSync
-import AppSync from './AppSync.js';
+import AppSync from './src/config/AppSync.js';
 import AWSAppSyncClient from "aws-appsync";
 import { Rehydrated } from 'aws-appsync-react';
 import { ApolloProvider } from 'react-apollo';

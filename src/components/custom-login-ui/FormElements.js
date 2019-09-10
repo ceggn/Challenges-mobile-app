@@ -5,7 +5,7 @@ import { TextInput, Platform, NativeModules } from 'react-native';
 
 // i18n
 import { I18n } from 'aws-amplify';
-import cahallengesDict from '../dictionary';
+import cahallengesDict from '../../config/dictionary';
 if( Platform.OS === 'ios' ){
   var locale = NativeModules.SettingsManager.settings.AppleLocale;
 }else{
