@@ -3,6 +3,7 @@ import {
   ImageBackground,
   Alert,
   FlatList,
+  StyleSheet,
   View,
   TouchableHighlight,
   TouchableOpacity,
@@ -10,7 +11,9 @@ import {
   Share,
   AsyncStorage,
   Platform,
+  NativeModules,
   StatusBar,
+  Dimensions
 } from 'react-native';
 import {
   Container,
@@ -28,9 +31,126 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FastImage from 'react-native-fast-image';
 import VideoAf from 'react-native-af-video-player';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import getTheme from '../../library/native-base-theme/components';
 import customStyle from '../../library/native-base-theme/variables/platform';
 import TimeAgo from '../../components/TimeAgo';
+
+import { Auth, API, I18n } from 'aws-amplify';
+import cahallengesDict from '../../config/dictionary';
+let moment = require('moment/min/moment-with-locales');
+let locale = NativeModules.I18nManager.localeIdentifier;
+if(Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
+}
+let languageCode = locale.substring(0, 2);
+moment.locale(languageCode);
+I18n.setLanguage(languageCode);
+I18n.putVocabularies(cahallengesDict);
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icoMoonConfig from '../../config/selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+const Win = Dimensions.get('window');
+
+const styles = StyleSheet.create({
+  trendingTitleText: {
+    fontSize: 17,
+    fontWeight: "bold",
+    fontStyle: "normal",
+    letterSpacing: -0.21,
+    textAlign: "left",
+    color: "#373744"
+  },
+  trendingTitleDescriptionText: {
+    opacity: 0.8,
+    fontSize: 10,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: 12,
+    letterSpacing: -0.05,
+    textAlign: "left",
+    color: "#9b9b9b"
+  },
+  trendingExcerpt: {
+    opacity: 0.8,
+    fontSize: 13,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: 22,
+    letterSpacing: -0.06,
+    textAlign: "left",
+    color: "#535353"
+  },
+
+  trendingCardFooter: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between'
+  },
+  trendingCardHeader: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "rgba(0, 0, 0, 0.06)",
+    shadowOffset: {
+      width: 0,
+      height: -16
+    },
+    shadowRadius: 60,
+    shadowOpacity: 1,
+    backgroundColor: '#F7F8F8',
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
+  trendingCardFooterText: {
+    fontSize: 13,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: -0.16,
+    textAlign: "left",
+    color: "#373744",
+    marginRight: 15,
+  },
+  profileCounterDescription: {
+    fontSize: 10,
+    fontWeight: "500",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    color: "#373744",
+    marginTop: 7,
+  },
+  commentName: {
+    fontSize: 12,
+    fontWeight: "500",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    color: "#373744",
+    marginBottom: 3
+  },
+  commentText: {
+    fontSize: 12,
+    fontWeight: "300",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    color: "#373744",
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  blackButtonText: {
+    height: 24,
+    textAlign: 'center',
+    color: "#ffffff"
+  }
+});
 
 export default class VideoScreen extends React.Component {
   constructor(props) {

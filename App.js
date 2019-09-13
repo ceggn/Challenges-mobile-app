@@ -1230,7 +1230,25 @@ const styles = StyleSheet.create({
     letterSpacing: -0.16,
     textAlign: "left",
     color: "#373744",
-    marginRight: 15,
+    marginRight: 12,
+  },
+  trendingToChallenge: {
+    width: 150,
+    height: 30,
+    marginRight: 12,
+    paddingVertical: 5,
+    borderRadius: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    alignSelf: 'center',
+  },
+  trendingCardRating: {
+    fontSize: 13,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: -0.16,
+    textAlign: "left",
+    color: "#373744",
+    marginRight: 0,
   },
   profileStatisticsWrapper: {
     marginTop: 22,
@@ -2147,17 +2165,18 @@ class HomeScreen extends React.Component {
           API.get("videosCRUD", path)
             .then(
               data => {
+                let challengeData = data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } );
                 if( this.state.filterOnlyLive ){
                   var currTime = new Date().valueOf();
-                  var filtered = data[0].filter( function(el) { return el.deadlineDate > currTime; } );
-                  data[0] = filtered;
+                  challengeData = challengeData.filter( function(el) { return el.deadlineDate > currTime; } );
                 }
                 this.setState({
-                  apiResponse: data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } ),
+                  apiResponse: challengeData,
                   refreshing: false,
                   lastEvaluatedKey: data[1],
                   loadingMore: false
                 });
+                this._updateChallengeData(challengeData, 'apiResponse');
               }
             ).catch(err => console.log(err));
         }
@@ -2183,16 +2202,17 @@ class HomeScreen extends React.Component {
             data[0] = data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } );
             if( this.state.filterOnlyLive ){
               var currTime = new Date().valueOf();
-              var filtered = data[0].filter( function(el) { return el.deadlineDate > currTime; } );
-              data[0] = filtered;
+              data[0] = data[0].filter( function(el) { return el.deadlineDate > currTime; } );
             }
+            let challengeData = [...this.state.apiResponse, ...data[0]].filter((elem, index, self) => self.findIndex(
+              (t) => {return (t.challengeId === elem.challengeId)}) === index);
             this.setState({
-              apiResponse: [...this.state.apiResponse, ...data[0]].filter((elem, index, self) => self.findIndex(
-                (t) => {return (t.challengeId === elem.challengeId)}) === index),
+              apiResponse: challengeData,
               refreshing: false,
               loadingMore: false,
               lastEvaluatedKey: data[1]
             });
+            this._updateChallengeData(challengeData, 'apiResponse');
           }
         ).catch(err => console.log(err));
     }else{
@@ -2217,19 +2237,19 @@ class HomeScreen extends React.Component {
         .then(
           data => {
             var filtered = data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } ).filter( function(el) { return el.parent == 'null'; } );
-            data[0] = filtered;
             if( this.state.filterOnlyLive ){
               var currTime = new Date().valueOf();
-              filtered = data[0].filter( function(el) { return el.deadlineDate > currTime; } );
-              data[0] = filtered;
+              filtered = filtered.filter( function(el) { return el.deadlineDate > currTime; } );
             }
+            let challengeData = [...this.state[`${cat_name}`], ...filtered].filter((elem, index, self) => self.findIndex(
+              (t) => {return (t.challengeId === elem.challengeId)}) === index);
             this.setState({
-              [`${cat_name}`] : [...this.state[`${cat_name}`], ...data[0]].filter((elem, index, self) => self.findIndex(
-                (t) => {return (t.challengeId === elem.challengeId)}) === index),
+              [`${cat_name}`] : challengeData,
               [`${cat_name}refreshing`] : false,
               [`${cat_name}lastEvaluatedKey`]: data[1],
               [`${cat_name}loadingMore`]: false
             });
+            this._updateChallengeData(challengeData, cat_name);
           }
         ).catch(err => console.log(err));
     }else{
@@ -2288,21 +2308,21 @@ class HomeScreen extends React.Component {
           API.get("videosCRUD", path)
             .then(
               data => {
-                data = data.filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } );
-                if( this.state.filterOnlyLive ){
+                let challengeData = data.filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } );
+                if(this.state.filterOnlyLive) {
                   var currTime = new Date().valueOf();
-                  var filtered = data.filter( function(el) { return el.deadlineDate > currTime; } );
-                  data = filtered;
+                  challengeData = challengeData.filter( function(el) { return el.deadlineDate > currTime; } );
                 }
                 this.setState({
-                  [`${cat_name}`] : data,
+                  [`${cat_name}`] : challengeData,
                   [`${cat_name}refreshing`] : false,
                   [`${cat_name}loaded`] : true
                 });
+                this._updateChallengeData(challengeData, cat_name);
               }
             ).catch(err => console.log(err));
         }
-      }else{
+      } else {
         if( !this.state[cat_name+'refreshing'] ){
           this.setState({
             [`${cat_name}refreshing`] : true
@@ -2311,22 +2331,21 @@ class HomeScreen extends React.Component {
           API.get("videosCRUD", path)
             .then(
               data => {
-                data[0] = data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId); } );
-                var filtered = data[0].filter( function(el) { return el.parent == 'null'; } );
-                data[0] = filtered;
+                let filtered = data[0].filter( function(el) { return !self.state.hiddenVideos.includes(el.challengeId) && el.parent == 'null'; });
                 if( this.state.filterOnlyLive ){
                   var currTime = new Date().valueOf();
-                  filtered = data[0].filter( function(el) { return el.deadlineDate > currTime; } );
-                  data[0] = filtered;
+                  filtered = filtered.filter( function(el) { return el.deadlineDate > currTime; } );
                 }
+                let challengeData = filtered.filter((elem, index, self) => self.findIndex(
+                  (t) => {return (t.challengeId === elem.challengeId)}) === index);
                 this.setState({
-                  [`${cat_name}`] : data[0].filter((elem, index, self) => self.findIndex(
-                    (t) => {return (t.challengeId === elem.challengeId)}) === index),
+                  [`${cat_name}`] : challengeData,
                   [`${cat_name}refreshing`] : false,
                   [`${cat_name}loaded`] : true,
                   [`${cat_name}lastEvaluatedKey`]: data[1],
                   [`${cat_name}loadingMore`]: false
                 });
+                this._updateChallengeData(challengeData, cat_name);
               }
             ).catch(err => console.log(err));
         }
@@ -2380,28 +2399,45 @@ class HomeScreen extends React.Component {
     )
   }
   
-  getChallengersVideos= async (challengeId) => {
-    const challengersPath = `/videos?parent=${challengeId}`;
-    const challengersVideos = await API.get("videosCRUD", challengersPath);
-    let participants = [];
-    if(challengersVideos && challengersVideos.length > 0) {
-      let sortedVideos = challengersVideos.sort(function(a, b) {
-        return b.rating - a.rating;
-      });
-      sortedVideos.map(video => {
-        if (video && participants.length < 3) {
-          let thumb = video.userThumb;
-          if (!thumb || thumb == '-') {
-            thumb = video.videoThumb;
-          }
-          if (thumb && thumb != '-') {
-            participants.push(thumb);
-          }
-        }
-      });
-      console.log("participants: ", participants)
+  _updateChallengeData = (challengeData, cat_name) => {
+    for (let key in challengeData) {
+      let challenge = challengeData[key];
+      if (!challenge.preview && challenge.participants > 0) {
+        this._getParticipantsImages(challenge.challengeId).then(preview => {
+          challengeData[key]['preview'] = preview;
+          console.log("cat_name", cat_name)
+          this.setState({
+            [`${cat_name}`] : challengeData,
+          });
+        })
+      }
     }
-    return participants;
+  }
+
+  _getParticipantsImages = (challengeId) => {
+    return new Promise((resolve, reject) => {
+      const challengersPath = `/videos?parent=${challengeId}`;
+      API.get("videosCRUD", challengersPath).then(videos => {
+        let participants = [];
+        if(videos && videos.length > 0) {
+          let sortedVideos = videos.sort(function(a, b) {
+            return b.rating - a.rating;
+          });
+          sortedVideos.map(video => {
+            if (video && participants.length < 3) {
+              let thumb = video.userThumb;
+              if (!thumb || thumb == '-') {
+                thumb = video.videoThumb;
+              }
+              if (thumb && thumb != '-') {
+                participants.push(thumb);
+              }
+            }
+          });
+        }
+        resolve(participants);
+      });
+    });
   }
 
   _challengeRender = ({item, index}, type) => {
@@ -2409,8 +2445,6 @@ class HomeScreen extends React.Component {
     const videoUrl = item.videoFile && item.videoFile != '-' ? item.videoFile : '';
     if (!videoUrl || !item.approved) return;
     const thumb = item.userThumb && item.userThumb != '-' ? item.userThumb : (item.videoThumb && item.videoThumb != '-' ? item.videoThumb : '');
-    let participants = [];
-    console.log("item: ", item)
     return (
       <View>
         { ( Platform.OS === 'ios' && this.state.adsResponse && index % 2 === 0 && index != 0 && this.state.adsResponse[index/2-1] ) &&
@@ -2553,27 +2587,19 @@ class HomeScreen extends React.Component {
           </TouchableHighlight>
           <Grid style={styles.trendingCardFooter} >
             <Col>
-              <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <TouchableOpacity style={{ position: 'absolute', top: 0, left: 0, flexDirection: 'row'}}
-                  onPress={() => this._navigateVideoPage(item, index)}>
-                  {participants.map((uri, index)=>(
-                    <FastImage
-                      key={index}
-                      style={{ width: 28, height: 28, borderRadius: 14, aspectRatio: 1}}
-                      source={{uri: uri, priority: FastImage.priority.normal}}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
-                  ))}                  
-                </TouchableOpacity>
-                <TouchableOpacity style={{
-                    height: 30,
-                    width: 150,
-                    borderRadius: 12,
-                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    marginRight: 15,
-                    paddingVertical: 5,
-                    alignSelf: 'center',
-                  }} 
+            <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: 'center', justifyContent: 'flex-end'}}>
+                {item.preview && item.preview.length !== 0 && item.preview.map((uri, index)=>(
+                  <TouchableOpacity style={{ position: 'absolute', top: 0, left: index*10, flexDirection: 'row'}}
+                    onPress={() => this._navigateVideoPage(item, index)}>
+                      <FastImage
+                        key={index}
+                        style={{ width: 28, height: 28, borderRadius: 14, aspectRatio: 1}}
+                        source={{uri: uri, priority: FastImage.priority.normal}}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity style={styles.trendingToChallenge} 
                   onPress={() => this._navigateVideoPage(item, index)}>
                   <Text style={styles.blackButtonText}>{I18n.get('To the challenge')}</Text>
                 </TouchableOpacity>
@@ -2581,7 +2607,7 @@ class HomeScreen extends React.Component {
                   <Icon name={'award1'} size={15} color={'#000000'} /> { item.participants ? item.participants : 0 }</Text>
                 <Text style={styles.trendingCardFooterText}>
                   <Icon name={'chat'} size={15} color={'#000000'} /> { item.comments ? item.comments : 0 }</Text>
-                <Text style={styles.trendingCardFooterText}>
+                <Text style={styles.trendingCardRating}>
                   <Icon name={'whatshot'} size={15} color={'#000000'} /> {item.rating}</Text>
               </View>
             </Col>
