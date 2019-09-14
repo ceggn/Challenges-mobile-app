@@ -24,9 +24,9 @@ import { API, Auth, I18n} from 'aws-amplify';
 import UUIDGenerator from 'react-native-uuid-generator';
 import { graphql, compose } from 'react-apollo';
 import ListMessages from '../../api/queries/ListMessages';
-import CreateUserConversations from '../../../mutations/CreateUserConversations';
-import CreateMessage from '../../../mutations/CreateMessage';
-import MessageAddedSubscription from '../../../subscriptions/MessagesAddedSubscription';
+import CreateUserConversations from '../../api/mutations/CreateUserConversations';
+import CreateMessage from '../../api/mutations/CreateMessage';
+import MessageAddedSubscription from '../../api/subscriptions/MessagesAddedSubscription';
 import Message from './message.component';
 import FastImage from 'react-native-fast-image';
 

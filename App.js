@@ -107,7 +107,7 @@ import { ErrorRow, Loading, SignIn, SignUp, ConfirmSignUp, ConfirmSignIn, Verify
 import { Client } from 'bugsnag-react-native';
 const bugsnag = new Client("e1899735244c054012ec84f4e239defc");
 
-import { withAuthenticator } from './components/customAuth';
+import { withAuthenticator } from './src/components/customAuth';
 import { LoginUsername, LoginPassword } from './src/components/custom-login-ui/FormElements';
 
 var isGuest = false;
@@ -131,8 +131,7 @@ import PayOutScreen from './src/screens/payOut/PayOutScreen';
 import VideoScreen from './src/screens/challenge/ChallengeScreen';
 
 console.disableYellowBox = true;
-// Custom UI
-//const FBLoginButton = require('./components/FBLoginButton');
+
 const AuthTheme = Object.assign({}, AmplifyTheme, {
   container: {
       flex: 1,
@@ -186,9 +185,6 @@ const AuthTheme = Object.assign({}, AmplifyTheme, {
       flex: 1,
       width: '50%'
   },
-  errorRow: {
-      
-  },
   erroRowText: {
       color: '#f6af46',
       paddingLeft: 20,
@@ -199,14 +195,12 @@ const AuthTheme = Object.assign({}, AmplifyTheme, {
       paddingLeft: 20,
       paddingRight: 20,
   },
-
   photo: {
       width: '100%'
   },
   album: {
       width: '100%'
   },
-
   a: {},
   button: {
       width: 190,
@@ -264,7 +258,6 @@ const AuthTheme = Object.assign({}, AmplifyTheme, {
       color: "#373744",
       width: '100%'
   },
-
   login: {
       margin: 6,
       borderRadius: 26.5,

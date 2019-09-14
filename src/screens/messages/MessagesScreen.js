@@ -12,8 +12,8 @@ import GetMe from '../../api/queries/GetMe';
 import AboutMe from './AboutMe';
 import getTheme from '../../library/native-base-theme/components';
 import customStyle from '../../library/native-base-theme/variables/platform';
-import ChatAddedSubscription from '../../../subscriptions/ChatAddedSubscription';
-import CreateConversation from '../../../mutations/CreateConversation';
+import ChatAddedSubscription from '../../api/subscriptions/ChatAddedSubscription';
+import CreateConversation from '../../api/mutations/CreateConversation';
 
 import { I18n } from 'aws-amplify';
 import cahallengesDict from '../../config/dictionary';
@@ -103,16 +103,6 @@ const MyData = compose(
                                 return data;
                             }
                         );
-                        // const newConversation = subscribeToNewUCs;
-                        // return update(prev, {
-                        //     me: {
-                        //         conversations: {
-                        //             userConversations: {
-                        //                 $unshift: [newConversation],
-                        //             },
-                        //         },
-                        //     },
-                        // });
                     },
                 }) : undefined;
             }
