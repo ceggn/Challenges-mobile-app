@@ -212,7 +212,7 @@ class ChatScreen extends Component {
     }
     async send() {
         if (this.state.text) {
-            let msg = this.state.text.replace(/\n/g, '\\n');
+            let msg = this.state.text.replace(/\n{6}|\n{5}|\n{4}|\n{3}|\n{2}|\n/g, '\\n');
             this.setState({
                 text: ''
             });

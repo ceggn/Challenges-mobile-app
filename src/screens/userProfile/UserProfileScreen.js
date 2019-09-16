@@ -562,57 +562,44 @@ export default class UserProfileScreen extends Component {
           .then(
             data => {
                 console.log("videosCRUD: ", data);
-                var avatarObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'picture'; });
-                var descriptionObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'profile'; });
-                var countryObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'custom:country'; });
-                var prefferedusernameObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'preferred_username'; });
-                var subObj = data[0].UserAttributes.find(function (obj) { return obj.Name === 'sub'; });
-                this._loadFollowers(subObj.Value);
-                Auth.currentAuthenticatedUser().then(
-                    currentUser => {
-                        const myUserPath = "/Followers/object/"+currentUser.signInUserSession.idToken.payload.sub;
-                        API.get("FollowersCRUD", myUserPath)
-                        .then(
-                            followers => {
-                              var origVideos = data[1].filter( function(el) { return el.approved; } );
-                              var videos = data[1].filter( function(el) { return el.approved; } );
-                              if( videos.length > 0 ){
-                                var challenges = [];
-                                var attended = [];
-                                for (var i = 0; i < videos.length; i++) {
-                                  if( videos[i].parent == 'null' ){
-                                    challenges.push(videos[i]);
-                                  }else{
-                                    attended.push(videos[i]);
+                if (data[0] && data[0].UserAttributes) {
+                  let userInfo = data[0].UserAttributes;
+                  var avatarObj = userInfo.find(function (obj) { return obj.Name === 'picture'; });
+                  var descriptionObj = userInfo.find(function (obj) { return obj.Name === 'profile'; });
+                  var countryObj = userInfo.find(function (obj) { return obj.Name === 'custom:country'; });
+                  var prefferedusernameObj = userInfo.find(function (obj) { return obj.Name === 'preferred_username'; });
+                  var subObj = userInfo.find(function (obj) { return obj.Name === 'sub'; });
+                  this._loadFollowers(subObj.Value);
+                  Auth.currentAuthenticatedUser().then(
+                      currentUser => {
+                          const myUserPath = "/Followers/object/"+currentUser.signInUserSession.idToken.payload.sub;
+                          API.get("FollowersCRUD", myUserPath)
+                          .then(
+                              followers => {
+                                var origVideos = data[1].filter( function(el) { return el.approved; } );
+                                var videos = data[1].filter( function(el) { return el.approved; } );
+                                if( videos.length > 0 ){
+                                  var challenges = [];
+                                  var attended = [];
+                                  for (var i = 0; i < videos.length; i++) {
+                                    if( videos[i].parent == 'null' ){
+                                      challenges.push(videos[i]);
+                                    }else{
+                                      attended.push(videos[i]);
+                                    }
                                   }
+                                  videos = [
+                                    {
+                                      title: I18n.get('Challenges'),
+                                      data: challenges
+                                    },
+                                    {
+                                      title: I18n.get('Attended'),
+                                      data: attended
+                                    },
+                                  ];
                                 }
-                                videos = [
-                                  {
-                                    title: I18n.get('Challenges'),
-                                    data: challenges
-                                  },
-                                  {
-                                    title: I18n.get('Attended'),
-                                    data: attended
-                                  },
-                                ];
-                              }
-                              if( followers.following && followers.following.values.indexOf( subObj.Value ) != -1 ){
-                                this.setState({
-                                    username: data[0].Username,
-                                    sub: subObj.Value,
-                                    preferred_username: prefferedusernameObj ? prefferedusernameObj.Value : data[0].Username,
-                                    country: countryObj ? countryObj.Value : '-',
-                                    description: descriptionObj ? descriptionObj.Value : '-',
-                                    avatar: avatarObj ? avatarObj.Value : undefined,
-                                    loading: false,
-                                    following: true,
-                                    followLoading: false,
-                                    videos: videos,
-                                    totalVideos: origVideos.length,
-                                    likes: origVideos.length > 0 ? origVideos.reduce((prev,next) => prev + next.rating,0) : 0
-                                });
-                              }else{
+                                if( followers.following && followers.following.values.indexOf( subObj.Value ) != -1 ){
                                   this.setState({
                                       username: data[0].Username,
                                       sub: subObj.Value,
@@ -621,16 +608,32 @@ export default class UserProfileScreen extends Component {
                                       description: descriptionObj ? descriptionObj.Value : '-',
                                       avatar: avatarObj ? avatarObj.Value : undefined,
                                       loading: false,
+                                      following: true,
                                       followLoading: false,
                                       videos: videos,
                                       totalVideos: origVideos.length,
                                       likes: origVideos.length > 0 ? origVideos.reduce((prev,next) => prev + next.rating,0) : 0
                                   });
+                                }else{
+                                    this.setState({
+                                        username: data[0].Username,
+                                        sub: subObj.Value,
+                                        preferred_username: prefferedusernameObj ? prefferedusernameObj.Value : data[0].Username,
+                                        country: countryObj ? countryObj.Value : '-',
+                                        description: descriptionObj ? descriptionObj.Value : '-',
+                                        avatar: avatarObj ? avatarObj.Value : undefined,
+                                        loading: false,
+                                        followLoading: false,
+                                        videos: videos,
+                                        totalVideos: origVideos.length,
+                                        likes: origVideos.length > 0 ? origVideos.reduce((prev,next) => prev + next.rating,0) : 0
+                                    });
+                                }
                               }
-                            }
-                        ).catch(err => console.log(err));
-                    }
-                );
+                          ).catch(err => console.log(err));
+                      }
+                  );
+                }
             }
           ).catch(err => console.log(err));
       }
