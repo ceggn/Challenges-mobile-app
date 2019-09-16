@@ -3188,15 +3188,17 @@ class VideoCapture extends React.Component {
         this.Rcamera.recordAsync(options)
         .then(
           data => {
-            console.log('Video Recorded: '+data);
-            this.setState({
-              isRecording: false,
-              videoURL: data.uri
-            });
-            this.props.navigation.navigate('Edit', {
-              videoURL: data.uri,
-              parentChallengeId: this.props.navigation.getParam('parent', '')
-            });
+            console.log('Video Recorded: ' + JSON.stringify(data));
+            if (data.uri) {
+              this.setState({
+                isRecording: false,
+                videoURL: data.uri
+              });
+              this.props.navigation.navigate('Edit', {
+                videoURL: data.uri,
+                parentChallengeId: this.props.navigation.getParam('parent', '')
+              });
+            }
           }
         )
         .catch(
