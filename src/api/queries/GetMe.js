@@ -15,6 +15,7 @@ query myData {
         conversation {
             id
             name
+            createdAt
         }
         associated {
             userId
