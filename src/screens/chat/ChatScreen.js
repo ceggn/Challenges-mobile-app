@@ -232,6 +232,11 @@ class ChatScreen extends Component {
           .catch(e => {
             console.log(e);
           });
+        this.props.updateConversation({
+          createdAt: new Date().valueOf(),
+          id: this.props.navigation.state.params.conversationId,
+          name: this.props.navigation.state.params.conversationName
+        });
       });
     }
   }
