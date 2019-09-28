@@ -17,7 +17,7 @@ import { graphql, compose } from 'react-apollo';
 import ListMessages from '../../api/queries/ListMessages';
 import CreateUserConversations from '../../api/mutations/CreateUserConversations';
 import CreateMessage from '../../api/mutations/CreateMessage';
-import UpdateConversation from '../../api/mutations/UpdateConversation';
+import CreateConversation from '../../api/mutations/CreateConversation';
 import MessageAddedSubscription from '../../api/subscriptions/MessagesAddedSubscription';
 import Message from './message.component';
 import FastImage from 'react-native-fast-image';
@@ -178,11 +178,11 @@ const createMessageMutation = graphql(CreateMessage, {
       })
   })
 });
-const updateConversationMutation = graphql(UpdateConversation, {
+const createConversationMutation = graphql(CreateConversation, {
   props: ({ mutate }) => ({
-    updateConversation: ({ createdAt, id }) =>
+    createConversation: ({ createdAt, id, name }) =>
       mutate({
-        variables: { createdAt, id }
+        variables: { createdAt, id, name }
       })
   })
 });
@@ -220,25 +220,25 @@ class ChatScreen extends Component {
         await this.sendUserConversation();
       }
       UUIDGenerator.getRandomUUID(uuid => {
-        // this.props
-        //   .createMessage({
-        //     conversationId: this.props.navigation.state.params.conversationId,
-        //     content: msg,
-        //     id: uuid,
-        //     createdAt: new Date().valueOf(),
-        //     sub: this.props.navigation.state.params.me.cognitoId
-        //   })
-        //   .then(data => {
-        //     if (this.props.navigation.state.params.firstMessage) {
-        //       this.props.navigation.state.params.firstMessage = false;
-        //     } else {
-        //       this.flatList.scrollToIndex({ index: 0, animated: true });
-        //     }
-        //   })
-        //   .catch(e => {
-        //     console.log(e);
-        //   });
-        this.props.updateConversation({
+        this.props
+          .createMessage({
+            conversationId: this.props.navigation.state.params.conversationId,
+            content: msg,
+            id: uuid,
+            createdAt: new Date().valueOf(),
+            sub: this.props.navigation.state.params.me.cognitoId
+          })
+          .then(data => {
+            if (this.props.navigation.state.params.firstMessage) {
+              this.props.navigation.state.params.firstMessage = false;
+            } else {
+              this.flatList.scrollToIndex({ index: 0, animated: true });
+            }
+          })
+          .catch(e => {
+            console.log(e);
+          });
+        this.props.createConversation({
           createdAt: new Date().valueOf(),
           id: this.props.navigation.state.params.conversationId,
           name: this.props.navigation.state.params.conversationName
@@ -463,5 +463,5 @@ export default compose(
   createUserConversationMutation,
   messagesQuery,
   createMessageMutation,
-  updateConversationMutation
+  createConversationMutation
 )(ChatScreen);

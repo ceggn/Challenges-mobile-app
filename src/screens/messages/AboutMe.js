@@ -212,7 +212,7 @@ export default class AboutMe extends Component {
       this.props.me && this.props.me.conversations ? this.props.me.conversations.userConversations : [];
     if (conversations.length > 0) {
       conversations = conversations.sort((a, b) => {
-        return a.conversation.createdAt - b.conversation.createdAt;
+        return b.conversation.createdAt - a.conversation.createdAt;
       });
     }
     return (
