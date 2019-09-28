@@ -1,13 +1,17 @@
-// @flow
-import React, { Component } from "react";
-import { View, Text, NativeModules, Platform } from "react-native";
+import React, { Component } from 'react';
+import { Text, NativeModules, Platform } from 'react-native';
 let moment = require('moment/min/moment-with-locales');
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+let locale = NativeModules.I18nManager.localeIdentifier;
+if (Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
+  if (locale === undefined) {
+    locale = NativeModules.SettingsManager.settings.AppleLanguages[0];
+    if (locale == undefined) {
+      locale = 'en';
+    }
+  }
 }
-var languageCode = locale.substring(0, 2);
+const languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 
 export default class TimeAgo extends Component {
@@ -46,10 +50,6 @@ export default class TimeAgo extends Component {
 
   render() {
     const { time, hideAgo } = this.props;
-    return (
-      <Text {...this.props}>
-        {moment(time).fromNow(hideAgo)}
-      </Text>
-    );
+    return <Text {...this.props}>{moment(time).fromNow(hideAgo)}</Text>;
   }
 }

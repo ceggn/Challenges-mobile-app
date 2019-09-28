@@ -6,12 +6,17 @@ import { TextInput, Platform, NativeModules } from 'react-native';
 // i18n
 import { I18n } from 'aws-amplify';
 import cahallengesDict from '../../config/dictionary';
-if( Platform.OS === 'ios' ){
-  var locale = NativeModules.SettingsManager.settings.AppleLocale;
-}else{
-  var locale = NativeModules.I18nManager.localeIdentifier;
+let locale = NativeModules.I18nManager.localeIdentifier;
+if (Platform.OS === 'ios') {
+  locale = NativeModules.SettingsManager.settings.AppleLocale;
+  if (locale === undefined) {
+    locale = NativeModules.SettingsManager.settings.AppleLanguages[0];
+    if (locale == undefined) {
+      locale = 'en';
+    }
+  }
 }
-var languageCode = locale.substring(0, 2);
+const languageCode = locale.substring(0, 2);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
 

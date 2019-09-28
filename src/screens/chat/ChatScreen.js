@@ -30,8 +30,14 @@ let moment = require('moment/min/moment-with-locales');
 let locale = NativeModules.I18nManager.localeIdentifier;
 if (Platform.OS === 'ios') {
   locale = NativeModules.SettingsManager.settings.AppleLocale;
+  if (locale === undefined) {
+    locale = NativeModules.SettingsManager.settings.AppleLanguages[0];
+    if (locale == undefined) {
+      locale = 'en';
+    }
+  }
 }
-let languageCode = locale.substring(0, 2);
+const languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
@@ -214,24 +220,24 @@ class ChatScreen extends Component {
         await this.sendUserConversation();
       }
       UUIDGenerator.getRandomUUID(uuid => {
-        this.props
-          .createMessage({
-            conversationId: this.props.navigation.state.params.conversationId,
-            content: msg,
-            id: uuid,
-            createdAt: new Date().valueOf(),
-            sub: this.props.navigation.state.params.me.cognitoId
-          })
-          .then(data => {
-            if (this.props.navigation.state.params.firstMessage) {
-              this.props.navigation.state.params.firstMessage = false;
-            } else {
-              this.flatList.scrollToIndex({ index: 0, animated: true });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
+        // this.props
+        //   .createMessage({
+        //     conversationId: this.props.navigation.state.params.conversationId,
+        //     content: msg,
+        //     id: uuid,
+        //     createdAt: new Date().valueOf(),
+        //     sub: this.props.navigation.state.params.me.cognitoId
+        //   })
+        //   .then(data => {
+        //     if (this.props.navigation.state.params.firstMessage) {
+        //       this.props.navigation.state.params.firstMessage = false;
+        //     } else {
+        //       this.flatList.scrollToIndex({ index: 0, animated: true });
+        //     }
+        //   })
+        //   .catch(e => {
+        //     console.log(e);
+        //   });
         this.props.updateConversation({
           createdAt: new Date().valueOf(),
           id: this.props.navigation.state.params.conversationId,

@@ -41,10 +41,16 @@ import { Auth, API, I18n } from 'aws-amplify';
 import cahallengesDict from '../../config/dictionary';
 let moment = require('moment/min/moment-with-locales');
 let locale = NativeModules.I18nManager.localeIdentifier;
-if(Platform.OS === 'ios') {
+if (Platform.OS === 'ios') {
   locale = NativeModules.SettingsManager.settings.AppleLocale;
+  if (locale === undefined) {
+    locale = NativeModules.SettingsManager.settings.AppleLanguages[0];
+    if (locale == undefined) {
+      locale = 'en';
+    }
+  }
 }
-let languageCode = locale.substring(0, 2);
+const languageCode = locale.substring(0, 2);
 moment.locale(languageCode);
 I18n.setLanguage(languageCode);
 I18n.putVocabularies(cahallengesDict);
