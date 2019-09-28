@@ -51,8 +51,6 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 
-var isGuest = false;
-
 export default class SearchScreen extends Component {
     state = {
         refreshing: false,
@@ -88,9 +86,6 @@ export default class SearchScreen extends Component {
     componentDidMount(){
         Auth.currentAuthenticatedUser().then(
             myUser => {
-                if( myUser.username == 'Guest' && myUser.attributes.sub == 'cc84d13e-6f1c-4539-a741-73f59a9648ac' ){
-                    isGuest = true;
-                }
                 this.setState({
                     myUsername: myUser.username
                 });
@@ -328,7 +323,7 @@ export default class SearchScreen extends Component {
                             refreshing={this.state.refreshing}
                             onRefresh={this.refreshSearchResult}
                             renderItem={({item}) => this.state.mode == 1 ? (
-                                isGuest && this.state.myUsername == item.Username ? null : <ListItem avatar>
+                                this.state.myUsername == item.Username ? null : <ListItem avatar>
                                     <Left>
                                         <TouchableOpacity onPress={() => this.state.myUsername == item.Username ? this.props.navigation.navigate('Profile') : this.props.navigation.navigate('ViewProfile', {
                                             user: item.Username

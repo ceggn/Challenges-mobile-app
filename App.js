@@ -116,7 +116,6 @@ const bugsnag = new Client("e1899735244c054012ec84f4e239defc");
 import { withAuthenticator } from './src/components/customAuth';
 import { LoginUsername, LoginPassword } from './src/components/custom-login-ui/FormElements';
 
-var isGuest = false;
 const Win = Dimensions.get('window');
 
 // AppSync
@@ -2041,18 +2040,8 @@ class HomeScreen extends React.Component {
     try {
       const value = await AsyncStorage.getItem('first_upload');
       if (value !== null) {
-        // We have data
-        if( !isGuest ){
-          this.props.navigation.navigate('Shoot');
-          //this.props.navigation.navigate('Edit');
-        }else{
-          Auth.signOut()
-            .then(() => {
-              this.props.screenProps.logOut('signedOut');
-            })
-            .catch(err => console.log(err));
-        }
-      }else{
+        this.props.navigation.navigate('Shoot');
+      } else {
         this._storeUploadData();
         Alert.alert(
             I18n.get('Upload'),
@@ -2060,15 +2049,7 @@ class HomeScreen extends React.Component {
             [
               {
                 text: I18n.get('Ok'), onPress: () => {
-                  if( !isGuest ){
-                    this.props.navigation.navigate('Shoot');
-                  }else{
-                    Auth.signOut()
-                      .then(() => {
-                        this.props.screenProps.logOut('signedOut');
-                      })
-                      .catch(err => console.log(err));
-                  }
+                  this.props.navigation.navigate('Shoot');
                 }
               },
             ],
@@ -2255,47 +2236,34 @@ class HomeScreen extends React.Component {
       return;
     }
   }
-  _get_challenges_by_cat(tab_id){
+  _get_challenges_by_cat(tab_id) {
+    let cat_name = '';
     switch (tab_id) {
       case 0:
         this.state.activeTab = 'popular';
         break;
       case 1:
         this.state.activeTab = 'friends';
-        break;
-      case 2:
-        this.state.activeTab = 'sport';
-        break;
-      case 3:
-        this.state.activeTab = 'games';
-        break;
-      case 4:
-        this.state.activeTab = 'music';
-        break;
-      case 5:
-        this.state.activeTab = 'live';
-        break;
-    }
-
-    tab_id = isGuest ? tab_id+1 : tab_id;
-    let cat_name = '';
-    switch (tab_id) {
-      case 1:
         cat_name = 'FRIENDS';
         break;
       case 2:
+        this.state.activeTab = 'sport';
         cat_name = 'SPORT';
         break;
       case 3:
+        this.state.activeTab = 'games';
         cat_name = 'GAMES';
         break;
       case 4:
+        this.state.activeTab = 'music';
         cat_name = 'MUSIK';
         break;
       case 5:
-        cat_name = 'LIVE';
+        this.state.activeTab = 'live';
+        cat_name = 'LIVE'
         break;
     }
+
     let self = this;
     if( cat_name ){
       if( cat_name == 'FRIENDS' ){
@@ -2776,7 +2744,6 @@ class HomeScreen extends React.Component {
                     renderItem={({item, index}) => this._challengeRender({item, index}, 'popular')}
                   />
                 </Tab>
-                { !isGuest &&
                 <Tab heading={I18n.get('Friends').toUpperCase()} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
                   <FlatList
                     data={this.state.FRIENDS}
@@ -2792,7 +2759,6 @@ class HomeScreen extends React.Component {
                     renderItem={({item, index}) => this._challengeRender({item, index}, 'friends')}
                   />
                 </Tab>
-                }
                 <Tab heading={I18n.get('Sport').toUpperCase()} textStyle={{ fontSize: 15 }} activeTextStyle={{ fontSize: 25 }} tabStyle={{ backgroundColor: "transparent" }} activeTabStyle={{ backgroundColor: "transparent" }} style={styles.tab}>
                   <FlatList
                     data={this.state.SPORT}
@@ -4187,51 +4153,63 @@ class InitialScreen extends Component {
     this.state = {
         image: null,
         isLoading: true,
-        isGuest: false
     };
   }
   componentDidMount(){
     Auth.currentAuthenticatedUser().then(
       data => {
-        if( data.username == 'Guest' && data.attributes.sub == 'cc84d13e-6f1c-4539-a741-73f59a9648ac' ){
-          isGuest = true;
-        }else{
-          isGuest = false;
+        if ( Platform.OS === 'ios' ) {
+          PushNotification.initializeIOS();
+        } else {
+          PushNotification.initializeAndroid();
+        }
+        PushNotification.onNotification((notification) => {
+          console.log('Push message', notification);
           if( Platform.OS === 'ios' ){
-            PushNotification.initializeIOS();
-          }else{
-            PushNotification.initializeAndroid();
-          }
-          // get the notification data
-          PushNotification.onNotification((notification) => {
-            // Note that the notification object structure is different from Android and IOS
-            console.log('Push message', notification);
-            if( Platform.OS === 'ios' ){
-              if( notification._alert.title != "New Message" ){
-                Toast.show({
-                  text: notification._alert.title+": "+notification._alert.body,
-                  position: "bottom"
-                });
-              }
-              // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-              notification.finish(PushNotificationIOS.FetchResult.NoData);
-            }else{
-              if( notification.title != "New Message" ){
-                Toast.show({
-                  text: notification.title+": "+notification.body,
-                  position: "bottom"
-                });
-              }
+            if( notification._alert.title != "New Message" ){
+              Toast.show({
+                text: notification._alert.title+": "+notification._alert.body,
+                position: "bottom"
+              });
             }
-          });
-          // if push token cached
-          const cacheKey = 'push_tokenb49d4d5e7b364ec6bd034bf6796c829b';
-          AsyncStorage.getItem(cacheKey).then((lastToken) => {
-              if (lastToken){
+            notification.finish(PushNotificationIOS.FetchResult.NoData);
+          }else{
+            if( notification.title != "New Message" ){
+              Toast.show({
+                text: notification.title+": "+notification.body,
+                position: "bottom"
+              });
+            }
+          }
+        });
+        // if push token cached
+        const cacheKey = 'push_tokenb49d4d5e7b364ec6bd034bf6796c829b';
+        AsyncStorage.getItem(cacheKey).then((lastToken) => {
+            if (lastToken){
+              Auth.currentAuthenticatedUser().then(
+                user => {
+                  Auth.updateUserAttributes(user, {
+                    'custom:pushToken': lastToken,
+                    'custom:os': Platform.OS.toString(),
+                  }).then(
+                    updatedUser => {
+                      console.log(updatedUser);
+                    }
+                  ).catch(
+                    err => {
+                      console.log(err);
+                    }
+                  );
+                }
+              );
+            }else{
+              // get the registration token
+              PushNotification.onRegister((token) => {
+                console.warn('in app registration '+token);
                 Auth.currentAuthenticatedUser().then(
                   user => {
                     Auth.updateUserAttributes(user, {
-                      'custom:pushToken': lastToken,
+                      'custom:pushToken': token,
                       'custom:os': Platform.OS.toString(),
                     }).then(
                       updatedUser => {
@@ -4244,44 +4222,21 @@ class InitialScreen extends Component {
                     );
                   }
                 );
-              }else{
-                // get the registration token
-                PushNotification.onRegister((token) => {
-                  console.warn('in app registration '+token);
-                  Auth.currentAuthenticatedUser().then(
-                    user => {
-                      Auth.updateUserAttributes(user, {
-                        'custom:pushToken': token,
-                        'custom:os': Platform.OS.toString(),
-                      }).then(
-                        updatedUser => {
-                          console.log(updatedUser);
-                        }
-                      ).catch(
-                        err => {
-                          console.log(err);
-                        }
-                      );
-                    }
-                  );
-                });
-              }
-          });
-
-          // Update locale
-          Auth.currentAuthenticatedUser().then(
-            user => {
-              Auth.updateUserAttributes(user, {
-                'locale': languageCode,
-                'preferred_username': user.preferred_username ? user.preferred_username : user.username
               });
             }
-          );
-        }
+        });
+        // Update locale
+        Auth.currentAuthenticatedUser().then(
+          user => {
+            Auth.updateUserAttributes(user, {
+              'locale': languageCode,
+              'preferred_username': user.preferred_username ? user.preferred_username : user.username
+            });
+          }
+        );
         this.setState({
           image: data.attributes.picture && data && data.attributes ? data.attributes.picture : null,
-          isLoading: false,
-          isGuest: isGuest
+          isLoading: false
         })
       }
     ).catch(
@@ -4306,15 +4261,7 @@ class InitialScreen extends Component {
     }else{
       const tabBarOnPress = ({ navigation, defaultHandler }) => {
         const { isFocused, state, goBack } = navigation;
-        if( this.state.isGuest && ( state.key == 'Nachrichten' || state.key == 'Profil' ) ){
-          Auth.signOut()
-            .then(() => {
-              this.props.onStateChange('signedOut');
-            })
-            .catch(err => console.log(err));
-        }else{
-          defaultHandler();
-        }
+        defaultHandler();
       };
       const Tabs = createBottomTabNavigator({
         Home: HomeStack,

@@ -446,42 +446,38 @@ export default class VideoScreen extends React.Component {
     )
   }
   renderHeader = () => {
-    if( isGuest ){
-      return null;
-    }else{
-      return (
-        <View>
-          <Form style={{marginBottom: 10}}>
-            <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 15}}>
-              <Label style={{fontSize: 12}}>{I18n.get('Leave a comment')}</Label>
-              <Textarea
-                rowSpan={2}
-                onChangeText={(input) => this.setState({
-                  message: input
-                })}
-                value={this.state.message}
-                style={{
-                  width: '100%',
-                  borderRadius: 12,
-                  marginTop: 10,
-                  color: '#a8adb2',
-                  paddingHorizontal: 4,
-                  fontSize: 12,
-                  backgroundColor: 'rgba(255,255,255,0.25)',
-                }} />
-            </Item>
-            <Button small light full onPress={this.postComment} disabled={ !this.state.message || this.state.sendingComment } style={{
-              marginTop: 15,
-              borderRadius: 12,
-              backgroundColor: '#ED923D',
-            }}>
-              <Text style={{color: '#ffffff'}}>{ this.state.sendingComment ? I18n.get('SENDING...') : I18n.get('LEAVE COMMENT') }</Text>
-            </Button>
-          </Form>
-          { this.state.loadingComments && <ActivityIndicator size="small" color="#ED923D" /> }
-        </View>
-      );
-    }
+    return (
+      <View>
+        <Form style={{marginBottom: 10}}>
+          <Item stackedLabel style={{borderBottomWidth: 0, marginLeft: 0, marginBottom: 15}}>
+            <Label style={{fontSize: 12}}>{I18n.get('Leave a comment')}</Label>
+            <Textarea
+              rowSpan={2}
+              onChangeText={(input) => this.setState({
+                message: input
+              })}
+              value={this.state.message}
+              style={{
+                width: '100%',
+                borderRadius: 12,
+                marginTop: 10,
+                color: '#a8adb2',
+                paddingHorizontal: 4,
+                fontSize: 12,
+                backgroundColor: 'rgba(255,255,255,0.25)',
+              }} />
+          </Item>
+          <Button small light full onPress={this.postComment} disabled={ !this.state.message || this.state.sendingComment } style={{
+            marginTop: 15,
+            borderRadius: 12,
+            backgroundColor: '#ED923D',
+          }}>
+            <Text style={{color: '#ffffff'}}>{ this.state.sendingComment ? I18n.get('SENDING...') : I18n.get('LEAVE COMMENT') }</Text>
+          </Button>
+        </Form>
+        { this.state.loadingComments && <ActivityIndicator size="small" color="#ED923D" /> }
+      </View>
+    );
   };
   renderSeparator = () => {
     return (
