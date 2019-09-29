@@ -4,6 +4,7 @@ import { Row, Col, Grid, Text } from 'native-base';
 import { API } from 'aws-amplify';
 import SingleMessage from './single.message.component';
 import FastImage from 'react-native-fast-image';
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
   userName: {
@@ -192,7 +193,7 @@ export default class AboutMe extends Component {
                         uri: this.getAvatar(userId),
                         priority: FastImage.priority.normal
                       }
-                    : require('../../assets/images/avatar.png')
+                    : Images.Avatar
                 }
                 resizeMode={FastImage.resizeMode.cover}
               />

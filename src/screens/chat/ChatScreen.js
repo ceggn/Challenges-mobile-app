@@ -44,6 +44,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
   container: {
@@ -335,7 +336,7 @@ class ChatScreen extends Component {
     // render list of messages for conversation
     return (
       <ImageBackground
-        source={require('../../assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -384,7 +385,7 @@ class ChatScreen extends Component {
                           uri: this.props.navigation.state.params.partnerPicture,
                           priority: FastImage.priority.normal
                         }
-                      : require('../../assets/images/avatar.png')
+                      : Images.Avatar
                   }
                   resizeMode={FastImage.resizeMode.cover}
                 />

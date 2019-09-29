@@ -29,6 +29,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
   container: {
@@ -74,9 +75,7 @@ class Message extends PureComponent {
                 {
                   uri: avatar,
                   priority: FastImage.priority.normal,
-                } :
-                require('../../assets/images/avatar.png')
-              }
+                } : Images.Avatar }
               resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity> }

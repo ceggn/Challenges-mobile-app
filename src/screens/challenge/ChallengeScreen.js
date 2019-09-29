@@ -58,6 +58,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
 const Win = Dimensions.get('window');
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
   trendingTitleText: {
@@ -621,7 +622,7 @@ export default class VideoScreen extends React.Component {
                       }}
                       source={
                         (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                        require('../../assets/images/placeholder-alt-1.jpg') :
+                        Images.placeholderAlt1 :
                         {
                           uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                           priority: FastImage.priority.normal,
@@ -654,7 +655,7 @@ export default class VideoScreen extends React.Component {
                         borderWidth: 1
                       }}
                       source={
-                        item.author == '-' ? require('../../assets/images/avatar.png') : 
+                        item.author == '-' ? Images.Avatar : 
                         {
                           uri: item.author,
                           priority: FastImage.priority.normal,
@@ -765,7 +766,7 @@ export default class VideoScreen extends React.Component {
               <FastImage
                   style={{ width: 21, height: 21, borderRadius: 10, aspectRatio: 1 }}
                   source={
-                    !item.avatar || item.avatar == '-' ? require('../../assets/images/avatar.png') : 
+                    !item.avatar || item.avatar == '-' ? Images.Avatar : 
                     {
                       uri: item.avatar,
                       priority: FastImage.priority.normal,
@@ -848,7 +849,7 @@ export default class VideoScreen extends React.Component {
     var currentDate = new Date().valueOf();
     return (
       <ImageBackground
-        source={require('../../assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -906,7 +907,7 @@ export default class VideoScreen extends React.Component {
                       <FastImage
                           style={{ width: 34, height: 34, borderRadius: 17, aspectRatio: 1 }}
                           source={
-                            videoAuthor == '-' ? require('../../assets/images/avatar.png') : 
+                            videoAuthor == '-' ? Images.Avatar : 
                             {
                               uri: videoAuthor,
                               priority: FastImage.priority.normal,

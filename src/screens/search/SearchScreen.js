@@ -50,6 +50,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 export default class SearchScreen extends Component {
     state = {
@@ -197,7 +198,7 @@ export default class SearchScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../../assets/images/screen-bg.png')}
+                source={Images.ScreenBg}
                 style={{
                 flex: 1,
                 width: null,
@@ -335,7 +336,7 @@ export default class SearchScreen extends Component {
                                                     {
                                                         uri: this.getUserAvatar(item),
                                                         priority: FastImage.priority.normal
-                                                    } : require('../../assets/images/avatar.png')
+                                                    } : Images.Avatar
                                                 }
                                                 resizeMode={FastImage.resizeMode.cover}
                                             />
@@ -372,7 +373,7 @@ export default class SearchScreen extends Component {
                                             style={{ width: 30, height: 30, borderRadius: 15 }}
                                             source={
                                                 item.fields.author[0] == '-' ?
-                                                require('../../assets/images/avatar.png') : 
+                                                Images.Avatar : 
                                                 {
                                                     uri: item.fields.author[0],
                                                     priority: FastImage.priority.normal

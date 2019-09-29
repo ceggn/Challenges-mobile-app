@@ -50,6 +50,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
     trendingTitleDescriptionText: {
@@ -240,7 +241,7 @@ export default class FollowersScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../../assets/images/screen-bg.png')}
+                source={Images.ScreenBg}
                 style={{
                 flex: 1,
                 width: null,
@@ -289,7 +290,7 @@ export default class FollowersScreen extends Component {
                                             user: item.Username,
                                             needUpdate: true
                                         })}>
-                                            <Thumbnail small style={{ width: 30, height: 30, borderRadius: 15}}  source={ this.getUserAvatar(item) ? { uri: this.getUserAvatar(item) } : require('../../assets/images/avatar.png') } />
+                                            <Thumbnail small style={{ width: 30, height: 30, borderRadius: 15}}  source={ this.getUserAvatar(item) ? { uri: this.getUserAvatar(item) } : Images.Avatar } />
                                         </TouchableOpacity>
                                     </Left>
                                     <Body>

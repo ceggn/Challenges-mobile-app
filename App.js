@@ -123,6 +123,7 @@ import AppSync from './src/config/AppSync.js';
 import AWSAppSyncClient from "aws-appsync";
 import { Rehydrated } from 'aws-appsync-react';
 import { ApolloProvider } from 'react-apollo';
+import Images from './src/config/Images';
 
 //Pages
 import MessageScreen from './src/screens/messages/MessagesScreen';
@@ -377,7 +378,7 @@ class MySignIn extends SignIn {
     return React.createElement(
       ImageBackground,
       {
-          source: require('./src/assets/images/BG.jpg'),
+          source: Images.ImageBackground,
           style: {
               flex: 1,
               width: '100%',
@@ -430,7 +431,7 @@ class MySignIn extends SignIn {
                     behavior: Platform.OS === 'ios' ? "padding":""
                 },
                 React.createElement(Image, {
-                    source: require('./src/assets/logo-large.png'),
+                    source: Images.LogoLarge,
                     style: {
                         marginBottom: 15,
                         width: '30%',
@@ -640,7 +641,7 @@ class MySignUp extends SignUp {
     return React.createElement(
       ImageBackground,
       {
-          source: require('./src/assets/images/BG.jpg'),
+          source: Images.ImageBackground,
           style: {
               flex: 1,
               width: '100%',
@@ -784,7 +785,7 @@ class MyConfirmSignUp extends ConfirmSignUp {
     return React.createElement(
       ImageBackground,
       {
-          source: require('./src/assets/images/BG.jpg'),
+          source: Images.ImageBackground,
           style: {
               flex: 1,
               width: '100%',
@@ -877,7 +878,7 @@ class MyForgotPassword extends ForgotPassword {
     return React.createElement(
         ImageBackground,
         {
-            source: require('./src/assets/images/BG.jpg'),
+            source: Images.ImageBackground,
             style: {
                 flex: 1,
                 width: '100%',
@@ -1067,7 +1068,7 @@ class MyVerifyContact extends VerifyContact {
     return React.createElement(
       ImageBackground,
       {
-          source: require('./src/assets/images/BG.jpg'),
+          source: Images.ImageBackground,
           style: {
               flex: 1,
               width: '100%',
@@ -1611,7 +1612,7 @@ class AddChallengeScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('./src/assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -1841,9 +1842,7 @@ class AddChallengeScreen extends React.Component {
                                   this.state.thumbResponse.uri ? {
                                     uri: this.state.thumbResponse.uri,
                                     priority: FastImage.priority.normal,
-                                  } :
-                                  require('./src/assets/images/upload.jpg')
-                                }
+                                  } : Images.Upload }
                                 resizeMode={FastImage.resizeMode.cover}
                             />
                         </TouchableOpacity>
@@ -2500,7 +2499,7 @@ class HomeScreen extends React.Component {
                   <FastImage
                         style={{ width: 34, height: 34, borderRadius: 17, aspectRatio: 1 }}
                         source={
-                          item.author == '-' ? require('./src/assets/images/avatar.png') : 
+                          item.author == '-' ? Images.Avatar : 
                           {
                             uri: item.author,
                             priority: FastImage.priority.normal,
@@ -2649,7 +2648,7 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('./src/assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -2675,7 +2674,7 @@ class HomeScreen extends React.Component {
                 <Body style={{flex: 1, alignItems: 'center'}}>
                   <FastImage
                     style={{ width: 30, height: 30 }}
-                    source={require('./src/assets/logo.png')}
+                    source={Images.Logo}
                     resizeMode={FastImage.resizeMode.cover}
                   />
                 </Body>
@@ -2965,7 +2964,7 @@ class TrendingScreen extends React.Component {
         })}
       >
         <ImageBackground
-          source={require('./src/assets/images/placeholder-alt.gif')}
+          source={Images.placeholderAlt}
           resizeMode="cover"
           style={{
             flex:1,
@@ -2981,7 +2980,7 @@ class TrendingScreen extends React.Component {
               }}
               source={
                 (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                require('./src/assets/images/placeholder-alt-1.jpg') :
+                Images.placeholderAlt1 :
                 {
                   uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                   priority: FastImage.priority.normal,
@@ -3030,7 +3029,7 @@ class TrendingScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('./src/assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -3433,7 +3432,7 @@ class ProfileScreen extends React.Component {
                   style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                   source={
                     (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                    require('./src/assets/images/placeholder-alt-1.jpg') :
+                    Images.placeholderAlt1 :
                     {
                       uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                       priority: FastImage.priority.normal,
@@ -3500,7 +3499,7 @@ class ProfileScreen extends React.Component {
               <FastImage
                   style={{ width: 110, height: 110, borderRadius: 55, zIndex: 2 }}
                   source={
-                    !this.state.avatar ? require('./src/assets/images/avatar.png') : 
+                    !this.state.avatar ? Images.Avatar : 
                     {
                       uri: this.state.avatar,
                       priority: FastImage.priority.normal,
@@ -3510,7 +3509,7 @@ class ProfileScreen extends React.Component {
               />
               <FastImage
                   style={{ top: 29, width: 110, height: 110, position: 'absolute', zIndex:1 }}
-                  source={require('./src/assets/images/oval.png')}
+                  source={Images.Oval}
                   resizeMode={FastImage.resizeMode.cover}
               />
             </Col>
@@ -3718,7 +3717,7 @@ class ProfileScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('./src/assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -3962,7 +3961,7 @@ class EditProfileScreen extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('./src/assets/images/screen-bg.png')}
+        source={Images.ScreenBg}
         style={{
           flex: 1,
           width: null,
@@ -4005,7 +4004,7 @@ class EditProfileScreen extends React.Component {
                   <FastImage
                       style={{ width: 55, height: 55, borderRadius: 27, zIndex: 2 }}
                       source={
-                        !this.state.avatarSource ? require('./src/assets/images/avatar.png') : 
+                        !this.state.avatarSource ? Images.Avatar : 
                         {
                           uri: this.state.avatarSource,
                           priority: FastImage.priority.normal,
@@ -4015,13 +4014,13 @@ class EditProfileScreen extends React.Component {
                   />
                   <FastImage
                       style={{ top: 13, left: 20, width: 55, height: 55, position: 'absolute', zIndex:1 }}
-                      source={require('./src/assets/images/oval.png')}
+                      source={Images.Oval}
                       resizeMode={FastImage.resizeMode.cover}
                   />
                   <TouchableOpacity onPress={this.getPhotos} style={{ top:40, left: 61, width: 17, height: 17, position: 'absolute', zIndex:3}}>
                     <FastImage
                         style={{ width: 17, height: 17 }}
-                        source={require('./src/assets/images/plus.png')}
+                        source={Images.Plus}
                         resizeMode={FastImage.resizeMode.cover}
                     />
                   </TouchableOpacity>
@@ -4285,7 +4284,7 @@ class InitialScreen extends Component {
               return <FastImage
                 style={{ width: 25, height: 25, borderRadius: 12 }}
                 source={
-                  !this.state.image ? require('./src/assets/images/avatar.png') : 
+                  !this.state.image ? Images.Avatar : 
                   {
                     uri: this.state.image,
                     priority: FastImage.priority.normal,

@@ -34,6 +34,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
     trendingTitleText: {
@@ -132,7 +133,7 @@ export default class PayOutScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../../assets/images/screen-bg.png')}
+                source={Images.ScreenBg}
                 style={{
                 flex: 1,
                 width: null,

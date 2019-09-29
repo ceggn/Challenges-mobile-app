@@ -50,6 +50,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
     tab: {
@@ -394,7 +395,7 @@ export default class UserProfileScreen extends Component {
                       style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                       source={
                         (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                        require('../../assets/images/placeholder-alt-1.jpg') :
+                        Images.placeholderAlt1 :
                         {
                           uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                           priority: FastImage.priority.normal,
@@ -443,13 +444,13 @@ export default class UserProfileScreen extends Component {
                         {
                             uri: this.state.avatar,
                             priority: FastImage.priority.normal
-                        } : require('../../assets/images/avatar.png')
+                        } : Images.Avatar
                       }
                       resizeMode={FastImage.resizeMode.cover}
                   />
                   <FastImage
                       style={{ top: 29, width: 110, height: 110, position: 'absolute', zIndex:1 }}
-                      source={require('../../assets/images/oval.png')}
+                      source={Images.Oval}
                       resizeMode={FastImage.resizeMode.cover}
                   />
                 </Col>
@@ -639,6 +640,10 @@ export default class UserProfileScreen extends Component {
                           ).catch(err => console.log(err));
                       }
                   );
+                } else {
+                  this.setState({loading: false});
+                  Alert.alert(I18n.get('User does not exist'));
+                  this.props.navigation.goBack();
                 }
             }
           ).catch(err => console.log(err));
@@ -698,7 +703,7 @@ export default class UserProfileScreen extends Component {
       render() {
         return (
           <ImageBackground
-            source={require('../../assets/images/screen-bg.png')}
+            source={Images.ScreenBg}
             style={{
               flex: 1,
               width: null,

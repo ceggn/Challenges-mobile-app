@@ -50,6 +50,7 @@ I18n.putVocabularies(cahallengesDict);
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icoMoonConfig from '../../config/selection.json';
 const Icon = createIconSetFromIcoMoon(icoMoonConfig);
+import Images from '../../config/Images';
 
 const styles = StyleSheet.create({
     trendingTitleText: {
@@ -161,7 +162,7 @@ export default class LikedVideosScreen extends Component {
                         style={{ borderRadius: 3.7, width: null, height: null, aspectRatio: 1000 / 564 }}
                         source={
                             (item.userThumb == '-' || !item.userThumb) && item.videoThumb == '-' ?
-                            require('../../assets/images/placeholder-alt-1.jpg') :
+                            Images.placeholderAlt1 :
                             {
                               uri: item.userThumb == '-' || !item.userThumb ? item.videoThumb : item.userThumb,
                               priority: FastImage.priority.normal,
@@ -207,7 +208,7 @@ export default class LikedVideosScreen extends Component {
     render() {
         return (
             <ImageBackground
-                source={require('../../assets/images/screen-bg.png')}
+                source={Images.ScreenBg}
                 style={{
                 flex: 1,
                 width: null,
