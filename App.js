@@ -2370,8 +2370,28 @@ class HomeScreen extends React.Component {
     for (let key in challengeData) {
       let challenge = challengeData[key];
       if (!challenge.preview && challenge.participants > 0) {
-        this._getParticipantsImages(challenge.challengeId).then(preview => {
+        this._getParticipantsImages(challenge.challengeId).then(videos => {
+          let preview = [];
+          let participants = 0;
+          if(videos && videos.length > 0) {
+            participants = videos.length;
+            let sortedVideos = videos.sort(function(a, b) {
+              return b.rating - a.rating;
+            });
+            sortedVideos.map(video => {
+              if (video && preview.length < 3) {
+                let thumb = video.userThumb;
+                if (!thumb || thumb == '-') {
+                  thumb = video.videoThumb;
+                }
+                if (thumb && thumb != '-') {
+                  preview.push(thumb);
+                }
+              }
+            });
+          }
           challengeData[key]['preview'] = preview;
+          challengeData[key]['participants'] = participants;
           console.log("cat_name", cat_name)
           this.setState({
             [`${cat_name}`] : challengeData,
@@ -2385,24 +2405,7 @@ class HomeScreen extends React.Component {
     return new Promise((resolve, reject) => {
       const challengersPath = `/videos?parent=${challengeId}`;
       API.get("videosCRUD", challengersPath).then(videos => {
-        let participants = [];
-        if(videos && videos.length > 0) {
-          let sortedVideos = videos.sort(function(a, b) {
-            return b.rating - a.rating;
-          });
-          sortedVideos.map(video => {
-            if (video && participants.length < 3) {
-              let thumb = video.userThumb;
-              if (!thumb || thumb == '-') {
-                thumb = video.videoThumb;
-              }
-              if (thumb && thumb != '-') {
-                participants.push(thumb);
-              }
-            }
-          });
-        }
-        resolve(participants);
+        resolve(videos);
       });
     });
   }
@@ -2616,10 +2619,7 @@ class HomeScreen extends React.Component {
     if (item.videoFile != '-') {
       const currentVideoKey = this.state.currentVideoKey;
       if (this.state._videoRef[currentVideoKey]) {
-        let self = this;
-        setTimeout(() => {
-          self.state._videoRef[currentVideoKey].pause();
-        }, 1200);
+        this.state._videoRef[currentVideoKey].pause();
       }
       this.props.navigation.navigate('Video', {
         videoThumb: item.videoThumb,
