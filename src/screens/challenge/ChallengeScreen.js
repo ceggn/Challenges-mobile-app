@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#535353"
   },
-
   trendingCardFooter: {
     backgroundColor: 'transparent',
     paddingHorizontal: 20,

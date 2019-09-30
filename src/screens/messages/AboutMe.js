@@ -67,7 +67,7 @@ export default class AboutMe extends Component {
       .catch(error => console.log('Create converstion error', error));
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.subscribeToNewChats();
   }
 
