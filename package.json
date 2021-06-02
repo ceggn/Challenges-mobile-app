@@ -29,7 +29,7 @@
     "react": "16.8.6",
     "react-apollo": "^2.2.4",
     "react-native": "0.60.5",
-    "react-native-af-video-player": "github:JijoBose/react-native-af-video-player#master",
+    "react-native-af-video-player": "github:smiledev1230/react-native-af-video-player#master",
     "react-native-aws3": "0.0.9",
     "react-native-blur": "^3.2.2",
     "react-native-camera": "^3.2.0",

@@ -31,6 +31,7 @@
 		39B246DB2132FA6000E3EF4B /* libRNAWSCognito.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39718F6B20EAAAEA00E11071 /* libRNAWSCognito.a */; };
 		39DD03E82131880200AD5088 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39718FC220EDADCF00E11071 /* libRCTVideo.a */; };
 		39F5AA6131164D8EAD630628 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B247AAE5B0F493AA59746F8 /* Ionicons.ttf */; };
+		44844A695F1E44B389CF963B /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB28719DCE5042B5BD72EF34 /* Fontisto.ttf */; };
 		47F5DD7114D5491F968CCF7C /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3284FA8774C04022BF653070 /* FontAwesome.ttf */; };
 		52B77FF11468478E92CAFF1D /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5FE4CAEA894FCFAFFEDD80 /* MaterialIcons.ttf */; };
 		60742DDA54BD48F0A96396A1 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCFACA0C2D5F443EAD48BFA4 /* Fontisto.ttf */; };
@@ -371,6 +372,7 @@
 		A8EAFA58F966441EA4816011 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		A9A32B0CE106476088FCE525 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		AA00AB3813318AC841455BC6 /* libPods-Challenges.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Challenges.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB28719DCE5042B5BD72EF34 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		B2552F8603F84762A0B05351 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		B92DD8B6C3D94F5082549EB9 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		BA74F81B9B1645D0A4546A3C /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/ios/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				9E2CACE9C8824DAEA7B21EDA /* FontAwesome5_Regular.ttf */,
 				B2552F8603F84762A0B05351 /* FontAwesome5_Solid.ttf */,
 				BCFACA0C2D5F443EAD48BFA4 /* Fontisto.ttf */,
+				AB28719DCE5042B5BD72EF34 /* Fontisto.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -805,12 +808,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = ZQHMVWMFLS;
+						DevelopmentTeam = 46V487AUBN;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = ZQHMVWMFLS;
+						DevelopmentTeam = 46V487AUBN;
 						LastSwiftMigration = 940;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -1174,6 +1177,7 @@
 				36A4B09B33EF4F8E969C096B /* FontAwesome5_Regular.ttf in Resources */,
 				98595121B505474CA75AC0A0 /* FontAwesome5_Solid.ttf in Resources */,
 				60742DDA54BD48F0A96396A1 /* Fontisto.ttf in Resources */,
+				44844A695F1E44B389CF963B /* Fontisto.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1207,7 +1211,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "cd $PROJECT_DIR/..\nexport NODE_BINARY=node\n./node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1334,7 +1338,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZQHMVWMFLS;
+				DEVELOPMENT_TEAM = 46V487AUBN;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks/";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1383,7 +1387,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = ZQHMVWMFLS;
+				DEVELOPMENT_TEAM = 46V487AUBN;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks/";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1432,7 +1436,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = ZQHMVWMFLS;
+				DEVELOPMENT_TEAM = 46V487AUBN;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/",
@@ -1466,14 +1470,15 @@
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/FIRAnalyticsConnector.framework",
 					"$(PROJECT_DIR)/Frameworks/FBSDKCoreKit.framework",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.challenges.app;
+				PRODUCT_BUNDLE_IDENTIFIER = fcr.challenges.app;
 				PRODUCT_NAME = Challenges;
-				PROVISIONING_PROFILE_SPECIFIER = "Challenges APP - Development";
+				PROVISIONING_PROFILE_SPECIFIER = "Challenges Development Provision";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNVideoProcessing/Challenges-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -1489,10 +1494,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Challenges/Challenges.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZQHMVWMFLS;
+				DEVELOPMENT_TEAM = 46V487AUBN;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/",
@@ -1526,14 +1531,15 @@
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/FIRAnalyticsConnector.framework",
 					"$(PROJECT_DIR)/Frameworks/FBSDKCoreKit.framework",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.challenges.app;
+				PRODUCT_BUNDLE_IDENTIFIER = fcr.challenges.app;
 				PRODUCT_NAME = Challenges;
-				PROVISIONING_PROFILE_SPECIFIER = "Challenges Apple Store - Smile";
+				PROVISIONING_PROFILE_SPECIFIER = "Challenges Distribution Provision";
 				SWIFT_OBJC_BRIDGING_HEADER = "RNVideoProcessing/Challenges-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
